@@ -1,0 +1,23 @@
+package com.xiaopinyun.pojo;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+/**
+ * 职位收藏
+ */
+@Data
+@TableName("jobCollect")
+public class JobCollect {
+    // 自增id
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+    // 招聘信息id
+    private Integer rid;
+    // 是否已取消收藏  0已收藏、1取消收藏
+    @TableLogic
+    private Integer isDelete;
+}
