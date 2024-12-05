@@ -35,7 +35,7 @@ public class Recruiter {
     private String benefit;
     // 是否发布  0不发布、1发布
     private Integer isPublish;
-    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过
+    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
     // 是否推荐到首页（管理员功能）  0不推荐、1推荐
     private Integer isRecommend;

@@ -7,7 +7,7 @@ import com.xiaopinyun.pojo.vo.Result;
 
 import java.util.List;
 
-public interface ApplicantInformationMaintenanceService extends IService<Applicant> {
+public interface ApplicantInformationService extends IService<Applicant> {
     /**
      * 根据 id 查询学生信息
      */

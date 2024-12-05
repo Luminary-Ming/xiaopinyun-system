@@ -32,10 +32,24 @@ public class Result<T> implements Serializable {
     }
 
     /**
+     * 返回成功
+     */
+    public static <T> Result<T> success(BizCode bizCode) {
+        return success(bizCode, null);
+    }
+
+    /**
      * 返回失败
      */
     public static <T> Result<T> fail(BizCode bizCode, T data) {
         return new Result<>(bizCode.getCode(), bizCode.getMessage(), data);
+    }
+
+    /**
+     * 返回失败
+     */
+    public static <T> Result<T> fail(BizCode bizCode) {
+        return fail(bizCode, null);
     }
 
 }

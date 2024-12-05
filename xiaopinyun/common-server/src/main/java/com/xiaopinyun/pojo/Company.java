@@ -44,6 +44,6 @@ public class Company {
     private Double capital;
     // 成立日期
     private Date foundDate;
-    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过
+    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
 }

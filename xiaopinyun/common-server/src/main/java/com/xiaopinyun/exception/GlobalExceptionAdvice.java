@@ -14,11 +14,11 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(BizException.class)
     public Result<String> handlerBizException() {
-        return Result.fail(BizCode.UNKNOWN, null);
+        return Result.fail(BizCode.UNKNOWN);
     }
 
     @ExceptionHandler(Exception.class)
     public Result<String> handlerException() {
-        return Result.fail(BizCode.UNKNOWN, null);
+        return Result.fail(BizCode.UNKNOWN);
     }
 }

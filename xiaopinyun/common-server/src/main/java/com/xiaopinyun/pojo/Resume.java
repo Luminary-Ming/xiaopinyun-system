@@ -25,7 +25,7 @@ public class Resume {
     private String selfEvaluation;
     // 附件简历（链接地址）
     private String resumePDF;
-    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过
+    // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
     // 是否已删除 0正常、1已删除
     @TableLogic
