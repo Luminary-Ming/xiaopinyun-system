@@ -17,6 +17,11 @@ public class GlobalExceptionAdvice {
         return Result.fail(BizCode.UNKNOWN);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public Result<String> handlerRuntimeException() {
+        return Result.fail(BizCode.UNKNOWN);
+    }
+
     @ExceptionHandler(Exception.class)
     public Result<String> handlerException() {
         return Result.fail(BizCode.UNKNOWN);

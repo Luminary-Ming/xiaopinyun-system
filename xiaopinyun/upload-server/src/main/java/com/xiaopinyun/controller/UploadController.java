@@ -36,30 +36,31 @@ public class UploadController {
 
     /**
      * 文件预览
-     */
+
     @GetMapping("/getRedFile")
     public String getRedFile(@RequestParam String filename) {
         return uploadService.getPreviewFileUrl(filename);
     }
+     */
 
     /**
      * 下载文件
-     */
+
     @GetMapping("/download/{filename}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String filename){
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
         byte[] data = uploadService.downloadFile(filename);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                 .body(data);
     }
-
+     */
     /**
      * 删除文件
-     */
-    @GetMapping("/deleteFile")
-    public String deleteFile(@RequestParam String filename) {
+
+    @GetMapping("/deleteFile/{filename}")
+    public String deleteFile(@PathVariable String filename) {
         return uploadService.deleteFile(filename);
     }
-
+     */
 }
