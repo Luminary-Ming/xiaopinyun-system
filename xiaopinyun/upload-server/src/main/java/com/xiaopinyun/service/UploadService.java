@@ -4,7 +4,6 @@ import com.xiaopinyun.pojo.vo.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 
 public interface UploadService {
 
@@ -13,17 +12,19 @@ public interface UploadService {
      */
     public Result<String> uploadFile(MultipartFile file);
 
-
     /**
      * 下载文件
      */
+    Result<Void> downloadFile(String filename, HttpServletResponse response);
 
     /**
      * 预览文件
      */
+    Result<String> getPreviewFileUrl(String filename);
 
     /**
      * 删除文件
      */
+    Result<String> deleteFile(String filename);
 
 }

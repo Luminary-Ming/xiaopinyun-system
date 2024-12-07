@@ -18,15 +18,15 @@
 
     <!-- 子模块 -->
     <modules>
-        <!-- 文件上传下载 -->
+        <!-- 文件上传下载模块 -->
         <module>upload-server</module>
-        <!-- 实体类工具类 -->
+        <!-- 实体类工具类模块 -->
         <module>common-server</module>
-        <!-- 个人信息维护 -->
+        <!-- 个人信息维护模块 -->
         <module>information-maintenance-server</module>
-        <!-- 招聘管理 -->
+        <!-- 招聘管理模块 -->
         <module>recruiter-server</module>
-        <!-- 用户管理 -->
+        <!-- 用户管理模块 -->
         <module>user-server</module>
     </modules>
 
@@ -79,28 +79,28 @@
                 <version>${minio.version}</version>
             </dependency>
 
-            <!-- common-server 模块 -->
+            <!-- 实体类工具类模块 -->
             <dependency>
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>common-server</artifactId>
                 <version>${common-server.version}</version>
             </dependency>
 
-            <!-- information-maintenance-server 模块 -->
+            <!-- 个人信息维护模块 -->
             <dependency>
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>information-maintenance-server</artifactId>
                 <version>${information-maintenance-server.version}</version>
             </dependency>
 
-            <!-- recruiter-server 模块 -->
+            <!-- 招聘管理模块 -->
             <dependency>
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>recruiter-server</artifactId>
                 <version>${recruiter-server.version}</version>
             </dependency>
 
-            <!-- upload-server 模块 -->
+            <!-- 文件上传下载模块 -->
             <dependency>
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>upload-server</artifactId>

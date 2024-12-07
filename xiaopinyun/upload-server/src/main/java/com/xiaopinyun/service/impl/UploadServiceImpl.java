@@ -13,11 +13,12 @@ import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import io.minio.http.Method;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,8 +29,6 @@ public class UploadServiceImpl implements UploadService {
     private MinIOConfig minIOConfig;
     @Autowired
     private MinioClient minioClient;
-    @Autowired
-    private UploadServiceImpl uploadServiceImpl;
 
     /**
      * 文件上传
@@ -37,6 +36,7 @@ public class UploadServiceImpl implements UploadService {
     public Result<String> uploadFile(MultipartFile file) {
         // 获取上传的文件名
         String filename = file.getOriginalFilename();
+        // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
             return Result.fail(BizCode.FILE_UPLOAD_FAIL);
         }
@@ -70,26 +70,36 @@ public class UploadServiceImpl implements UploadService {
     /**
      * 文件下载
      */
-    public Result<byte[]> downloadFile(String filename) {
+    public Result<Void> downloadFile(String filename, HttpServletResponse response) {
+        // 如果文件名为空
+        if (StringUtils.isBlank(filename)) {
+            return Result.fail(BizCode.FILE_DOWNLOAD_FAIL);
+        }
+        // 如果文件在桶中不存在
+        if (!fileIsExist(filename)) {
+            return Result.fail(BizCode.FILE_NOT_EXIST);
+        }
+        // 配置响应头
+        response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+        response.setContentType("application/octet-stream");
         /*
             try-with-resources 语句，JDK7加入的
             当 try 中代码执行结束后（正常结束或者异常结束），都会调用 try() 括号中对象的close()方法来关闭资源
         */
-        try (InputStream stream = minioClient.getObject(
+        try (InputStream inputStream = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(minIOConfig.getBucketName())
                         .object(filename).build());
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+             ServletOutputStream outputStream = response.getOutputStream()) {
             // 创建缓冲区，用于临时存储从输入流中读取的数据
             byte[] buffer = new byte[1024];
             int length;
             // 读取数据
-            while ((length = stream.read(buffer)) != -1) {
+            while ((length = inputStream.read(buffer)) != -1) {
                 // 写入数据
                 outputStream.write(buffer, 0, length);
             }
-            byte[] byteArray = outputStream.toByteArray();
-            return Result.success(BizCode.FILE_DOWNLOAD_SUCCESS, byteArray);
+            return Result.success(BizCode.FILE_DOWNLOAD_SUCCESS);
         } catch (Exception e) {
             return Result.fail(BizCode.FILE_DOWNLOAD_FAIL);
         }
@@ -100,9 +110,13 @@ public class UploadServiceImpl implements UploadService {
      * 根据文件路径得到预览文件绝对地址
      */
     public Result<String> getPreviewFileUrl(String filename) {
-        // 如果文件在桶中不存在
-        if (!uploadServiceImpl.fileIsExist(filename)) {
+        // 如果文件名为空
+        if (StringUtils.isBlank(filename)) {
             return Result.fail(BizCode.FILE_PREVIEW_FAIL);
+        }
+        // 如果文件在桶中不存在
+        if (!fileIsExist(filename)) {
+            return Result.fail(BizCode.FILE_NOT_EXIST);
         }
         String previewFileUrl = null;
         try {
@@ -118,14 +132,17 @@ public class UploadServiceImpl implements UploadService {
         return Result.success(BizCode.FILE_PREVIEW_SUCCESS, previewFileUrl);
     }
 
-
     /**
      * 删除文件
      */
     public Result<String> deleteFile(String filename) {
+        // 如果文件名为空
+        if (StringUtils.isBlank(filename)) {
+            return Result.fail(BizCode.FILE_DELETE_FAIL);
+        }
         // 如果文件在桶中不存在
-        if (!uploadServiceImpl.fileIsExist(filename)) {
-            return Result.fail(BizCode.FILE_PREVIEW_FAIL);
+        if (!fileIsExist(filename)) {
+            return Result.fail(BizCode.FILE_NOT_EXIST);
         }
         try {
             minioClient.removeObject(
