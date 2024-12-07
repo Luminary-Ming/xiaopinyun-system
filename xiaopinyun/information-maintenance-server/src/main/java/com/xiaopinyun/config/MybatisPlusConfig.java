@@ -3,6 +3,7 @@ package com.xiaopinyun.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.xiaopinyun.pojo.HR;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * mybatis-plus 插件
  */
 @Configuration
-@MapperScans({
-    @MapperScan
-})
+@MapperScan("com.xiaopinyun.mapper")
 public class MybatisPlusConfig {
 
     /**
