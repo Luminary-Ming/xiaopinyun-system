@@ -11,5 +11,6 @@ out/
 !**/src/test/**/target/
 
 ### VS Code ###
-xiaopinyun_ui/.vscode/
-xiaopinyun_ui/node_modules/
+xiaopinyun-ui/.vscode/
+xiaopinyun-ui/_vscode/
+xiaopinyun-ui/node_modules/
