@@ -25,10 +25,10 @@ public class EducationalBackground {
     private Integer qualification;
     // 专业
     private String major;
-    // 入学时间
-    private Date startTime;
-    // 毕业时间
-    private Date endTime;
+    // 入学时间  例2021年9月
+    private String startTime;
+    // 毕业时间  例2025年6月
+    private String endTime;
     // 主修课程
     private String majorCourse;
     // 是否已删除 0正常、1已删除

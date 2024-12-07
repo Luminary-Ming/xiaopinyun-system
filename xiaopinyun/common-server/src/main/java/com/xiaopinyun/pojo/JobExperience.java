@@ -27,10 +27,10 @@ public class JobExperience {
     private String department;
     // 职位名称
     private String jobName;
-    // 入职时间
-    private Date startTime;
-    // 离职时间
-    private Date endTime;
+    // 入职时间  例2024年11月
+    private String startTime;
+    // 离职时间  例2025年5月
+    private String endTime;
     // 工作内容
     private String jobContent;
     // 是否已删除 0正常 1已删除

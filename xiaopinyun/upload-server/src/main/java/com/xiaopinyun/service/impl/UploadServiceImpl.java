@@ -135,7 +135,7 @@ public class UploadServiceImpl implements UploadService {
     /**
      * 删除文件
      */
-    public Result<String> deleteFile(String filename) {
+    public Result<Void> deleteFile(String filename) {
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
             return Result.fail(BizCode.FILE_DELETE_FAIL);

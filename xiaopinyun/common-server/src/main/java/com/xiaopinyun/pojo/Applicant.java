@@ -23,7 +23,7 @@ public class Applicant {
     // 性别  0男、1女
     private Integer sex;
     // 出生年月 例2024-11
-    private Date birthday;
+    private String birthday;
     // 居住地
     private String address;
     // 手机号

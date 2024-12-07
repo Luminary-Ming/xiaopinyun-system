@@ -1,9 +1,6 @@
 package com.xiaopinyun.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
@@ -24,6 +21,7 @@ public class Resume {
     // 自我评价
     private String selfEvaluation;
     // 附件简历（链接地址）
+    @TableField("resume_pdf")
     private String resumePDF;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;

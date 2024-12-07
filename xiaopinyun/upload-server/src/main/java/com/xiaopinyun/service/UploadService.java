@@ -25,6 +25,6 @@ public interface UploadService {
     /**
      * 删除文件
      */
-    Result<String> deleteFile(String filename);
+    Result<Void> deleteFile(String filename);
 
 }

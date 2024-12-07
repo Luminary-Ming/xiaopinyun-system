@@ -42,7 +42,7 @@ public class UploadController {
      * 删除文件
      */
     @DeleteMapping("/{filename}")
-    public Result<String> deleteFile(@PathVariable String filename) {
+    public Result<Void> deleteFile(@PathVariable String filename) {
         return uploadService.deleteFile(filename);
     }
 }

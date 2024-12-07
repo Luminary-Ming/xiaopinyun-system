@@ -1,6 +1,7 @@
 package com.xiaopinyun.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -37,12 +38,13 @@ public class Company {
     // 公司介绍
     private String introduce;
     // 公司全称
+    @TableField("company_full_name")
     private String companyFullName;
     // 法定代表人
     private String legalPerson;
     // 注册资本
     private Double capital;
-    // 成立日期
+    // 成立日期  例1998-12-15
     private Date foundDate;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
