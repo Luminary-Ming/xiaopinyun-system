@@ -18,14 +18,14 @@
 
     <!-- 子模块 -->
     <modules>
-        <!-- 文件上传下载模块 -->
-        <module>upload-server</module>
         <!-- 实体类工具类模块 -->
         <module>common-server</module>
         <!-- 个人信息维护模块 -->
         <module>information-maintenance-server</module>
         <!-- 招聘管理模块 -->
         <module>recruiter-server</module>
+        <!-- 文件上传下载模块 -->
+        <module>upload-server</module>
         <!-- 用户管理模块 -->
         <module>user-server</module>
     </modules>
@@ -144,7 +144,7 @@
 
         <!-- 项目中每个模块（服务）注册到Nacos上，便于服务之间的调用与发现 -->
         <dependency>
-            <groupId>com.alibaba.cloud </groupId>
+            <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 

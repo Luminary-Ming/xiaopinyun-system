@@ -1,9 +1,6 @@
 package com.xiaopinyun.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -48,4 +45,7 @@ public class Company {
     private Date foundDate;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
+    // 是否已删除 0正常、1已删除
+    @TableLogic
+    private Integer isDelete;
 }

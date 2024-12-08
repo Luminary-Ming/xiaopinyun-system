@@ -21,12 +21,12 @@ public interface ApplicantInformationService extends IService<Applicant> {
     /**
      * 添加学生信息
      */
-    Result<Void> addApplicant(Applicant applicant);
+    Result<Applicant> addApplicant(Applicant applicant);
 
     /**
      * 修改学生信息
      */
-    Result<Void> updateApplicant(Applicant applicant);
+    Result<Applicant> updateApplicant(Applicant applicant);
 
     /**
      * 根据 id 删除学生信息

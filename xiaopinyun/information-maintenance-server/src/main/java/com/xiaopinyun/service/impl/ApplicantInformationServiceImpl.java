@@ -60,7 +60,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 添加学生信息
      */
     @Override
-    public Result<Void> addApplicant(Applicant applicant) {
+    public Result<Applicant> addApplicant(Applicant applicant) {
         if (applicant == null) {
             return Result.fail(BizCode.ADD_NULL);
         }
@@ -68,8 +68,12 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
         applicant.setIsCheck(2);
         // 默认未就业
         applicant.setIsEmploy(0);
+        // 默认未删除
+        applicant.setIsDelete(0);
         if (save(applicant)) {
-            return Result.success(BizCode.ADD_SUCCESS);
+            // 添加之后的数据
+            Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());
+            return Result.success(BizCode.ADD_SUCCESS, applicantData);
         }
         return Result.fail(BizCode.ADD_FAIL);
     }
@@ -78,7 +82,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 修改学生信息
      */
     @Override
-    public Result<Void> updateApplicant(Applicant applicant) {
+    public Result<Applicant> updateApplicant(Applicant applicant) {
         // 如果没有要更新的数据直接返回更新成功
         if (applicant == null) {
             return Result.success(BizCode.UPDATE_SUCCESS);
@@ -86,7 +90,9 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
         // 更新需要审核
         applicant.setIsCheck(2);
         if (updateById(applicant)) {
-            return Result.success(BizCode.UPDATE_SUCCESS);
+            // 修改之后的数据
+            Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());
+            return Result.success(BizCode.UPDATE_SUCCESS, applicantData);
         }
         return Result.fail(BizCode.UPDATE_FAIL);
     }

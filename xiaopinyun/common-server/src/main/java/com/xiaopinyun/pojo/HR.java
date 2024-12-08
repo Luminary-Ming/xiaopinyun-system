@@ -2,6 +2,7 @@ package com.xiaopinyun.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -32,4 +33,7 @@ public class HR {
     private Integer status;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
+    // 是否已删除 0正常、1已删除
+    @TableLogic
+    private Integer isDelete;
 }
