@@ -24,6 +24,8 @@
         <module>information-maintenance-server</module>
         <!-- 招聘管理模块 -->
         <module>recruiter-server</module>
+        <!-- 简历管理模块 -->
+        <module>resume-server</module>
         <!-- 文件上传下载模块 -->
         <module>upload-server</module>
         <!-- 用户管理模块 -->
@@ -38,10 +40,7 @@
         <bootstrap.version>3.1.4</bootstrap.version>
         <minio.version>8.5.13</minio.version>
         <mybatis-plus.version>3.5.8</mybatis-plus.version>
-        <information-maintenance-server.version>1.0-SNAPSHOT</information-maintenance-server.version>
-        <recruiter-server.version>1.0-SNAPSHOT</recruiter-server.version>
         <common-server.version>1.0-SNAPSHOT</common-server.version>
-        <upload-server.version>1.0-SNAPSHOT</upload-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -84,27 +83,6 @@
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>common-server</artifactId>
                 <version>${common-server.version}</version>
-            </dependency>
-
-            <!-- 个人信息维护模块 -->
-            <dependency>
-                <groupId>com.xiaopinyun</groupId>
-                <artifactId>information-maintenance-server</artifactId>
-                <version>${information-maintenance-server.version}</version>
-            </dependency>
-
-            <!-- 招聘管理模块 -->
-            <dependency>
-                <groupId>com.xiaopinyun</groupId>
-                <artifactId>recruiter-server</artifactId>
-                <version>${recruiter-server.version}</version>
-            </dependency>
-
-            <!-- 文件上传下载模块 -->
-            <dependency>
-                <groupId>com.xiaopinyun</groupId>
-                <artifactId>upload-server</artifactId>
-                <version>${upload-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

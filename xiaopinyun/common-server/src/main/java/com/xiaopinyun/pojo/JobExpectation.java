@@ -15,8 +15,6 @@ public class JobExpectation {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    // 求职者id
-    private Integer aid;
     // 简历id
     private Integer rid;
     // 求职类型

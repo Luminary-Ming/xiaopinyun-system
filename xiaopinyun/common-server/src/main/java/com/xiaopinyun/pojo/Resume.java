@@ -1,6 +1,11 @@
 package com.xiaopinyun.pojo;
 
-import com.baomidou.mybatisplus.annotation.*;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -16,6 +21,12 @@ public class Resume {
     private Integer aid;
     // 专业技能
     private String majorSkill;
+    // 教育背景
+    private Integer[] eid;
+    // 项目经历
+    private Integer[] pid;
+    // 实习经历
+    private Integer[] jid;
     // 获奖荣誉
     private String honor;
     // 自我评价
