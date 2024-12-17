@@ -2,7 +2,7 @@ package com.xiaopinyun.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xiaopinyun.config.MinIOConfig;
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.UploadService;
 import com.xiaopinyun.util.BizCode;
 import io.minio.GetObjectArgs;

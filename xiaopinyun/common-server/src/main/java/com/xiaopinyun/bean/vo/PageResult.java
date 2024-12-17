@@ -1,4 +1,4 @@
-package com.xiaopinyun.pojo.vo;
+package com.xiaopinyun.bean.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.xiaopinyun.service;
 
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.vo.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 

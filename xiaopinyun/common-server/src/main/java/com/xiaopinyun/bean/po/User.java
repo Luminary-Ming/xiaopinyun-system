@@ -1,4 +1,4 @@
-package com.xiaopinyun.pojo;
+package com.xiaopinyun.bean.po;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;

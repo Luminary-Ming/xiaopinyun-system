@@ -1,4 +1,4 @@
-package com.xiaopinyun.pojo;
+package com.xiaopinyun.bean.po;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -22,11 +22,11 @@ public class Resume {
     // 专业技能
     private String majorSkill;
     // 教育背景
-    private Integer[] eid;
+    private Integer[] eids;
     // 项目经历
-    private Integer[] pid;
+    private Integer[] pids;
     // 实习经历
-    private Integer[] jid;
+    private Integer[] jids;
     // 获奖荣誉
     private String honor;
     // 自我评价

@@ -1,9 +1,9 @@
 package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xiaopinyun.pojo.Company;
-import com.xiaopinyun.pojo.vo.PageResult;
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.po.Company;
+import com.xiaopinyun.bean.vo.PageResult;
+import com.xiaopinyun.bean.vo.Result;
 
 import java.util.List;
 

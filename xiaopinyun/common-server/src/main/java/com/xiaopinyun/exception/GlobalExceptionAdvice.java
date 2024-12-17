@@ -1,6 +1,6 @@
 package com.xiaopinyun.exception;
 
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.util.BizCode;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

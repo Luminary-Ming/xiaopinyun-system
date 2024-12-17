@@ -2,8 +2,8 @@ package com.xiaopinyun.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaopinyun.mapper.ResumeMapper;
-import com.xiaopinyun.pojo.Resume;
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.po.Resume;
+import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.ResumeService;
 import com.xiaopinyun.util.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;

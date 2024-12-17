@@ -1,8 +1,8 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.pojo.Applicant;
-import com.xiaopinyun.pojo.vo.PageResult;
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.po.Applicant;
+import com.xiaopinyun.bean.vo.PageResult;
+import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.ApplicantInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

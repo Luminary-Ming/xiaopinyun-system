@@ -1,8 +1,8 @@
 package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xiaopinyun.pojo.Resume;
-import com.xiaopinyun.pojo.vo.Result;
+import com.xiaopinyun.bean.po.Resume;
+import com.xiaopinyun.bean.vo.Result;
 
 public interface ResumeService extends IService<Resume> {
 

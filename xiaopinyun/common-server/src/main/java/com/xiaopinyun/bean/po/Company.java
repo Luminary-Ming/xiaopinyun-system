@@ -1,4 +1,4 @@
-package com.xiaopinyun.pojo;
+package com.xiaopinyun.bean.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -44,7 +45,7 @@ public class Company {
     // 法定代表人
     private String legalPerson;
     // 注册资本
-    private Double capital;
+    private BigDecimal capital;
     // 成立日期  例1998-12-15
     private Date foundDate;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
