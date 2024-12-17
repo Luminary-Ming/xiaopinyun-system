@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xiaopinyun.bean.vo.ApplicantVO;
-import com.xiaopinyun.mapper.ApplicantInformationMapper;
 import com.xiaopinyun.bean.po.Applicant;
+import com.xiaopinyun.bean.vo.ApplicantVO;
 import com.xiaopinyun.bean.vo.PageResult;
 import com.xiaopinyun.bean.vo.Result;
+import com.xiaopinyun.mapper.ApplicantInformationMapper;
 import com.xiaopinyun.service.ApplicantInformationService;
 import com.xiaopinyun.util.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -75,19 +74,10 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
         if (applicant == null) {
             return Result.fail(BizCode.ADD_NULL);
         }
-        // 校验性别
-        if (applicant.getSex() != 0 && applicant.getSex() != 1) {
-            return Result.fail(BizCode.SEX_FAIL);
+        // 校验对象的字段
+        if (checkApplicant(applicant).getCode() != 2000) {
+            return checkApplicant(applicant);
         }
-        // 校验手机号
-        Pattern compile = Pattern.compile("^1[3-9]\\d{9}$");
-        Matcher matcher = compile.matcher(applicant.getTelephone());
-        boolean matches = matcher.matches();
-        if (matches) {
-            return Result.fail(BizCode.TELEPHONE_FAIL);
-        }
-        // 校验电子邮箱
-
         // 添加需要审核
         applicant.setIsCheck(2);
         // 默认未就业
@@ -111,6 +101,10 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
         // 如果没有要更新的数据直接返回更新成功
         if (applicant == null) {
             return Result.success(BizCode.UPDATE_SUCCESS);
+        }
+        // 校验对象的字段
+        if (checkApplicant(applicant).getCode() != 2000) {
+            return checkApplicant(applicant);
         }
         // 更新需要审核
         applicant.setIsCheck(2);
@@ -136,4 +130,32 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
         }
         return Result.fail(BizCode.DELETE_FAIL);
     }
+
+    /**
+     * 校验所传入的字段
+     */
+    public Result<ApplicantVO> checkApplicant(Applicant applicant) {
+        // 校验性别
+        if (applicant.getSex() != 0 && applicant.getSex() != 1) {
+            return Result.fail(BizCode.SEX_FAIL);
+        }
+        // 校验手机号
+        if (!Pattern.matches("^1[3-9]\\d{9}$", applicant.getTelephone())) {
+            return Result.fail(BizCode.TELEPHONE_FORMAT_FAIL);
+        }
+        // 校验电子邮箱
+        if (!Pattern.matches("[a-zA-Z0-9]+@[A-Za-z0-9]+\\.[a-z0-9]{2,}", applicant.getEmail())) {
+            return Result.fail(BizCode.EMAIL_FORMAT_FAIL);
+        }
+        // 校验出生年月
+        if (!Pattern.matches("\\b\\d{4}-(0[1-9]|1[0-2])\\b", applicant.getBirthday())) {
+            return Result.fail(BizCode.BIRTHDAY_FORMAT_FAIL);
+        }
+        // 校检求职状态
+        if (Pattern.matches("[0-3]", applicant.getStatus().toString())) {
+            return Result.fail(BizCode.STATUS_FAIL);
+        }
+        return Result.success(BizCode.SUCCESS);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.po.Applicant;
+import com.xiaopinyun.bean.vo.ApplicantVO;
 import com.xiaopinyun.bean.vo.PageResult;
 import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.ApplicantInformationService;
@@ -27,7 +28,7 @@ public class ApplicantInformationController {
      * 根据 id 查询学生信息
      */
     @GetMapping("/{id}")
-    public Result<Applicant> selectApplicantById(@PathVariable Integer id) {
+    public Result<ApplicantVO> selectApplicantById(@PathVariable Integer id) {
         return applicantInformationService.selectApplicantById(id);
     }
 
@@ -35,7 +36,7 @@ public class ApplicantInformationController {
      * 条件查询、分页查询学生信息
      */
     @GetMapping
-    public Result<PageResult<List<Applicant>>> selectApplicant(
+    public Result<PageResult<List<ApplicantVO>>> selectApplicant(
             @RequestParam(name = "currentPage", defaultValue = "1") Integer currentPage,
             @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(name = "name", required = false) String name,
@@ -48,7 +49,7 @@ public class ApplicantInformationController {
      * 添加学生信息
      */
     @PostMapping
-    public Result<Applicant> addApplicant(@RequestBody Applicant applicant) {
+    public Result<ApplicantVO> addApplicant(@RequestBody Applicant applicant) {
         return applicantInformationService.addApplicant(applicant);
     }
 
@@ -56,7 +57,7 @@ public class ApplicantInformationController {
      * 修改学生信息
      */
     @PutMapping
-    public Result<Applicant> updateApplicant(@RequestBody Applicant applicant) {
+    public Result<ApplicantVO> updateApplicant(@RequestBody Applicant applicant) {
         return applicantInformationService.updateApplicant(applicant);
     }
 

@@ -39,7 +39,10 @@ public enum BizCode {
     FILE_DELETE_FAIL(5010, "文件删除失败"),
     FILE_NOT_EXIST(5011, "文件不存在"),
     SEX_FAIL(5012, "性别错误"),
-    TELEPHONE_FAIL(5013, "手机号格式错误");
+    BIRTHDAY_FORMAT_FAIL(5013,"出生年月格式错误"),
+    TELEPHONE_FORMAT_FAIL(5014, "手机号格式错误"),
+    EMAIL_FORMAT_FAIL(5015,"邮箱格式错误"),
+    STATUS_FAIL(5016,"求职状态错误");
 
     private final Integer code;
     private final String message;
