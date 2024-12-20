@@ -1,6 +1,7 @@
 package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.po.Company;
+import com.xiaopinyun.bean.vo.CompanyVO;
 import com.xiaopinyun.bean.vo.PageResult;
 import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.CompanyInformationService;
@@ -27,7 +28,7 @@ public class CompanyInformationController {
      * 根据 id 查询公司信息
      */
     @GetMapping("/{id}")
-    public Result<Company> selectCompanyById(@PathVariable Integer id) {
+    public Result<CompanyVO> selectCompanyById(@PathVariable Integer id) {
         return companyInformationService.selectCompanyById(id);
     }
 
@@ -35,7 +36,7 @@ public class CompanyInformationController {
      * 条件查询、分页查询公司信息
      */
     @GetMapping
-    public Result<PageResult<List<Company>>> selectCompany(
+    public Result<PageResult<List<CompanyVO>>> selectCompany(
             @RequestParam(name = "currentPage", defaultValue = "1") Integer currentPage,
             @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(name = "companyName", required = false) String companyName,
@@ -48,7 +49,7 @@ public class CompanyInformationController {
      * 添加公司信息
      */
     @PostMapping
-    public Result<Company> addCompany(@RequestBody Company company) {
+    public Result<CompanyVO> addCompany(@RequestBody Company company) {
         return companyInformationService.addCompany(company);
     }
 
@@ -56,7 +57,7 @@ public class CompanyInformationController {
      * 修改公司信息
      */
     @PutMapping
-    public Result<Company> updateCompany(@RequestBody Company company) {
+    public Result<CompanyVO> updateCompany(@RequestBody Company company) {
         return companyInformationService.updateCompany(company);
     }
 

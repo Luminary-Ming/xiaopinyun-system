@@ -152,7 +152,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
             return Result.fail(BizCode.BIRTHDAY_FORMAT_FAIL);
         }
         // 校检求职状态
-        if (Pattern.matches("[0-3]", applicant.getStatus().toString())) {
+        if (!Pattern.matches("[0-3]", applicant.getStatus().toString())) {
             return Result.fail(BizCode.STATUS_FAIL);
         }
         return Result.success(BizCode.SUCCESS);

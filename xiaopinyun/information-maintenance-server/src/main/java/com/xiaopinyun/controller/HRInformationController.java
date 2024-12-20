@@ -1,6 +1,7 @@
 package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.po.HR;
+import com.xiaopinyun.bean.vo.HRVO;
 import com.xiaopinyun.bean.vo.PageResult;
 import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.HRInformationService;
@@ -27,7 +28,7 @@ public class HRInformationController {
      * 根据 id 查询 HR 信息
      */
     @GetMapping("/{id}")
-    public Result<HR> selectHRById(@PathVariable Integer id) {
+    public Result<HRVO> selectHRById(@PathVariable Integer id) {
         return hrInformationService.selectHRById(id);
     }
 
@@ -35,7 +36,7 @@ public class HRInformationController {
      * 条件查询、分页查询 HR 信息
      */
     @GetMapping
-    public Result<PageResult<List<HR>>> selectHR(
+    public Result<PageResult<List<HRVO>>> selectHR(
             @RequestParam(name = "currentPage", defaultValue = "1") Integer currentPage,
             @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(name = "name", required = false) String name,
@@ -48,7 +49,7 @@ public class HRInformationController {
      * 添加 HR 信息
      */
     @PostMapping
-    public Result<HR> addHR(@RequestBody HR hr) {
+    public Result<HRVO> addHR(@RequestBody HR hr) {
         return hrInformationService.addHR(hr);
     }
 
@@ -56,7 +57,7 @@ public class HRInformationController {
      * 修改 HR 信息
      */
     @PutMapping
-    public Result<HR> updateHR(@RequestBody HR hr) {
+    public Result<HRVO> updateHR(@RequestBody HR hr) {
         return hrInformationService.updateHR(hr);
     }
 

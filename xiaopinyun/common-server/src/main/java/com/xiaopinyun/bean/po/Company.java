@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 公司信息
@@ -27,7 +26,7 @@ public class Company {
     private Integer people;
     // 行业分类   互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
     private String industryType;
-    // 工作时间 例8:30 - 17:30
+    // 工作时间 例08:30 - 17:30
     private String workingHours;
     // 休假情况   0双休、1单休、2无休
     private Integer holiday;
@@ -47,7 +46,7 @@ public class Company {
     // 注册资本
     private BigDecimal capital;
     // 成立日期  例1998-12-15
-    private Date foundDate;
+    private String foundDate;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;
     // 是否已删除 0正常、1已删除
