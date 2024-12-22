@@ -7,16 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * 实习经历
+ * 工作 / 实习经历
  */
 @Data
-@TableName("jobExperience")
-public class JobExperience {
+@TableName("work_experience")
+public class WorkExperience {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    // 简历id
-    private Integer rid;
     // 公司名
     private String companyName;
     // 所属行业
@@ -25,9 +23,9 @@ public class JobExperience {
     private String department;
     // 职位名称
     private String jobName;
-    // 入职时间  例2024年11月
+    // 入职时间  例2024.11 2024.11-2025.05
     private String startTime;
-    // 离职时间  例2025年5月
+    // 离职时间  例2025.05
     private String endTime;
     // 工作内容
     private String jobContent;

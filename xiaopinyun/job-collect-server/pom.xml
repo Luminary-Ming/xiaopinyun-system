@@ -9,7 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>recruiter-server</artifactId>
+    <groupId>org.xiaopinyun</groupId>
+    <artifactId>job-collect-server</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

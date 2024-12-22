@@ -10,15 +10,17 @@ import lombok.Data;
  * 简历投递
  */
 @Data
-@TableName("resumeSubmit")
+@TableName("resume_submit")
 public class ResumeSubmit {
-    // 自增id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    // 招聘职位id
+    // 投递的招聘职位
     private Integer recid;
-    // 简历id
+    // 投递在线简历
     private Integer resid;
+    // 投递附件简历
+    private Integer aid;
     // 是否通过筛选（HR功能） 0退回、1通过
     private Integer isPass;
     // 简历退回回复（HR功能）

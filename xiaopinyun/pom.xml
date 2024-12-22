@@ -23,13 +23,15 @@
         <!-- 个人信息维护模块 -->
         <module>information-maintenance-server</module>
         <!-- 招聘管理模块 -->
-        <module>recruiter-server</module>
+        <module>recruit-server</module>
         <!-- 简历管理模块 -->
         <module>resume-server</module>
         <!-- 文件上传下载模块 -->
         <module>upload-server</module>
         <!-- 用户管理模块 -->
         <module>user-server</module>
+        <module>resume-submit-server</module>
+        <module>job-collect-server</module>
     </modules>
 
     <properties>

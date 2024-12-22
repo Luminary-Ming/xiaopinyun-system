@@ -12,12 +12,12 @@ public class HRVO {
     private Integer id;
     // 头像
     private String profileImgUrl;
-    // 所属公司
-    private Integer cid;
     // 姓名
     private String name;
     // 性别  0男、1女 --> 将数字转换为字符串
     private String sex;
+    //所属公司
+    private String companyName;
     // 身份  例人事总监、HR、招聘专家、人事专员、技术总监、经理、校招顾问、项目总监
     private String identity;
     // 手机号 --> 进行脱敏处理，中间四位 * 号代替
@@ -32,15 +32,14 @@ public class HRVO {
     public HRVO(HR hr) {
         this.id = hr.getId();
         this.profileImgUrl = hr.getProfileImg();
-        this.cid = hr.getCid();
         this.name = hr.getName();
         this.sex = convertSex(hr.getSex());
+        this.companyName = hr.getCompanyName();
         this.identity = hr.getIdentity();
         this.telephone = hr.getTelephone();
         this.email = hr.getEmail();
         this.status = convertStatus(hr.getStatus());
         this.checkStatus = convertCheckStatus(hr.getIsCheck());
-
     }
 
     // 私有方法，用于转换性别描述

@@ -10,7 +10,7 @@ import lombok.Data;
  * 职位收藏
  */
 @Data
-@TableName("jobCollect")
+@TableName("job_collect")
 public class JobCollect {
     // 自增id
     @TableId(value = "id", type = IdType.AUTO)

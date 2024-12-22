@@ -16,17 +16,17 @@ public class User {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    // 求职者id
+    // 学生id
     private Integer aid;
-    // HR_id
+    // HR id
     private Integer hid;
     // 用户名
     private String username;
     // 密码
     private String password;
-    // 角色  0学生（默认） 、1企业、2管理员
+    // 角色  0学生、1企业、2管理员
     private Integer role;
-    // 是否已删除账户  0正常使用 1已删除账户
+    // 是否已删除账户  0正常使用、1已删除账户
     @TableLogic
     private Integer isDelete;
 }

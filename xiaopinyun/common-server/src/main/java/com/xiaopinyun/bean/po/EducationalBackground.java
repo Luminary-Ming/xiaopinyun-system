@@ -10,22 +10,20 @@ import lombok.Data;
  * 教育背景
  */
 @Data
-@TableName("educationalBackground")
+@TableName("educational_background")
 public class EducationalBackground {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    // 简历id
-    private Integer rid;
     // 学校名称
     private String name;
     // 学历 0初中及以下 1中专 2高中 3大专 4本科 5硕士 6博士
     private Integer qualification;
     // 专业
     private String major;
-    // 入学时间  例2021年9月
+    // 入学时间  例2021 2021-2025
     private String startTime;
-    // 毕业时间  例2025年6月
+    // 毕业时间  例2025
     private String endTime;
     // 主修课程
     private String majorCourse;

@@ -6,14 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 /**
  * 招聘信息 / 职位信息
  */
 @Data
-@TableName("recruiter")
-public class Recruiter {
+@TableName("recruit")
+public class Recruit {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -21,10 +19,10 @@ public class Recruiter {
     private Integer cid;
     // HRid
     private Integer hid;
-    // 招聘岗位
-    private String job;
-    // 薪资
-    private BigDecimal salary;
+    // 招聘标题
+    private String title;
+    // 薪资 例9k-15k
+    private String salary;
     // 工作地点
     private String address;
     // 工作要求 经验不限、5天/周、在校/应届
