@@ -29,7 +29,7 @@ public class HRInformationController {
      */
     @GetMapping("/{id}")
     public Result<HRVO> selectHRById(@PathVariable Integer id) {
-        return hrInformationService.selectHRById(id);
+        return hrInformationService.queryVOById(id);
     }
 
     /**
@@ -42,7 +42,7 @@ public class HRInformationController {
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "sex", required = false) Integer sex,
             @RequestParam(name = "status", required = false) Integer status) {
-        return hrInformationService.selectHR(currentPage, pageSize, name, sex, status);
+        return hrInformationService.queryVO(currentPage, pageSize, name, sex, status);
     }
 
     /**
@@ -50,7 +50,7 @@ public class HRInformationController {
      */
     @PostMapping
     public Result<HRVO> addHR(@RequestBody HR hr) {
-        return hrInformationService.addHR(hr);
+        return hrInformationService.saveVO(hr);
     }
 
     /**
@@ -58,7 +58,7 @@ public class HRInformationController {
      */
     @PutMapping
     public Result<HRVO> updateHR(@RequestBody HR hr) {
-        return hrInformationService.updateHR(hr);
+        return hrInformationService.updateVO(hr);
     }
 
     /**
@@ -66,6 +66,6 @@ public class HRInformationController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteHRById(@PathVariable Integer id) {
-        return hrInformationService.deleteHRById(id);
+        return hrInformationService.deleteVOById(id);
     }
 }

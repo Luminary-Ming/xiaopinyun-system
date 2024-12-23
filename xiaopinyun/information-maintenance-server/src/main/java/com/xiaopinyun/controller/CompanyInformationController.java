@@ -29,7 +29,7 @@ public class CompanyInformationController {
      */
     @GetMapping("/{id}")
     public Result<CompanyVO> selectCompanyById(@PathVariable Integer id) {
-        return companyInformationService.selectCompanyById(id);
+        return companyInformationService.queryVOById(id);
     }
 
     /**
@@ -42,7 +42,7 @@ public class CompanyInformationController {
             @RequestParam(name = "companyName", required = false) String companyName,
             @RequestParam(name = "industryType", required = false) String industryType,
             @RequestParam(name = "benefit", required = false) String benefit) {
-        return companyInformationService.selectCompany(currentPage, pageSize, companyName, industryType, benefit);
+        return companyInformationService.queryVO(currentPage, pageSize, companyName, industryType, benefit);
     }
 
     /**
@@ -50,7 +50,7 @@ public class CompanyInformationController {
      */
     @PostMapping
     public Result<CompanyVO> addCompany(@RequestBody Company company) {
-        return companyInformationService.addCompany(company);
+        return companyInformationService.saveVO(company);
     }
 
     /**
@@ -58,7 +58,7 @@ public class CompanyInformationController {
      */
     @PutMapping
     public Result<CompanyVO> updateCompany(@RequestBody Company company) {
-        return companyInformationService.updateCompany(company);
+        return companyInformationService.updateVO(company);
     }
 
     /**
@@ -66,6 +66,6 @@ public class CompanyInformationController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteCompanyById(@PathVariable Integer id) {
-        return companyInformationService.deleteCompanyById(id);
+        return companyInformationService.deleteVOById(id);
     }
 }

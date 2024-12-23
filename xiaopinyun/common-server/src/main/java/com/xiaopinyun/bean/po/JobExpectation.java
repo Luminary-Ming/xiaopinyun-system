@@ -19,12 +19,12 @@ public class JobExpectation {
     private String jobType;
     // 期望行业 最多三个 例计算机软件、互联网、企业服务
     private String expectedIndustry;
-    // 工作城市 最多三个 例天津，北京，大连
+    // 期望城市 最多三个 例天津，北京，大连
     private String district;
     // 期望职位
     private String expectedJob;
     // 薪资要求 例9k-15k
-    private String Salary;
+    private String salary;
     // 是否已删除 0正常、1已删除
     @TableLogic
     private Integer isDelete;

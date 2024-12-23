@@ -1,9 +1,10 @@
 package com.xiaopinyun.bean.vo;
 
+import com.xiaopinyun.bean.po.JobExpectation;
 import lombok.Data;
 
 /**
- * 求职期望
+ * 求职期望（展示层对象）
  */
 @Data
 public class JobExpectationVO {
@@ -18,5 +19,14 @@ public class JobExpectationVO {
     // 期望职位
     private String expectedJob;
     // 薪资要求 例9k-15k
-    private String Salary;
+    private String salary;
+
+    // 构造方法，用于从 JobExpectation 对象转换
+    private JobExpectationVO(JobExpectation jobExpectation){
+        this.id = jobExpectation.getId();
+        this.jobType = jobExpectation.getJobType();
+        this.expectedIndustry = jobExpectation.getExpectedIndustry();
+        this.expectedJob = jobExpectation.getExpectedJob();
+        this.salary = jobExpectation.getSalary();
+    }
 }

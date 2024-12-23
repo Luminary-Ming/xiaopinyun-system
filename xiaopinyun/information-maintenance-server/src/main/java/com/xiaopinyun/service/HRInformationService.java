@@ -13,25 +13,25 @@ public interface HRInformationService extends IService<HR> {
     /**
      * 根据 id 查询 HR 信息
      */
-    Result<HRVO> selectHRById(Integer id);
+    Result<HRVO> queryVOById(Integer id);
 
     /**
      * 条件查询、分页查询 HR 信息
      */
-    Result<PageResult<List<HRVO>>> selectHR(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status);
+    Result<PageResult<List<HRVO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status);
 
     /**
      * 添加 HR 信息
      */
-    Result<HRVO> addHR(HR hr);
+    Result<HRVO> saveVO(HR hr);
 
     /**
      * 修改 HR 信息
      */
-    Result<HRVO> updateHR(HR hr);
+    Result<HRVO> updateVO(HR hr);
 
     /**
      * 根据 id 删除 HR 信息
      */
-    Result<Void> deleteHRById(Integer id);
+    Result<Void> deleteVOById(Integer id);
 }

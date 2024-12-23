@@ -12,25 +12,25 @@ public interface CompanyInformationService extends IService<Company> {
     /**
      * 根据 id 查询公司信息
      */
-    Result<CompanyVO> selectCompanyById(Integer id);
+    Result<CompanyVO> queryVOById(Integer id);
 
     /**
      * 条件查询、分页查询公司信息
      */
-    Result<PageResult<List<CompanyVO>>> selectCompany(Integer currentPage, Integer pageSize, String companyName, String industryType, String benefit);
+    Result<PageResult<List<CompanyVO>>> queryVO(Integer currentPage, Integer pageSize, String companyName, String industryType, String benefit);
 
     /**
      * 添加公司信息
      */
-    Result<CompanyVO> addCompany(Company company);
+    Result<CompanyVO> saveVO(Company company);
 
     /**
      * 修改公司信息
      */
-    Result<CompanyVO> updateCompany(Company company);
+    Result<CompanyVO> updateVO(Company company);
 
     /**
      * 根据 id 删除公司信息
      */
-    Result<Void> deleteCompanyById(Integer id);
+    Result<Void> deleteVOById(Integer id);
 }

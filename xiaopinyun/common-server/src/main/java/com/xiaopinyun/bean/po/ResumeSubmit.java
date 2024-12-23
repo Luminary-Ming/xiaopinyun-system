@@ -2,7 +2,6 @@ package com.xiaopinyun.bean.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -21,11 +20,8 @@ public class ResumeSubmit {
     private Integer resid;
     // 投递附件简历
     private Integer aid;
-    // 是否通过筛选（HR功能） 0退回、1通过
-    private Integer isPass;
+    // 筛选状态（HR功能） 0、默认、1退回、2通过、3感兴趣
+    private Integer filterStatus;
     // 简历退回回复（HR功能）
     private String reply;
-    // 是否已取消投递（学生功能） 0正常、1已删除
-    @TableLogic
-    private Integer isDelete;
 }

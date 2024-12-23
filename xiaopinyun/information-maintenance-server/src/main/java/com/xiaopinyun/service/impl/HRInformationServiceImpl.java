@@ -27,7 +27,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      * 根据 id 查询 HR 信息
      */
     @Override
-    public Result<HRVO> selectHRById(Integer id) {
+    public Result<HRVO> queryVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }
@@ -43,7 +43,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      * 条件查询、分页查询 HR 信息
      */
     @Override
-    public Result<PageResult<List<HRVO>>> selectHR(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
+    public Result<PageResult<List<HRVO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
         Page<HR> page = new Page<>();
         QueryWrapper<HR> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name), "name", name)
@@ -69,7 +69,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      * 添加 HR 信息
      */
     @Override
-    public Result<HRVO> addHR(HR hr) {
+    public Result<HRVO> saveVO(HR hr) {
         if (hr == null) {
             return Result.fail(BizCode.ADD_NULL);
         }
@@ -94,7 +94,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      * 修改 HR 信息
      */
     @Override
-    public Result<HRVO> updateHR(HR hr) {
+    public Result<HRVO> updateVO(HR hr) {
         // 如果没有要更新的数据直接返回更新成功
         if (hr == null) {
             return Result.success(BizCode.UPDATE_SUCCESS);
@@ -118,7 +118,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      * 根据 id 删除 HR 信息
      */
     @Override
-    public Result<Void> deleteHRById(Integer id) {
+    public Result<Void> deleteVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }

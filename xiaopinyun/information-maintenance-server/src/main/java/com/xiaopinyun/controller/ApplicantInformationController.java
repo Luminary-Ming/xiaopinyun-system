@@ -29,7 +29,7 @@ public class ApplicantInformationController {
      */
     @GetMapping("/{id}")
     public Result<ApplicantVO> selectApplicantById(@PathVariable Integer id) {
-        return applicantInformationService.selectApplicantById(id);
+        return applicantInformationService.queryVOById(id);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ApplicantInformationController {
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "sex", required = false) Integer sex,
             @RequestParam(name = "status", required = false) Integer status) {
-        return applicantInformationService.selectApplicant(currentPage, pageSize, name, sex, status);
+        return applicantInformationService.queryVO(currentPage, pageSize, name, sex, status);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ApplicantInformationController {
      */
     @PostMapping
     public Result<ApplicantVO> addApplicant(@RequestBody Applicant applicant) {
-        return applicantInformationService.addApplicant(applicant);
+        return applicantInformationService.saveVO(applicant);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ApplicantInformationController {
      */
     @PutMapping
     public Result<ApplicantVO> updateApplicant(@RequestBody Applicant applicant) {
-        return applicantInformationService.updateApplicant(applicant);
+        return applicantInformationService.updateVO(applicant);
     }
 
     /**
@@ -66,6 +66,6 @@ public class ApplicantInformationController {
      */
     @DeleteMapping("/{id}")
     public Result<Void> deleteApplicantById(@PathVariable Integer id) {
-        return applicantInformationService.deleteApplicantById(id);
+        return applicantInformationService.deleteVOById(id);
     }
 }

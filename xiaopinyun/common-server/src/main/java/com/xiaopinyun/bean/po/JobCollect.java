@@ -15,6 +15,8 @@ public class JobCollect {
     // 自增id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    // 学生id
+    private Integer aid;
     // 招聘信息id
     private Integer rid;
     // 是否已取消收藏  0已收藏、1取消收藏

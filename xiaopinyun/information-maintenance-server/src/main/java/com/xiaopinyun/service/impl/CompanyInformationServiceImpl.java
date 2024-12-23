@@ -27,7 +27,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      * 根据 id 查询公司信息
      */
     @Override
-    public Result<CompanyVO> selectCompanyById(Integer id) {
+    public Result<CompanyVO> queryVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }
@@ -43,7 +43,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      * 条件查询、分页查询公司信息
      */
     @Override
-    public Result<PageResult<List<CompanyVO>>> selectCompany(Integer currentPage, Integer pageSize, String companyName, String industryType, String benefit) {
+    public Result<PageResult<List<CompanyVO>>> queryVO(Integer currentPage, Integer pageSize, String companyName, String industryType, String benefit) {
         Page<Company> page = new Page<>();
         QueryWrapper<Company> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(companyName), "company_name", companyName)
@@ -69,7 +69,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      * 添加公司信息
      */
     @Override
-    public Result<CompanyVO> addCompany(Company company) {
+    public Result<CompanyVO> saveVO(Company company) {
         if (company == null) {
             return Result.fail(BizCode.ADD_NULL);
         }
@@ -93,7 +93,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      * 修改公司信息
      */
     @Override
-    public Result<CompanyVO> updateCompany(Company company) {
+    public Result<CompanyVO> updateVO(Company company) {
         // 如果没有要更新的数据直接返回更新成功
         if (company == null) {
             return Result.success(BizCode.UPDATE_SUCCESS);
@@ -117,7 +117,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      * 根据 id 删除公司信息
      */
     @Override
-    public Result<Void> deleteCompanyById(Integer id) {
+    public Result<Void> deleteVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }

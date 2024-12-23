@@ -31,9 +31,9 @@ public class Recruit {
     private Integer education;
     // 岗位详情
     private String jobInformation;
-    // 员工福利
+    // 员工福利 例五险一金、定期体检、年终奖、带薪年假、节日福利
     private String benefit;
-    // 是否发布  0不发布、1发布
+    // 是否发布  0不发布（职位关闭）、1发布（招聘中）
     private Integer isPublish;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer isCheck;

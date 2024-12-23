@@ -23,6 +23,7 @@ public class EducationalBackgroundVO {
     // 主修课程
     private String majorCourse;
 
+    // 构造方法，用于从 EducationalBackground 对象转换
     public EducationalBackgroundVO(EducationalBackground educationalBackground) {
         this.id = educationalBackground.getId();
         this.name = educationalBackground.getName();

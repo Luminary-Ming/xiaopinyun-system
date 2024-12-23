@@ -28,7 +28,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 根据 id 查询学生信息
      */
     @Override
-    public Result<ApplicantVO> selectApplicantById(Integer id) {
+    public Result<ApplicantVO> queryVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }
@@ -44,7 +44,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 条件查询、分页查询学生信息
      */
     @Override
-    public Result<PageResult<List<ApplicantVO>>> selectApplicant(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
+    public Result<PageResult<List<ApplicantVO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
         Page<Applicant> page = new Page<>();
         QueryWrapper<Applicant> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name), "name", name)
@@ -70,7 +70,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 添加学生信息
      */
     @Override
-    public Result<ApplicantVO> addApplicant(Applicant applicant) {
+    public Result<ApplicantVO> saveVO(Applicant applicant) {
         if (applicant == null) {
             return Result.fail(BizCode.ADD_NULL);
         }
@@ -97,7 +97,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 修改学生信息
      */
     @Override
-    public Result<ApplicantVO> updateApplicant(Applicant applicant) {
+    public Result<ApplicantVO> updateVO(Applicant applicant) {
         // 如果没有要更新的数据直接返回更新成功
         if (applicant == null) {
             return Result.success(BizCode.UPDATE_SUCCESS);
@@ -121,7 +121,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      * 根据 id 删除学生信息
      */
     @Override
-    public Result<Void> deleteApplicantById(Integer id) {
+    public Result<Void> deleteVOById(Integer id) {
         if (id == null || id < 1) {
             return Result.fail(BizCode.FAIL);
         }
