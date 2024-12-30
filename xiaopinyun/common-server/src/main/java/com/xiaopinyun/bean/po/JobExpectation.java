@@ -15,6 +15,8 @@ public class JobExpectation {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    // 学生id
+    private Integer aid;
     // 求职类型
     private String jobType;
     // 期望行业 最多三个 例计算机软件、互联网、企业服务

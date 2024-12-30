@@ -22,7 +22,7 @@ public class JobExpectationVO {
     private String salary;
 
     // 构造方法，用于从 JobExpectation 对象转换
-    private JobExpectationVO(JobExpectation jobExpectation){
+    public JobExpectationVO(JobExpectation jobExpectation){
         this.id = jobExpectation.getId();
         this.jobType = jobExpectation.getJobType();
         this.expectedIndustry = jobExpectation.getExpectedIndustry();
