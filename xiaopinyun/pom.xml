@@ -68,13 +68,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- 开启 SpringCloud 应用程序启动时加载 bootstrap.yml 配置文件 -->
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-bootstrap</artifactId>
-                <version>${bootstrap.version}</version>
-            </dependency>
-
             <!-- MinIO服务器依赖 -->
             <dependency>
                 <groupId>io.minio</groupId>
@@ -164,7 +157,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

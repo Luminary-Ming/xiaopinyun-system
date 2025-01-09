@@ -134,7 +134,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
     /**
      * 校验所传入的字段
      */
-    public Result<ApplicantVO> checkApplicant(Applicant applicant) {
+    private Result<ApplicantVO> checkApplicant(Applicant applicant) {
         // 校验性别
         if (applicant.getSex() != 0 && applicant.getSex() != 1) {
             return Result.fail(BizCode.SEX_FAIL);

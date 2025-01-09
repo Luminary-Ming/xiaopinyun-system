@@ -15,6 +15,8 @@ public class ProjectExperience {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    // 学生id
+    private Integer aid;
     // 项目名称
     private String projectName;
     // 项目角色

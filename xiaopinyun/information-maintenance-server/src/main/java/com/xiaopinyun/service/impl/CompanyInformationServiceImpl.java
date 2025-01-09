@@ -130,7 +130,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
     /**
      * 校验所传入的字段
      */
-    public Result<CompanyVO> checkCompany(Company company) {
+    private Result<CompanyVO> checkCompany(Company company) {
         // 校检工作时间
         if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", company.getWorkingHours())) {
             return Result.fail(BizCode.WORKINGHOURS_FORMAT_FAIL);

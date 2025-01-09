@@ -15,6 +15,8 @@ public class WorkExperience {
     // id
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    // 学生id
+    private Integer aid;
     // 公司名
     private String companyName;
     // 所属行业

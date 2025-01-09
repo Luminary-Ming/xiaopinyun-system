@@ -48,6 +48,8 @@ public enum BizCode {
     OVERTIME_FAIL(5019,"加班情况错误"),
     CAPITAL_FAIL(5020,"注册资本只能为数值"),
     FOUNDDATE_FORMAT_FAIL(5021,"成立日期格式不正确"),
+    QUALIFICATION_FORMAT_FAIL(5022,"学历格式不正确"),
+    TIME_FORMAT_FAIL(5023,"时间格式不正确")
     ;
 
 

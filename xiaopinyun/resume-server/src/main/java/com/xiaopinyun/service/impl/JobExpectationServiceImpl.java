@@ -33,8 +33,9 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
         List<JobExpectationVO> jobExpectationVOList = new ArrayList<>();
         for (JobExpectation jobExpectation : jobExpectationList) {
             JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectation);
-            jobExpectationVOList.add(jobExpectationVO)
+            jobExpectationVOList.add(jobExpectationVO);
         }
+        return Result.success(BizCode.SELECT_SUCCESS, jobExpectationVOList);
     }
 
     /**
@@ -42,7 +43,15 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      */
     @Override
     public Result<JobExpectationVO> saveVO(JobExpectation jobExpectation) {
-        return null;
+        if (jobExpectation == null) {
+            return Result.fail(BizCode.ADD_FAIL);
+        }
+        if (save(jobExpectation)) {
+            JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
+            JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
+            return Result.success(BizCode.ADD_SUCCESS, jobExpectationVO);
+        }
+        return Result.fail(BizCode.ADD_FAIL);
     }
 
     /**
@@ -50,7 +59,16 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      */
     @Override
     public Result<JobExpectationVO> updateVO(JobExpectation jobExpectation) {
-        return null;
+        // 如果没有更新数据直接返回更新成功
+        if (jobExpectation == null) {
+            return Result.success(BizCode.UPDATE_SUCCESS);
+        }
+        if (updateById(jobExpectation)) {
+            JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
+            JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
+            return Result.success(BizCode.UPDATE_SUCCESS, jobExpectationVO);
+        }
+        return Result.fail(BizCode.UPDATE_FAIL);
     }
 
     /**
@@ -58,6 +76,12 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      */
     @Override
     public Result<Void> deleteVOById(Integer id) {
-        return null;
+        if (id == null || id < 1) {
+            return Result.fail(BizCode.FAIL);
+        }
+        if (removeById(id)) {
+            return Result.success(BizCode.DELETE_SUCCESS);
+        }
+        return Result.fail(BizCode.DELETE_FAIL);
     }
 }

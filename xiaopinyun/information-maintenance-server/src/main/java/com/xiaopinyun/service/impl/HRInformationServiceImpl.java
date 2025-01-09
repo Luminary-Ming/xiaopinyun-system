@@ -131,7 +131,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
     /**
      * 校验所传入的字段
      */
-    public Result<HRVO> checkHR(HR hr) {
+    private Result<HRVO> checkHR(HR hr) {
         // 校检性别
         if (!Pattern.matches("[0-1]", hr.getSex().toString())) {
             return Result.fail(BizCode.SEX_FAIL);
