@@ -1,10 +1,9 @@
 package com.xiaopinyun.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xiaopinyun.config.MinIOConfig;
 import com.xiaopinyun.bean.vo.Result;
+import com.xiaopinyun.config.MinIOConfig;
 import com.xiaopinyun.service.UploadService;
-import com.xiaopinyun.util.BizCode;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
@@ -38,7 +37,7 @@ public class UploadServiceImpl implements UploadService {
         String filename = file.getOriginalFilename();
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
-            return Result.fail(BizCode.FILE_UPLOAD_FAIL);
+            return Result.paramError("文件名不能为空");
         }
         // 获取文件扩展名
         String ext = filename.substring(filename.lastIndexOf("."));
@@ -61,9 +60,9 @@ public class UploadServiceImpl implements UploadService {
                             .build());
             // 返回文件在服务器里的链接
             String fileURL = minIOConfig.getEndpoint() + "/" + minIOConfig.getBucketName() + "/" + filename;
-            return Result.success(BizCode.FILE_UPLOAD_SUCCESS, fileURL);
+            return Result.ok(fileURL, "文件上传成功");
         } catch (Exception e) {
-            return Result.fail(BizCode.FILE_UPLOAD_FAIL);
+            return Result.error("文件上传失败");
         }
     }
 
@@ -73,11 +72,11 @@ public class UploadServiceImpl implements UploadService {
     public Result<Void> downloadFile(String filename, HttpServletResponse response) {
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
-            return Result.fail(BizCode.FILE_DOWNLOAD_FAIL);
+            return Result.paramError("文件名不能为空");
         }
         // 如果文件在桶中不存在
         if (!fileIsExist(filename)) {
-            return Result.fail(BizCode.FILE_NOT_EXIST);
+            return Result.error("文件不存在");
         }
         // 配置响应头
         response.setHeader("Content-Disposition", "attachment; filename=" + filename);
@@ -99,9 +98,9 @@ public class UploadServiceImpl implements UploadService {
                 // 写入数据
                 outputStream.write(buffer, 0, length);
             }
-            return Result.success(BizCode.FILE_DOWNLOAD_SUCCESS);
+            return Result.ok("文件下载成功");
         } catch (Exception e) {
-            return Result.fail(BizCode.FILE_DOWNLOAD_FAIL);
+            return Result.error("文件下载失败");
         }
     }
 
@@ -112,11 +111,11 @@ public class UploadServiceImpl implements UploadService {
     public Result<String> getPreviewFileUrl(String filename) {
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
-            return Result.fail(BizCode.FILE_PREVIEW_FAIL);
+            return Result.error("文件名不能为空");
         }
         // 如果文件在桶中不存在
         if (!fileIsExist(filename)) {
-            return Result.fail(BizCode.FILE_NOT_EXIST);
+            return Result.error("文件不存在");
         }
         String previewFileUrl = null;
         try {
@@ -127,9 +126,9 @@ public class UploadServiceImpl implements UploadService {
                             .bucket(minIOConfig.getBucketName())
                             .object(filename).build());
         } catch (Exception e) {
-            return Result.fail(BizCode.FILE_PREVIEW_FAIL);
+            return Result.error("文件预览失败");
         }
-        return Result.success(BizCode.FILE_PREVIEW_SUCCESS, previewFileUrl);
+        return Result.ok(previewFileUrl, "文件预览成功");
     }
 
     /**
@@ -138,11 +137,11 @@ public class UploadServiceImpl implements UploadService {
     public Result<Void> deleteFile(String filename) {
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
-            return Result.fail(BizCode.FILE_DELETE_FAIL);
+            return Result.paramError("文件名不能为空");
         }
         // 如果文件在桶中不存在
         if (!fileIsExist(filename)) {
-            return Result.fail(BizCode.FILE_NOT_EXIST);
+            return Result.error("文件不存在");
         }
         try {
             minioClient.removeObject(
@@ -150,9 +149,9 @@ public class UploadServiceImpl implements UploadService {
                             .bucket(minIOConfig.getBucketName())
                             .object(filename)
                             .build());
-            return Result.success(BizCode.FILE_DELETE_SUCCESS);
+            return Result.ok("文件删除成功");
         } catch (Exception e) {
-            return Result.fail(BizCode.FILE_DELETE_FAIL);
+            return Result.error("文件删除失败");
         }
     }
 

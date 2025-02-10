@@ -1,7 +1,6 @@
 package com.xiaopinyun.exception;
 
 import com.xiaopinyun.bean.vo.Result;
-import com.xiaopinyun.util.BizCode;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,16 +13,16 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(BizException.class)
     public Result<String> handlerBizException() {
-        return Result.fail(BizCode.UNKNOWN);
+        return Result.unkown();
     }
 
     @ExceptionHandler(RuntimeException.class)
     public Result<String> handlerRuntimeException() {
-        return Result.fail(BizCode.UNKNOWN);
+        return Result.unkown();
     }
 
     @ExceptionHandler(Exception.class)
     public Result<String> handlerException() {
-        return Result.fail(BizCode.UNKNOWN);
+        return Result.unkown();
     }
 }

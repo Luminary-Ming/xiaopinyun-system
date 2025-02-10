@@ -28,15 +28,12 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      */
     @Override
     public Result<CompanyVO> queryVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         Company company = companyInformationMapper.selectById(id);
         if (company != null) {
             CompanyVO companyVO = new CompanyVO(company);
-            return Result.success(BizCode.SELECT_SUCCESS, companyVO);
+            return Result.ok(companyVO);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -60,9 +57,9 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
                 companyVOList.add(companyVO);
             }
             pageResult.setData(companyVOList);
-            return Result.success(BizCode.SELECT_SUCCESS, pageResult);
+            return Result.ok(pageResult);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -71,10 +68,10 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
     @Override
     public Result<CompanyVO> saveVO(Company company) {
         if (company == null) {
-            return Result.fail(BizCode.ADD_NULL);
+            return Result.paramError("请填写信息");
         }
         // 校验对象的字段
-        if (checkCompany(company).getCode() != 2000) {
+        if (checkCompany(company).isSuccess()) {
             return checkCompany(company);
         }
         // 添加需要审核
@@ -84,9 +81,9 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
         if (save(company)) {
             Company companyData = companyInformationMapper.selectById(company.getId());
             CompanyVO companyVO = new CompanyVO(companyData);
-            return Result.success(BizCode.ADD_SUCCESS, companyVO);
+            return Result.ok(companyVO);
         }
-        return Result.fail(BizCode.ADD_FAIL);
+        return Result.error();
     }
 
     /**
@@ -96,10 +93,10 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
     public Result<CompanyVO> updateVO(Company company) {
         // 如果没有要更新的数据直接返回更新成功
         if (company == null) {
-            return Result.success(BizCode.UPDATE_SUCCESS);
+            return Result.ok();
         }
         // 校验对象的字段
-        if (checkCompany(company).getCode() != 2000) {
+        if (checkCompany(company).isSuccess()) {
             return checkCompany(company);
         }
         // 更新需要审核
@@ -108,9 +105,9 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
             // 修改之后的数据
             Company companyData = companyInformationMapper.selectById(company.getId());
             CompanyVO companyVO = new CompanyVO(companyData);
-            return Result.success(BizCode.UPDATE_SUCCESS, companyVO);
+            return Result.ok(companyVO);
         }
-        return Result.fail(BizCode.UPDATE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -118,13 +115,10 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
      */
     @Override
     public Result<Void> deleteVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         if (removeById(id)) {
-            return Result.success(BizCode.DELETE_SUCCESS);
+            return Result.ok();
         }
-        return Result.fail(BizCode.DELETE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -133,24 +127,24 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
     private Result<CompanyVO> checkCompany(Company company) {
         // 校检工作时间
         if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", company.getWorkingHours())) {
-            return Result.fail(BizCode.WORKINGHOURS_FORMAT_FAIL);
+            return Result.paramError("工作时间格式错误");
         }
         // 校检休假情况
         if (!Pattern.matches("[0-2]", company.getHoliday().toString())) {
-            return Result.fail(BizCode.HOLIDAY_FAIL);
+            return Result.paramError("休假情况错误");
         }
         // 校检加班情况
         if (!Pattern.matches("[0-2]", company.getOvertime().toString())) {
-            return Result.fail(BizCode.OVERTIME_FAIL);
+            return Result.paramError("加班情况错误");
         }
         // 检验注册资本
         if (!Pattern.matches("^\\d+(\\.\\d+)?$", company.getCapital().toString())) {
-            return Result.fail(BizCode.CAPITAL_FAIL);
+            return Result.paramError("注册资本只能为数值");
         }
         // 检验成立日期
         if (!Pattern.matches("^\\d{4}-\\d{2}-\\d{2}$", company.getFoundDate())) {
-            return Result.fail(BizCode.FOUNDDATE_FORMAT_FAIL);
+            return Result.paramError("成立日期格式不正确");
         }
-        return Result.success(BizCode.SUCCESS);
+        return Result.ok();
     }
 }

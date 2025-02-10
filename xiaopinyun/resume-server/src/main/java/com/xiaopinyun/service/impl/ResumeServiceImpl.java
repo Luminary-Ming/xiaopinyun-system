@@ -19,14 +19,11 @@ public class ResumeServiceImpl extends ServiceImpl<ResumeMapper, Resume> impleme
      */
     @Override
     public Result<Resume> selectResume(Integer id) {
-        if(id == null || id < 1){
-            return Result.fail(BizCode.FAIL);
-        }
         Resume resume = resumeMapper.selectById(id);
         if(resume != null){
-            return Result.success(BizCode.SELECT_SUCCESS,resume);
+            return Result.ok(resume);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**

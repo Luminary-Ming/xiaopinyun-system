@@ -24,9 +24,6 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      */
     @Override
     public Result<List<JobExpectationVO>> queryVOByAid(Integer aid) {
-        if (aid == null || aid < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         QueryWrapper<JobExpectation> wrapper = new QueryWrapper<>();
         wrapper.eq("aid", aid);
         List<JobExpectation> jobExpectationList = jobExpectationMapper.selectList(wrapper);
@@ -35,7 +32,7 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
             JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectation);
             jobExpectationVOList.add(jobExpectationVO);
         }
-        return Result.success(BizCode.SELECT_SUCCESS, jobExpectationVOList);
+        return Result.ok(jobExpectationVOList);
     }
 
     /**
@@ -44,14 +41,14 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
     @Override
     public Result<JobExpectationVO> saveVO(JobExpectation jobExpectation) {
         if (jobExpectation == null) {
-            return Result.fail(BizCode.ADD_FAIL);
+            return Result.error(BizCode.ADD_FAIL);
         }
         if (save(jobExpectation)) {
             JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
             JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
-            return Result.success(BizCode.ADD_SUCCESS, jobExpectationVO);
+            return Result.ok(jobExpectationVO);
         }
-        return Result.fail(BizCode.ADD_FAIL);
+        return Result.error();
     }
 
     /**
@@ -61,14 +58,14 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
     public Result<JobExpectationVO> updateVO(JobExpectation jobExpectation) {
         // 如果没有更新数据直接返回更新成功
         if (jobExpectation == null) {
-            return Result.success(BizCode.UPDATE_SUCCESS);
+            return Result.ok();
         }
         if (updateById(jobExpectation)) {
             JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
             JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
-            return Result.success(BizCode.UPDATE_SUCCESS, jobExpectationVO);
+            return Result.ok(jobExpectationVO);
         }
-        return Result.fail(BizCode.UPDATE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -76,12 +73,9 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      */
     @Override
     public Result<Void> deleteVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         if (removeById(id)) {
-            return Result.success(BizCode.DELETE_SUCCESS);
+            return Result.ok();
         }
-        return Result.fail(BizCode.DELETE_FAIL);
+        return Result.error();
     }
 }

@@ -28,15 +28,12 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      */
     @Override
     public Result<HRVO> queryVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         HR hr = hrInformationMapper.selectById(id);
         if (hr != null) {
             HRVO hrVO = new HRVO(hr);
-            return Result.success(BizCode.SELECT_SUCCESS, hrVO);
+            return Result.ok(hrVO);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -60,9 +57,9 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
                 hrVOList.add(hrVO);
             }
             pageResult.setData(hrVOList);
-            return Result.success(BizCode.SELECT_SUCCESS, pageResult);
+            return Result.ok(pageResult);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -71,10 +68,10 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
     @Override
     public Result<HRVO> saveVO(HR hr) {
         if (hr == null) {
-            return Result.fail(BizCode.ADD_NULL);
+            return Result.paramError("请填写信息");
         }
         // 校验对象的字段
-        if (checkHR(hr).getCode() != 2000) {
+        if (checkHR(hr).isSuccess()) {
             return checkHR(hr);
         }
         // 添加需要审核
@@ -85,9 +82,9 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
             // 添加之后的数据
             HR hrData = hrInformationMapper.selectById(hr.getId());
             HRVO hrVO = new HRVO(hrData);
-            return Result.success(BizCode.ADD_SUCCESS, hrVO);
+            return Result.ok(hrVO);
         }
-        return Result.fail(BizCode.ADD_FAIL);
+        return Result.error();
     }
 
     /**
@@ -97,10 +94,10 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
     public Result<HRVO> updateVO(HR hr) {
         // 如果没有要更新的数据直接返回更新成功
         if (hr == null) {
-            return Result.success(BizCode.UPDATE_SUCCESS);
+            return Result.ok();
         }
         // 校验对象的字段
-        if (checkHR(hr).getCode() != 2000) {
+        if (checkHR(hr).isSuccess()) {
             return checkHR(hr);
         }
         // 更新需要审核
@@ -109,9 +106,9 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
             // 修改之后的数据
             HR hrData = hrInformationMapper.selectById(hr.getId());
             HRVO hrVO = new HRVO(hrData);
-            return Result.success(BizCode.UPDATE_SUCCESS, hrVO);
+            return Result.ok(hrVO);
         }
-        return Result.fail(BizCode.UPDATE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -119,13 +116,10 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
      */
     @Override
     public Result<Void> deleteVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         if (removeById(id)) {
-            return Result.success(BizCode.DELETE_SUCCESS);
+            return Result.ok();
         }
-        return Result.fail(BizCode.DELETE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -134,20 +128,20 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
     private Result<HRVO> checkHR(HR hr) {
         // 校检性别
         if (!Pattern.matches("[0-1]", hr.getSex().toString())) {
-            return Result.fail(BizCode.SEX_FAIL);
+            return Result.paramError("性别参数错误");
         }
         // 校验手机号
         if (!Pattern.matches("^1[3-9]\\d{9}$", hr.getTelephone())) {
-            return Result.fail(BizCode.TELEPHONE_FORMAT_FAIL);
+            return Result.paramError("手机号格式错误");
         }
         // 校验电子邮箱
         if (!Pattern.matches("[a-zA-Z0-9]+@[A-Za-z0-9]+\\.[a-z0-9]{2,}", hr.getEmail())) {
-            return Result.fail(BizCode.EMAIL_FORMAT_FAIL);
+            return Result.paramError("邮箱格式错误");
         }
         // 校检状态
         if (!Pattern.matches("[0-4]", hr.getStatus().toString())) {
-            return Result.fail(BizCode.STATUS_FAIL);
+            return Result.paramError("校检状态错误");
         }
-        return Result.success(BizCode.SUCCESS);
+        return Result.ok();
     }
 }

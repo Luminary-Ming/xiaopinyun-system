@@ -29,15 +29,12 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      */
     @Override
     public Result<ApplicantVO> queryVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         Applicant applicant = applicantInformationMapper.selectById(id);
         if (applicant != null) {
             ApplicantVO applicantVO = new ApplicantVO(applicant);
-            return Result.success(BizCode.SELECT_SUCCESS, applicantVO);
+            return Result.ok(applicantVO);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -61,9 +58,9 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
                 applicantVOList.add(applicantVO);
             }
             pageResult.setData(applicantVOList);
-            return Result.success(BizCode.SELECT_SUCCESS, pageResult);
+            return Result.ok(pageResult);
         }
-        return Result.fail(BizCode.NO_DATA);
+        return Result.ok(BizCode.NO_DATA);
     }
 
     /**
@@ -72,10 +69,10 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
     @Override
     public Result<ApplicantVO> saveVO(Applicant applicant) {
         if (applicant == null) {
-            return Result.fail(BizCode.ADD_NULL);
+            return Result.paramError("请填写信息");
         }
         // 校验对象的字段
-        if (checkApplicant(applicant).getCode() != 2000) {
+        if (checkApplicant(applicant).isSuccess()) {
             return checkApplicant(applicant);
         }
         // 添加需要审核
@@ -88,9 +85,9 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
             // 添加之后的数据
             Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());
             ApplicantVO applicantVO = new ApplicantVO(applicantData);
-            return Result.success(BizCode.ADD_SUCCESS, applicantVO);
+            return Result.ok(applicantVO);
         }
-        return Result.fail(BizCode.ADD_FAIL);
+        return Result.error();
     }
 
     /**
@@ -100,10 +97,10 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
     public Result<ApplicantVO> updateVO(Applicant applicant) {
         // 如果没有要更新的数据直接返回更新成功
         if (applicant == null) {
-            return Result.success(BizCode.UPDATE_SUCCESS);
+            return Result.ok();
         }
         // 校验对象的字段
-        if (checkApplicant(applicant).getCode() != 2000) {
+        if (checkApplicant(applicant).isSuccess()) {
             return checkApplicant(applicant);
         }
         // 更新需要审核
@@ -112,9 +109,9 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
             // 修改之后的数据
             Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());
             ApplicantVO applicantVO = new ApplicantVO(applicantData);
-            return Result.success(BizCode.UPDATE_SUCCESS, applicantVO);
+            return Result.ok(applicantVO);
         }
-        return Result.fail(BizCode.UPDATE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -122,13 +119,10 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
      */
     @Override
     public Result<Void> deleteVOById(Integer id) {
-        if (id == null || id < 1) {
-            return Result.fail(BizCode.FAIL);
-        }
         if (removeById(id)) {
-            return Result.success(BizCode.DELETE_SUCCESS);
+            return Result.ok();
         }
-        return Result.fail(BizCode.DELETE_FAIL);
+        return Result.error();
     }
 
     /**
@@ -137,25 +131,24 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
     private Result<ApplicantVO> checkApplicant(Applicant applicant) {
         // 校验性别
         if (applicant.getSex() != 0 && applicant.getSex() != 1) {
-            return Result.fail(BizCode.SEX_FAIL);
+            return Result.paramError("性别参数错误");
         }
         // 校验手机号
         if (!Pattern.matches("^1[3-9]\\d{9}$", applicant.getTelephone())) {
-            return Result.fail(BizCode.TELEPHONE_FORMAT_FAIL);
+            return Result.paramError("手机号格式错误");
         }
         // 校验电子邮箱
         if (!Pattern.matches("[a-zA-Z0-9]+@[A-Za-z0-9]+\\.[a-z0-9]{2,}", applicant.getEmail())) {
-            return Result.fail(BizCode.EMAIL_FORMAT_FAIL);
+            return Result.paramError("邮箱格式错误");
         }
         // 校验出生年月
         if (!Pattern.matches("\\b\\d{4}-(0[1-9]|1[0-2])\\b", applicant.getBirthday())) {
-            return Result.fail(BizCode.BIRTHDAY_FORMAT_FAIL);
+            return Result.paramError("出生年月格式错误");
         }
         // 校检求职状态
         if (!Pattern.matches("[0-3]", applicant.getStatus().toString())) {
-            return Result.fail(BizCode.STATUS_FAIL);
+            return Result.paramError("求职状态错误");
         }
-        return Result.success(BizCode.SUCCESS);
+        return Result.ok();
     }
-
 }
