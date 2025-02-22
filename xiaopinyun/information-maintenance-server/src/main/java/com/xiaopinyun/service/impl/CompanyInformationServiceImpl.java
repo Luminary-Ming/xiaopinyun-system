@@ -68,16 +68,16 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
     @Override
     public Result<CompanyVO> saveVO(Company company) {
         if (company == null) {
-            return Result.paramError("请填写信息");
+            return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
         if (checkCompany(company).isSuccess()) {
             return checkCompany(company);
         }
         // 添加需要审核
-        company.setIsCheck(2);
+        company.setCheckStatus(2);
         // 默认未删除
-        company.setIsDelete(0);
+        company.setDr(0);
         if (save(company)) {
             Company companyData = companyInformationMapper.selectById(company.getId());
             CompanyVO companyVO = new CompanyVO(companyData);
@@ -100,7 +100,7 @@ public class CompanyInformationServiceImpl extends ServiceImpl<CompanyInformatio
             return checkCompany(company);
         }
         // 更新需要审核
-        company.setIsCheck(2);
+        company.setCheckStatus(2);
         if (updateById(company)) {
             // 修改之后的数据
             Company companyData = companyInformationMapper.selectById(company.getId());

@@ -28,5 +28,5 @@ public class User {
     private Integer role;
     // 是否已删除账户  0正常使用、1已删除账户
     @TableLogic
-    private Integer isDelete;
+    private Integer dr;
 }

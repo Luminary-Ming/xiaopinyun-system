@@ -21,5 +21,5 @@ public class JobCollect {
     private Integer rid;
     // 是否已取消收藏  0已收藏、1取消收藏
     @TableLogic
-    private Integer isDelete;
+    private Integer dr;
 }

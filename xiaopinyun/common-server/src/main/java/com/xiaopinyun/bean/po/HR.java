@@ -32,8 +32,8 @@ public class HR {
     // 状态  0-在线、1-昨日活跃、2-3天内活跃、3-7天内活跃、4-1月内活跃
     private Integer status;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
-    private Integer isCheck;
+    private Integer checkStatus;
     // 是否已删除 0正常、1已删除
     @TableLogic
-    private Integer isDelete;
+    private Integer dr;
 }

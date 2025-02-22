@@ -68,16 +68,16 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
     @Override
     public Result<HRVO> saveVO(HR hr) {
         if (hr == null) {
-            return Result.paramError("请填写信息");
+            return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
         if (checkHR(hr).isSuccess()) {
             return checkHR(hr);
         }
         // 添加需要审核
-        hr.setIsCheck(2);
+        hr.setCheckStatus(2);
         // 默认未删除
-        hr.setIsDelete(0);
+        hr.setDr(0);
         if (save(hr)) {
             // 添加之后的数据
             HR hrData = hrInformationMapper.selectById(hr.getId());
@@ -101,7 +101,7 @@ public class HRInformationServiceImpl extends ServiceImpl<HRInformationMapper, H
             return checkHR(hr);
         }
         // 更新需要审核
-        hr.setIsCheck(2);
+        hr.setCheckStatus(2);
         if (updateById(hr)) {
             // 修改之后的数据
             HR hrData = hrInformationMapper.selectById(hr.getId());

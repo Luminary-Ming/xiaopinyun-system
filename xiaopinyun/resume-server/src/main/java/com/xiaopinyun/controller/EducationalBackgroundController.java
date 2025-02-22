@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class EducationalBackgroundController {
      * 添加教育背景
      */
     @PostMapping
-    public Result<EducationalBackgroundVO> saveVO(EducationalBackground background) {
+    public Result<EducationalBackgroundVO> saveVO(@RequestBody EducationalBackground background) {
         return backgroundService.saveVO(background);
     }
 
@@ -41,7 +42,7 @@ public class EducationalBackgroundController {
      * 修改教育背景
      */
     @PutMapping
-    public Result<EducationalBackgroundVO> updateVO(EducationalBackground background) {
+    public Result<EducationalBackgroundVO> updateVO(@RequestBody EducationalBackground background) {
         return backgroundService.updateVO(background);
     }
 

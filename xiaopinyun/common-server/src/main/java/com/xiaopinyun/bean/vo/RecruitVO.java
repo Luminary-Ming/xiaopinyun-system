@@ -46,9 +46,9 @@ public class RecruitVO {
     // 工作地址
     private String companyAddress;
     // 是否发布 0不发布（职位关闭）、1发布（招聘中）
-    private Integer isPublish;
+    private Integer publishStatus;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
-    private Integer isCheck;
+    private Integer checkStatus;
     // 是否推荐到首页（管理员功能）  0不推荐、1推荐
-    private Integer isRecommend;
+    private Integer recommendStatus;
 }

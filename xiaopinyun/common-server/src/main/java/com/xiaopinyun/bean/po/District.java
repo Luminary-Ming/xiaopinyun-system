@@ -13,7 +13,7 @@ import lombok.Data;
 public class District {
     // 自增id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer district_id;
+    private Integer districtId;
     // 父级关系
     private Integer pid;
     // 地区名称

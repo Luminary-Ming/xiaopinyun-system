@@ -39,7 +39,7 @@ public class HRVO {
         this.telephone = hr.getTelephone();
         this.email = hr.getEmail();
         this.status = convertStatus(hr.getStatus());
-        this.checkStatus = convertCheckStatus(hr.getIsCheck());
+        this.checkStatus = convertCheckStatus(hr.getCheckStatus());
     }
 
     // 私有方法，用于转换性别描述

@@ -7,6 +7,7 @@ import com.xiaopinyun.bean.vo.EducationalBackgroundVO;
 import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.mapper.EducationalBackgroundMapper;
 import com.xiaopinyun.service.EducationalBackgroundService;
+import com.xiaopinyun.util.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class EducationalBackgroundServiceImpl extends ServiceImpl<EducationalBac
     @Override
     public Result<EducationalBackgroundVO> saveVO(EducationalBackground background) {
         if (background == null) {
-            return Result.paramError("请填写信息");
+            return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象字段
         if (check(background).isSuccess()) {

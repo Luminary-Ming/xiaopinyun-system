@@ -26,7 +26,7 @@ public class WorkExperienceVO {
     private String jobContent;
 
     // 构造方法，用于从 WorkExperience 对象转换
-    private WorkExperienceVO(WorkExperience workExperience){
+    public WorkExperienceVO(WorkExperience workExperience){
         this.id = workExperience.getId();
         this.companyName  =workExperience.getCompanyName();
         this.industryType = workExperience.getIndustryType();

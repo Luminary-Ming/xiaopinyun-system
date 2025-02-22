@@ -41,7 +41,7 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
     @Override
     public Result<JobExpectationVO> saveVO(JobExpectation jobExpectation) {
         if (jobExpectation == null) {
-            return Result.error(BizCode.ADD_FAIL);
+            return Result.paramError(BizCode.PLEASE_WRITE);
         }
         if (save(jobExpectation)) {
             JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());

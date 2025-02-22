@@ -22,7 +22,7 @@ public class ProjectExperienceVO {
     private String describe;
 
     // 构造方法，用于从 ProjectExperience 对象转换
-    private ProjectExperienceVO(ProjectExperience projectExperience){
+    public ProjectExperienceVO(ProjectExperience projectExperience){
         this.id = projectExperience.getId();
         this.projectName = projectExperience.getProjectName();
         this.projectRole = projectExperience.getProjectRole();

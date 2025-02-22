@@ -45,6 +45,7 @@
         <minio.version>8.5.13</minio.version>
         <mybatis-plus.version>3.5.8</mybatis-plus.version>
         <common-server.version>1.0-SNAPSHOT</common-server.version>
+        <information-maintenance-server.version>1.0-SNAPSHOT</information-maintenance-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -80,6 +81,13 @@
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>common-server</artifactId>
                 <version>${common-server.version}</version>
+            </dependency>
+
+            <!-- 个人信息维护模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>information-maintenance-server</artifactId>
+                <version>${information-maintenance-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

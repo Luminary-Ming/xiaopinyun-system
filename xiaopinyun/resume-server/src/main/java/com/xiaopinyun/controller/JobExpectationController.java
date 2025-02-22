@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class JobExpectationController {
      * 添加求职期望
      */
     @PostMapping
-    public Result<JobExpectationVO> saveVO(JobExpectation jobExpectation) {
+    public Result<JobExpectationVO> saveVO(@RequestBody JobExpectation jobExpectation) {
         return jobExpectationService.saveVO(jobExpectation);
     }
 
@@ -41,7 +42,7 @@ public class JobExpectationController {
      * 修改求职期望
      */
     @PutMapping
-    public Result<JobExpectationVO> updateVO(JobExpectation jobExpectation) {
+    public Result<JobExpectationVO> updateVO(@RequestBody JobExpectation jobExpectation) {
         return jobExpectationService.updateVO(jobExpectation);
     }
 

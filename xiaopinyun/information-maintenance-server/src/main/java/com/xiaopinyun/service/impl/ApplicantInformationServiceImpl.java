@@ -69,18 +69,18 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
     @Override
     public Result<ApplicantVO> saveVO(Applicant applicant) {
         if (applicant == null) {
-            return Result.paramError("请填写信息");
+            return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
         if (checkApplicant(applicant).isSuccess()) {
             return checkApplicant(applicant);
         }
         // 添加需要审核
-        applicant.setIsCheck(2);
+        applicant.setCheckStatus(2);
         // 默认未就业
-        applicant.setIsEmploy(0);
+        applicant.setEmployStatus(0);
         // 默认未删除
-        applicant.setIsDelete(0);
+        applicant.setDr(0);
         if (save(applicant)) {
             // 添加之后的数据
             Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());
@@ -104,7 +104,7 @@ public class ApplicantInformationServiceImpl extends ServiceImpl<ApplicantInform
             return checkApplicant(applicant);
         }
         // 更新需要审核
-        applicant.setIsCheck(2);
+        applicant.setCheckStatus(2);
         if (updateById(applicant)) {
             // 修改之后的数据
             Applicant applicantData = applicantInformationMapper.selectById(applicant.getId());

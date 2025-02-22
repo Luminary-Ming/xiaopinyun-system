@@ -45,8 +45,8 @@ public class ApplicantVO {
         this.telephone = convertTelephone(applicant.getTelephone());
         this.email = applicant.getEmail();
         this.status = convertStatus(applicant.getStatus());
-        this.checkStatus = convertCheckStatus(applicant.getIsCheck());
-        this.employStatus = convertEmployStatus(applicant.getIsEmploy());
+        this.checkStatus = convertCheckStatus(applicant.getCheckStatus());
+        this.employStatus = convertEmployStatus(applicant.getEmployStatus());
     }
 
     // 私有方法，用于转换性别描述

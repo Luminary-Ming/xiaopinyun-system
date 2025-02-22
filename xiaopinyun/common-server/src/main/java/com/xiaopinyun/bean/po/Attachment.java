@@ -16,5 +16,5 @@ public class Attachment {
     private String resumePDF;
     // 是否已删除 0正常、1已删除
     @TableLogic
-    private Integer isDelete;
+    private Integer dr;
 }

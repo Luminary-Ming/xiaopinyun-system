@@ -60,7 +60,7 @@ public class CompanyVO {
         this.legalPerson = company.getLegalPerson();
         this.capital = convertCapital(company.getCapital());
         this.foundDate = company.getFoundDate();
-        this.checkStatus = convertCheckStatus(company.getIsCheck());
+        this.checkStatus = convertCheckStatus(company.getCheckStatus());
     }
 
     // 私有方法，用于转换加班情况描述
