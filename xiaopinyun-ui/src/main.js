@@ -7,13 +7,15 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 // 配置 ElementPlus 组件使用中文
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { pinia } from "@/store";
 import App from "./App.vue";
 import router from "./router";
 
 const app = createApp(App);
 
+app.use(pinia);
 app.use(ElementPlus);
-app.use(router);
 app.use(ElementPlus, { locale: zhCn });
+app.use(router);
 
 app.mount("#app");
