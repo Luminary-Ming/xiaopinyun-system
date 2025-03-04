@@ -1,271 +1,416 @@
-<!-- src/components/common/AuthDialog.vue -->
 <template>
-    <el-dialog v-model="visible" title=" " width="380px" :show-close="false" class="boss-dialog" @closed="resetForm">
-        <!-- 顶部导航 -->
-        <div class="auth-header">
-            <div v-for="tab in tabs" :key="tab.value" :class="['tab-item', { active: activeTab === tab.value }]" @click="activeTab = tab.value">
-                {{ tab.label }}
-            </div>
-        </div>
-
-        <!-- 主体表单 -->
-        <el-form ref="formRef" :model="form">
-            <!-- 国家区号选择 -->
-            <div class="phone-prefix">
-                <el-select v-model="form.prefix" class="prefix-select">
-                    <el-option label="+86" value="+86" />
-                </el-select>
-                <el-input v-model="form.phone" placeholder="手机号" class="phone-input" />
-            </div>
-
-            <!-- 验证码 -->
-            <div class="sms-code">
-                <el-input v-model="form.code" placeholder="短信验证码" />
-                <el-button class="send-btn" :disabled="countdown > 0" @click="sendSmsCode">
-                    {{ countdown ? `${countdown}s后重发` : "发送验证码" }}
-                </el-button>
-            </div>
-
-            <!-- 登录按钮 -->
-            <el-button type="primary" class="submit-btn" @click="handleSubmit"> 登录/注册 </el-button>
-
-            <!-- 第三方登录 -->
-            <div class="third-login">
-                <div class="divider">
-                    <span class="line"></span>
-                    <span class="text">其他方式登录</span>
-                    <span class="line"></span>
-                </div>
-                <el-button class="wechat-btn" @click="wechatLogin">
-                    <el-icon class="wechat-icon"><svg-icon icon="wechat" /></el-icon>
-                    微信
-                </el-button>
-            </div>
-
-            <!-- 用户协议 -->
-            <div class="agreement">
-                已阅读并同意
-                <el-link type="primary">《用户协议》</el-link>
-                <el-link type="primary">《隐私政策》</el-link>
-            </div>
-        </el-form>
-
-        <!-- 底部信息 -->
-        <template #footer>
-            <div class="footer">
-                <p>客服电话: 400-065-5790</p>
-                <p>服务时间：8:00-22:00</p>
-                <div class="certificates">
-                    <span>人力资源服务许可证</span>
-                    <span>建设执照</span>
-                    <span>核准人</span>
-                    <span>注册资格证书</span>
+    <div class="shell">
+        <form>
+            <h2>LOGIN</h2>
+            <div class="form-item">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <input type="text" id="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
                 </div>
             </div>
-        </template>
-    </el-dialog>
+            <div class="form-item">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input :type="passwordType" id="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
+                    <button type="button" id="eyeball" @click="togglePasswordVisibility">
+                        <div class="eye"></div>
+                    </button>
+                    <div id="beam"></div>
+                </div>
+            </div>
+            <div>
+                <el-dropdown placement="bottom-end">
+                    <el-button class="el-button_qxzsfdl"> {{ selectedRole }} </el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu class="el-dropdown-item">
+                            <el-dropdown-item command="学生">学生</el-dropdown-item>
+                            <el-dropdown-item command="HR">HR</el-dropdown-item>
+                            <el-dropdown-item command="管理员">管理员</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
+            <button id="submit">Sign in</button>
+        </form>
+    </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { ElMessage } from "element-plus";
+<script>
+import { ref, onMounted } from "vue";
 
-const visible = ref(false);
-const activeTab = ref("jobSeeker"); // 当前选项卡
-const countdown = ref(0); // 验证码倒计时
+export default {
+    name: "GoolLogin",
+    setup() {
+        const passwordType = ref("password"); // 控制密码输入框的类型
+        const beamDegrees = ref(0); // 控制光束的旋转角度
+        const selectedRole = ref("请选择身份登录"); // 默认按钮文本
 
-// 表单数据
-const form = ref({
-    prefix: "+86",
-    phone: "",
-    code: "",
-});
+        // 切换密码可见性
+        const togglePasswordVisibility = () => {
+            document.body.classList.toggle("show-password");
+            passwordType.value = passwordType.value === "password" ? "text" : "password";
+            document.getElementById("password").focus();
+        };
 
-// 选项卡配置
-const tabs = [
-    { label: "我要找工作", value: "jobSeeker" },
-    { label: "我要招聘", value: "recruiter" },
-];
+        // 在组件挂载后添加鼠标移动事件监听器
+        onMounted(() => {
+            const root = document.documentElement;
+            const beam = document.getElementById("beam");
 
-// 发送验证码
-const sendSmsCode = () => {
-    if (!/^1[3-9]\d{9}$/.test(form.value.phone)) {
-        ElMessage.error("请输入正确的手机号");
-        return;
-    }
+            root.addEventListener("mousemove", (e) => {
+                const rect = beam.getBoundingClientRect();
+                const mouseX = rect.right + rect.width / 2;
+                const mouseY = rect.top + rect.height / 2;
+                const rad = Math.atan2(mouseX - e.pageX, mouseY - e.pageY);
+                const degrees = rad * (20 / Math.PI) * -1 - 350;
+                beamDegrees.value = degrees;
+                root.style.setProperty("--beamDegrees", `${degrees}deg`);
+            });
+        });
 
-    countdown.value = 60;
-    const timer = setInterval(() => {
-        countdown.value--;
-        if (countdown.value <= 0) clearInterval(timer);
-    }, 1000);
-};
-
-// 微信登录
-const wechatLogin = () => {
-    // 微信登录逻辑
-};
-
-// 提交表单
-const handleSubmit = () => {
-    // 验证逻辑
-};
-
-// 重置表单
-const resetForm = () => {
-    form.value = { prefix: "+86", phone: "", code: "" };
-    countdown.value = 0;
+        // 选择身份后更新按钮文本
+        const handleSelect = (role) => {
+            selectedRole.value = role;
+        };
+        return {
+            passwordType,
+            togglePasswordVisibility,
+            selectedRole,
+            handleSelect,
+        };
+    },
 };
 </script>
 
-<style lang="scss" scoped>
-.boss-dialog {
-    :deep(.el-dialog__header) {
-        display: none;
-    }
-
-    :deep(.el-dialog__body) {
-        padding: 0;
-    }
+<style>
+.el-button_qxzsfdl {
+    font-size: 20px;
+    font-family: "优设标题黑";
+    color: var(--bgColor);
+    background-color: var(--inputColor);
+}
+.el-dropdown-item {
+    width: 80px;
+    font-size: 500px;
+    font-family: "优设标题黑";
+    color: var(--bgColor);
+    background-color: var(--inputColor);
+}
+/* 设置全局样式 */
+* {
+    box-sizing: border-box;
+    transition: 0.2s;
 }
 
-.auth-header {
+/* 设置根元素变量 */
+:root {
+    --bgColor: white;
+    /* 设置背景颜色变量为白色 */
+    --inputColor: black;
+    /* 设置输入框颜色变量为黑色 */
+    --outlineColor: rgb(60, 115, 235);
+    /* 设置输入框边框颜色变量为RGB(60, 115, 235) */
+    --border: black;
+}
+
+/* 设置body样式 */
+body {
     display: flex;
-    height: 56px;
-    border-bottom: 1px solid #eee;
-
-    .tab-item {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        color: #666;
-        cursor: pointer;
-
-        &.active {
-            color: #00b38a;
-            border-bottom: 2px solid #00b38a;
-        }
-    }
+    /* 设置body元素为flex布局 */
+    justify-content: center;
+    /* 水平居中对齐 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    height: 100vh;
+    /* 设置body元素的高度为视口高度 */
+    overflow: hidden;
+    /* 隐藏溢出内容 */
+    background: var(--bgColor);
+    /* 设置背景颜色为变量--bgColor的值 */
+    background-image: url(/src/assets/images/黄昏.jpg);
+    /* 设置背景图片为./img/1.png */
+    background-size: cover;
+    /* 背景图片等比例缩放铺满容器 */
 }
 
-.phone-prefix {
+/* 设置外层容器样式 */
+.shell {
+    width: 100%;
+    /* 设置外层容器的宽度为100% */
+    height: 100vh;
+    /* 设置外层容器的高度为视口高度 */
     display: flex;
-    margin: 24px 20px 0;
-    gap: 8px;
-
-    .prefix-select {
-        width: 100px;
-
-        :deep(.el-input__inner) {
-            padding-right: 0;
-        }
-    }
-
-    .phone-input {
-        flex: 1;
-    }
+    /* 设置外层容器为flex布局 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    justify-content: center;
+    /* 水平居中对齐 */
+    /* background-image: url(/src/assets/images/123.jpg); */
+    /* 设置背景图片为./img/1.png */
+    background-size: cover;
+    /* 背景图片等比例缩放铺满容器 */
 }
 
-.sms-code {
-    display: flex;
-    margin: 16px 20px;
-    gap: 8px;
-
-    .send-btn {
-        width: 120px;
-        color: #00b38a;
-        border-color: #00b38a;
-
-        &:disabled {
-            color: #999;
-            border-color: #ddd;
-        }
-    }
+/* 设置显示密码时的样式 */
+body.show-password {
+    --bgColor: rgba(0, 0, 0, 0.9);
+    /* 设置背景颜色变量为RGBA(0, 0, 0, 0.9) */
+    --inputColor: white;
+    /* 设置输入框颜色变量为白色 */
+    --border: rgb(255, 255, 255);
+    background-image: url(/src/assets/images/落日.jpg);
+    /* 设置背景图片为./img/1.png */
+    background-size: cover;
+    /* 背景图片等比例缩放铺满容器 */
 }
 
-.submit-btn {
-    width: calc(100% - 40px);
-    height: 40px;
-    margin: 16px 20px;
-    background: #00b38a;
+/* 设置表单样式 */
+form {
+    transform: translate3d(0, 0, 0);
+    /* 3D变换，无位移 */
+    padding: 50px;
+    /* 设置内边距为10px */
+    border: 20px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px #00000065;
+}
+
+form > * + * {
+    margin-top: 15px;
+    /* 设置相邻元素之间的上边距为15px */
+}
+
+.form-item > * + * {
+    margin-top: 0.5rem;
+    /* 设置相邻元素之间的上边距为0.5rem */
+}
+
+/* 设置label, input, button样式 */
+h2,
+label,
+input,
+button {
+    font-size: 2rem;
+    /* 设置字体大小为2rem */
+    color: var(--inputColor);
+    /* 设置字体颜色为变量--inputColor的值 */
+    font-family: "优设标题黑";
+}
+
+h2 {
+    font-size: 4rem;
+    margin: 0;
+}
+
+label:focus,
+input:focus,
+button:focus {
+    outline-offset: 2px;
+    /* 设置聚焦时的外边距为2px */
+}
+
+label::-moz-focus-inner,
+input::-moz-focus-inner,
+button::-moz-focus-inner {
     border: none;
+    /* 去掉Firefox浏览器的聚焦时的内边框 */
 }
 
-.third-login {
-    margin: 24px 20px;
-
-    .divider {
-        display: flex;
-        align-items: center;
-        color: #999;
-        font-size: 12px;
-
-        .line {
-            flex: 1;
-            height: 1px;
-            background: #eee;
-            margin: 0 8px;
-        }
-    }
-
-    .wechat-btn {
-        width: 100%;
-        margin-top: 16px;
-        color: #09bb07;
-        border-color: #09bb07;
-
-        &:hover {
-            background: #f6fffc;
-        }
-    }
-
-    .wechat-icon {
-        margin-right: 8px;
-        font-size: 18px;
-    }
+/* 设置密码相关样式 */
+label[id="password"],
+input[id="password"],
+button[id="password"] {
+    color: black;
+    /* 设置字体颜色为黑色 */
 }
 
-.agreement {
-    margin: 16px 20px;
-    color: #999;
-    font-size: 12px;
-    line-height: 1.5;
-
-    .el-link {
-        vertical-align: baseline;
-    }
+/* 设置按钮样式 */
+button {
+    border: none;
+    /* 去掉按钮的边框 */
 }
 
-.footer {
-    padding: 16px 0;
-    text-align: center;
-    color: #999;
-    font-size: 12px;
+[id="submit"] {
+    width: 100%;
+    cursor: pointer;
+    /* 设置鼠标样式为手型 */
+    margin: 20px 0 0 2px;
+    /* 设置外边距为20px 0 0 2px */
+    padding: 0.75rem 1.25rem;
+    /* 设置内边距为0.75rem 1.25rem */
+    color: var(--bgColor);
+    /* 设置字体颜色为变量--bgColor的值 */
+    background-color: var(--inputColor);
+    /* 设置背景颜色为变量--inputColor的值 */
+    box-shadow: 4px 4px 0 rgba(30, 144, 255, 0.2);
+    /* 设置阴影效果 */
+}
 
-    p {
-        margin: 4px 0;
-    }
+[id="submit"]:active {
+    transform: translateY(1px);
+    /* 设置点击时向下位移1px */
+}
 
-    .certificates {
-        margin-top: 8px;
+/* 设置输入框包裹器样式 */
+.input-wrapper {
+    position: relative;
+    /* 设置相对定位 */
+}
 
-        span {
-            position: relative;
-            padding: 0 8px;
+/* 设置输入框样式 */
+input {
+    padding: 0.75rem 4rem 0.75rem 0.75rem;
+    /* 设置内边距为0.75rem 4rem 0.75rem 0.75rem */
+    width: 100%;
+    /* 设置宽度为100% */
+    border: 2px solid transparent;
+    /* 设置边为2px透明 */
+    border-radius: 0;
+    /* 设置边框圆角为0 */
+    background-color: transparent;
+    /* 设置背景颜色为透明 */
+    box-shadow: inset 0 0 0 2px black, inset 6px 6px 0 rgba(30, 144, 255, 0.2), 3px 3px 0 rgba(30, 144, 255, 0.2);
+    /* 设置阴影效果 */
+    -webkit-appearance: none;
+    /* 去掉Webkit浏览器的默认样式 */
+}
 
-            &::after {
-                content: "|";
-                position: absolute;
-                right: -2px;
-                color: #ddd;
-            }
+input:focus {
+    outline-offset: 1px;
+    /* 设置聚焦时的外边距为1px */
+}
 
-            &:last-child::after {
-                display: none;
-            }
-        }
-    }
+/* 设置显示密码时的输入框样式 */
+.show-password input {
+    box-shadow: inset 0 0 0 2px black;
+    /* 设置阴影效果 */
+    border: 2px dashed white;
+    /* 设置边框为2px虚线白色 */
+}
+
+.show-password input:focus {
+    outline: none;
+    /* 去掉聚焦时的外边框 */
+    border-color: rgb(255, 255, 145);
+    /* 设置边框颜色为RGB(255, 255, 145) */
+}
+
+/* 设置眼睛按钮样式 */
+[id="eyeball"] {
+    --size: 1.25rem;
+    /* 设置变量--size的值为1.25rem */
+    display: flex;
+    /* 设置为flex布局 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    justify-content: center;
+    /* 水平居中对齐 */
+    cursor: pointer;
+    /* 设置鼠标样式为手型 */
+    outline: none;
+    /* 去掉聚焦时的外边框 */
+    position: absolute;
+    /* 设置绝对定位 */
+    top: 50%;
+    /* 设置顶部距离为50% */
+    right: 0.75rem;
+    /* 设置右侧距离为0.75rem */
+    border: none;
+    /* 去掉边框 */
+    background-color: transparent;
+    /* 设置背景颜色为透明 */
+    transform: translateY(-50%);
+    /* 设置向上位移50% */
+}
+
+[id="eyeball"]:active {
+    transform: translateY(calc(-50% + 1px));
+    /* 设置点击时向上位移50% + 1px */
+}
+
+.eye {
+    width: var(--size);
+    /* 设置宽度为变量--size的值 */
+    height: var(--size);
+    /* 设置高度为变量--size的值 */
+    border: 2px solid var(--inputColor);
+    /* 设置边框为2px实线，颜色为变量--inputColor的值 */
+    border-radius: calc(var(--size) / 1.5) 0;
+    /* 设置边框圆角为变量--size的值除以1.5，0 */
+    transform: rotate(45deg);
+    /* 设置旋转45度 */
+}
+
+.eye:before,
+.eye:after {
+    content: "";
+    /* 清空内容 */
+    position: absolute;
+    /* 设置绝对定位 */
+    top: 0;
+    /* 设置顶部距离为0 */
+    right: 0;
+    /* 设置右侧距离为0 */
+    bottom: 0;
+    /* 设置底部距离为0 */
+    left: 0;
+    /* 设置左侧距离为0 */
+    margin: auto;
+    /* 设置自动外边距 */
+    border-radius: 100%;
+    /* 设置边框圆角为100% */
+}
+
+.eye:before {
+    width: 35%;
+    /* 设置宽度为35% */
+    height: 35%;
+    /* 设置高度为35% */
+    background-color: var(--inputColor);
+    /* 设置背景颜色为变量--inputColor的值 */
+}
+
+.eye:after {
+    width: 65%;
+    /* 设置宽度为65% */
+    height: 65%;
+    /* 设置高度为65% */
+    border: 2px solid var(--inputColor);
+    /* 设置边框为2px实线，颜色为变量--inputColor的值 */
+    border-radius: 100%;
+    /* 设置边框圆角为100% */
+}
+
+/* 设置光束样式 */
+[id="beam"] {
+    position: absolute;
+    /* 设置绝对定位 */
+    top: 50%;
+    /* 设置顶部距离为50% */
+    right: 1.75rem;
+    /* 设置右侧距离为1.75rem */
+    clip-path: polygon(100% 50%, 100% 50%, 0 0, 0 100%);
+    /* 设置剪切路径为多边形 */
+    width: 100vw;
+    /* 设置宽度为100vw */
+    height: 25vw;
+    /* 设置高度为25vw */
+    z-index: 1;
+    /* 设置层级为1 */
+    mix-blend-mode: multiply;
+    /* 设置混合模式为multiply */
+    transition: transform 200ms ease-out;
+    /* 设置过渡效果为200ms的ease-out */
+    transform-origin: 100% 50%;
+    /* 设置变换原点为右侧50% */
+    transform: translateY(-50%) rotate(var(--beamDegrees, 0));
+    /* 设置向上位移50%并旋转--beamDegrees度 */
+    pointer-events: none;
+    /* 禁用指针事件 */
+}
+
+.show-password [id="beam"] {
+    background: rgb(255, 255, 145);
+    /* 设置背景颜色为RGB(255, 255, 145) */
 }
 </style>
