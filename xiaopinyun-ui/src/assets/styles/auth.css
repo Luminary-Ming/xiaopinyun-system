@@ -1,0 +1,19 @@
+body.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bgColor);
+    background-image: url(/src/assets/images/黄昏.jpg);
+    background-size: cover;
+    transition: all 0.3s;
+}
+
+body.auth-page.show-password {
+    --bgColor: rgba(0, 0, 0, 0.9);
+    --inputColor: white;
+    --border: rgb(255, 255, 255);
+    background-image: url(/src/assets/images/落日.jpg);
+    background-size: cover;
+}

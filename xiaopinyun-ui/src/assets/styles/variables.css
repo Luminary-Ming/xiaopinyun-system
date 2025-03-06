@@ -1,0 +1,7 @@
+/* 设置根元素变量 */
+:root {
+    --bgColor: white;
+    --inputColor: black;
+    --outlineColor: rgb(60, 115, 235);
+    --border: black;
+}

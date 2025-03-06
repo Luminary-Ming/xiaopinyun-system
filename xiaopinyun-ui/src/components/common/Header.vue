@@ -15,6 +15,9 @@
                     <router-link to="/company">公司</router-link>
                 </el-menu-item>
                 <el-menu-item index="4">
+                    <router-link to="/resume">我的简历</router-link>
+                </el-menu-item>
+                <el-menu-item index="5">
                     <el-icon><User /></el-icon>
                     <router-link to="/login">登录/注册</router-link>
                 </el-menu-item>

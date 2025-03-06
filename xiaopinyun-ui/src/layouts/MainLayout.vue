@@ -14,9 +14,14 @@ import Header from "@/components/common/Header.vue";
 import Footer from "@/components/common/Footer.vue";
 </script>
 
-<style scoped lang="scss">
+<style scoped>
+.main-layout {
+    width: 100%;
+    height: 100%;
+}
 .main-content {
+    width: 100%;
+    height: 100%;
     min-height: calc(100vh - 120px);
-    padding: 20px 0;
 }
 </style>

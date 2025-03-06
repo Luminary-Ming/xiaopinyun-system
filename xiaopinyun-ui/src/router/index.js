@@ -17,7 +17,7 @@ const publicRoutes = [
                 path: "/home",
                 name: "Home",
                 component: () => import("@/views/public/Home.vue"),
-                meta: { title: "校聘云首页" },
+                meta: { title: "首页" },
             },
             {
                 path: "/job",
@@ -31,6 +31,12 @@ const publicRoutes = [
                 name: "Company",
                 component: () => import("@/views/company/Dashboard.vue"),
                 meta: { title: "公司详情" },
+            },
+            {
+                path: "/resume",
+                name: "Resume",
+                component: () => import("@/components/student/ResumeEditor.vue"),
+                meta: { title: "我的简历" },
             },
         ],
     },
