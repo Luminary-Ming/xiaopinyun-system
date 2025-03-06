@@ -1,0 +1,16 @@
+{
+  "id": "4849170",
+  "name": "校聘云",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6907046",
+      "name": "附件菜单",
+      "font_class": "file-menu",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 @import "./base.css";
-
+@import "iconfont/icon-file-menu/iconfont.css";
 /* 去除标签默认样式 */
 * {
     margin: 0;

@@ -80,17 +80,39 @@
         </div>
         <div class="resume-file">
             <el-col :span="12">
-                <el-menu active-text-color="#000" background-color="#fff" class="el-menu-vertical-demo" default-active="2" text-color="#000" @open="handleOpen" @close="handleClose">
+                <el-menu active-text-color="#000" background-color="#fff" class="el-menu-vertical-demo_resume-file" default-active="2" text-color="#000" @open="handleOpen" @close="handleClose">
                     <div class="mb-2">
-                        <h3>附件管理</h3>
+                        <h3>
+                            附件管理<el-icon><Paperclip /></el-icon>
+                        </h3>
+                        <el-icon style="font-size: 20px"><Plus /></el-icon>
                     </div>
+
+                    <div class="resume-wenjian">文件（3/3）</div>
                     <el-menu-item index="9">
                         <img class="pdf_img" src="https://static.zhipin.com/fe-zhipin-geek/web/chat/v5808/static/images/icon-pdf.bd26c623.png" />
-                        <span>java工程师</span>
+                        <div class="resume-info">
+                            <div class="resume-name">java工程师.pdf</div>
+                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
+                        </div>
+                        <span class="iconfont icon-file-menu"></span>
                     </el-menu-item>
+
                     <el-menu-item index="10">
                         <img class="pdf_img" src="https://static.zhipin.com/fe-zhipin-geek/web/chat/v5808/static/images/icon-pdf.bd26c623.png" />
-                        <span>实施工程师</span>
+                        <div class="resume-info">
+                            <div class="resume-name">实施工程师.pdf</div>
+                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
+                        </div>
+                        <span class="iconfont icon-file-menu"></span>
+                    </el-menu-item>
+                    <el-menu-item index="11">
+                        <img class="pdf_img" src="https://static.zhipin.com/fe-zhipin-geek/web/chat/v5808/static/images/icon-pdf.bd26c623.png" />
+                        <div class="resume-info">
+                            <div class="resume-name">运维工程师.pdf</div>
+                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
+                        </div>
+                        <span class="iconfont icon-file-menu"></span>
                     </el-menu-item>
                 </el-menu>
             </el-col>
@@ -162,11 +184,8 @@ const resetForm = () => {
     border-radius: 10px;
 }
 
-.resume-editor {
-}
-
 .resume-file {
-    width: 200px;
+    width: 260px;
     height: 400px;
     border: 1px #e6e7ec solid;
     border-radius: 10px;
@@ -178,16 +197,47 @@ const resetForm = () => {
     margin: 0px 8px 0px 0px;
 }
 
+.resume-info {
+    display: flex;
+    flex-direction: column;
+}
+.resume-name {
+    margin-bottom: -35px; /* 可根据需要调整间距 */
+    color: #414a60;
+}
+.resume-font {
+    font-size: 12px;
+    color: #8d92a1;
+}
+.resume-wenjian {
+    font-size: 13px;
+    color: #414a60;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
 .mb-2 {
+    display: flex;
+    justify-content: space-between;
     height: 35px;
     background-color: #f6f6f8;
     border-radius: 10px 10px 0 0;
-    padding-top: 5px;
+    padding-top: 18px;
     padding-left: 25px;
+    padding-right: 30px;
+}
+
+.mb-2 h3 {
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
+    min-height: 400px;
+    border-radius: 10px;
+}
+.el-menu-vertical-demo_resume-file:not(.el-menu--collapse) {
+    width: 300px;
     min-height: 400px;
     border-radius: 10px;
 }
