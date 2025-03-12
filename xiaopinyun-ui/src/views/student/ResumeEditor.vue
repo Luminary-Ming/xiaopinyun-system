@@ -1180,7 +1180,17 @@ i {
     transition: all 0.2slinear;
     cursor: pointer;
 }
+
+.resume-editor-expectation:hover span {
+    opacity: 1;
+}
+
+.resume-editor-expectation:hover .op {
+    opacity: 1;
+}
+
 .resume-editor-expectation span {
+    opacity: 0;
     font-size: 14px;
     cursor: pointer;
     color: #98a9a9;
@@ -1274,6 +1284,9 @@ i {
     transition: all 0.2slinear;
     cursor: pointer;
 }
+.resume-editor-education-info:hover .op {
+    opacity: 1;
+}
 
 .resume-editor-education-info:hover {
     background-color: #f8f8f8;
@@ -1360,7 +1373,16 @@ i {
     cursor: pointer;
 }
 
+.resume-editor-project-info:hover .op {
+    opacity: 1;
+}
+
+.resume-editor-project:hover span {
+    opacity: 1;
+}
+
 .resume-editor-project span {
+    opacity: 0;
     font-size: 14px;
     cursor: pointer;
     color: #98a9a9;
@@ -1497,8 +1519,16 @@ i {
     transition: all 0.2slinear;
     cursor: pointer;
 }
+.resume-editor-work-info:hover .op {
+    opacity: 1;
+}
+
+.resume-editor-work:hover span {
+    opacity: 1;
+}
 
 .resume-editor-work span {
+    opacity: 0;
     font-size: 14px;
     cursor: pointer;
     color: #98a9a9;
@@ -1629,6 +1659,9 @@ i {
     border-radius: 8px;
     transition: all 0.2slinear;
     cursor: pointer;
+}
+.resume-editor-honor-info:hover .op {
+    opacity: 1;
 }
 
 .resume-editor-honor .el-form {

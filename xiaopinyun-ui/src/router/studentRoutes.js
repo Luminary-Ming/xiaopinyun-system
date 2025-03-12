@@ -7,12 +7,12 @@ export default [
     },
     {
         path: "/student/profile",
-        component: () => import("@/views/student/Profile.vue"),
+        component: () => import("@/views/public/Profile.vue"),
         meta: { requiresAuth: true, roles: ["student"] },
     },
     {
         path: "/student/applications",
-        component: () => import("@/views/student/Applications.vue"),
+        component: () => import("@/views/student/Application.vue"),
         meta: { requiresAuth: true, roles: ["student"] },
     },
 ];

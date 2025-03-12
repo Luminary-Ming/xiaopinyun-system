@@ -11,7 +11,7 @@ import adminRoutes from "./adminRoutes";
 const publicRoutes = [
     {
         path: "/",
-        component: () => import("@/layouts/MainLayout.vue"),
+        component: () => import("@/components/layouts/MainLayout.vue"),
         redirect: "/home", // 重定向到首页
         children: [
             {
@@ -36,7 +36,7 @@ const publicRoutes = [
             {
                 path: "/resume",
                 name: "Resume",
-                component: () => import("@/components/student/ResumeEditor.vue"),
+                component: () => import("@/views/student/ResumeEditor.vue"),
                 meta: { title: "我的简历" },
             },
         ],
@@ -45,14 +45,14 @@ const publicRoutes = [
     {
         path: "/login",
         name: "Login",
-        component: () => import("@/components/common/AuthDialog.vue"),
+        component: () => import("@/views/public/AuthDialog.vue"),
         meta: { title: "用户登录" },
     },
     // 404处理
-    {
-        path: "/:pathMatch(.*)*",
-        redirect: { name: "Home" },
-    },
+    // {
+    //     path: "/:pathMatch(.*)*",
+    //     redirect: { name: "Home" },
+    // },
 ];
 
 // 合并所有路由
