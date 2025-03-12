@@ -1,0 +1,46 @@
+# 配置端口
+server:
+  port: 6060
+
+spring:
+  application:
+    name: information-maintenance-server
+  cloud:
+    # 配置 nacos 注册中心的访问地址
+    nacos:
+      server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:2233
+  mvc:
+    servlet:
+      # 项目根路径
+      path: /
+  # 配置数据库连接
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xiaopinyun_db
+    username: root
+    password: leesin
+
+# mybatis-plus 配置
+mybatis-plus:
+  configuration:
+    # 配置 mybatis-plus 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 下划线到驼峰命名的自动映射
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 主键生成策略
+      id-type: auto
+      # 逻辑未删除值
+      logic-not-delete-value: 0
+      # 逻辑已删除值
+      logic-delete-field: 1
+
+
+# 配置 springboot 日志级别
+logging:
+  level:
+    root: info

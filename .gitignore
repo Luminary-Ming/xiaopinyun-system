@@ -1,0 +1,16 @@
+### IntelliJ IDEA ###
+xiaopinyun/.idea
+xiaopinyun/_idea
+*.iws
+*.iml
+*.ipr
+target/
+out/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### VS Code ###
+xiaopinyun-ui/.vscode/
+xiaopinyun-ui/_vscode/
+xiaopinyun-ui/node_modules/

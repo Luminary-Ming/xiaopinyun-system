@@ -1,0 +1,35 @@
+@import "./base.css";
+@import "iconfont/icon-file-menu/iconfont.css";
+/* 去除标签默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ul,
+ol,
+dl,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: none;
+    vertical-align: bottom;
+}
+
+input,
+button {
+    outline: none;
+}
+
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+}

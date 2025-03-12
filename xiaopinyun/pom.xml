@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.xiaopinyun</groupId>
+    <artifactId>xiaopinyun</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- 构建 Spring Boot 的父工程，管理项目依赖、插件 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.5</version>
+    </parent>
+
+    <!-- 子模块 -->
+    <modules>
+        <!-- 实体类工具类模块 -->
+        <module>common-server</module>
+        <!-- 个人信息维护模块 -->
+        <module>information-maintenance-server</module>
+        <!-- 职位收藏模块 -->
+        <module>job-collect-server</module>
+        <!-- 招聘管理模块 -->
+        <module>recruit-server</module>
+        <!-- 简历管理模块 -->
+        <module>resume-server</module>
+        <!-- 简历投递模块 -->
+        <module>resume-submit-server</module>
+        <!-- 文件上传下载模块 -->
+        <module>upload-server</module>
+        <!-- 用户管理模块 -->
+        <module>user-server</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mysql.version>8.3.0</mysql.version>
+        <bootstrap.version>3.1.4</bootstrap.version>
+        <minio.version>8.5.13</minio.version>
+        <mybatis-plus.version>3.5.8</mybatis-plus.version>
+        <common-server.version>1.0-SNAPSHOT</common-server.version>
+        <information-maintenance-server.version>1.0-SNAPSHOT</information-maintenance-server.version>
+    </properties>
+
+    <!-- 管理依赖，子模块引用不需要指定版本号 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 微服务依赖 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2023.0.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 阿里巴巴微服务依赖 -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2023.0.1.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- MinIO服务器依赖 -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+            <!-- 实体类工具类模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>common-server</artifactId>
+                <version>${common-server.version}</version>
+            </dependency>
+
+            <!-- 个人信息维护模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>information-maintenance-server</artifactId>
+                <version>${information-maintenance-server.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- SpringMVC 启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 单元测试启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- mybatis-plus 启动器 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <!-- mysql 数据库 -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+
+        <!-- 项目中每个模块（服务）注册到Nacos上，便于服务之间的调用与发现 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- sentinel 从流量控制、熔断降级、系统负载保护多个维度保护服务的稳定性 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <!-- 将 SpringCloud 应用配置集成到Nacos配置中心，让服务中的配置文件可以在Nacos上配置使用 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- 开启 SpringCloud 应用程序启动时加载 bootstrap.yml 配置文件 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+
+        <!--
+           提供服务调用的能力、负载均衡：
+           需要定义一个接口，并使用注解 @FeignClient、@GetMapping、@PostMapping等来指定要调用的服务名称、请求方法、路径和参数等，
+           Spring Cloud就会自动为这些接口生成实现类，并处理HTTP请求的发送和接收。
+       -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- 实现客户端负载均衡的组件 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 项目打包名 -->
+        <finalName>xiaopinyun</finalName>
+        <!-- 插件 -->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

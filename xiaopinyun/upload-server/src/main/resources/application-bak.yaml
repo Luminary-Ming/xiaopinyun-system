@@ -1,0 +1,45 @@
+# Nacos 上的 yaml 文件备份
+# 配置端口
+server:
+  port: 7070
+
+spring:
+  application:
+    name: upload-server
+  cloud:
+    # 配置 nacos 注册中心的访问地址
+    nacos:
+      server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:2233
+  servlet:
+    multipart:
+      # 文件上传限制
+      max-file-size: 20MB
+      max-request-size: 100MB
+  mvc:
+    servlet:
+      # 项目根路径
+      path: /
+  # 配置数据库连接
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xiaopinyun_db
+    username: root
+    password: leesin
+
+# MinIO 服务器配置
+minio:
+  # 端点
+  endpoint: http://127.0.0.1:9000
+  # 密钥
+  access-key: H55g1WoW61lR1QwCo3Bu
+  secret-key: HLtENKXRYjeCcUr3WKym9pdG0GGekE1rnLjIiOlZ
+  # 存储桶名
+  bucket-name: filebucket
+
+# 配置 springboot 日志级别
+logging:
+  level:
+    root: info
