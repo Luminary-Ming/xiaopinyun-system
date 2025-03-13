@@ -28,12 +28,6 @@ const publicRoutes = [
                 props: true,
             },
             {
-                path: "/company",
-                name: "Company",
-                component: () => import("@/views/company/Dashboard.vue"),
-                meta: { title: "公司详情" },
-            },
-            {
                 path: "/resume",
                 name: "Resume",
                 component: () => import("@/views/student/ResumeEditor.vue"),

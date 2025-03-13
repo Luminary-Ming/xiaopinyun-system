@@ -1,4 +1,4 @@
-<!-- src/views/admin/Statistics.vue -->
+<!-- 统计分析 -->
 <template>
     <div class="statistics-container">
         <div class="filter-bar">

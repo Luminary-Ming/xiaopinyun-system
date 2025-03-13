@@ -1,4 +1,4 @@
-<!-- src/views/admin/UserAudit.vue -->
+<!-- 管理员审核 -->
 <template>
     <div class="user-audit">
         <el-tabs v-model="activeTab">

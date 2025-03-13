@@ -1,4 +1,4 @@
-<!-- src/components/student/ResumeEditor.vue -->
+<!-- 我的简历 -->
 <template>
     <div class="resume-box">
         <div class="resume-list">
