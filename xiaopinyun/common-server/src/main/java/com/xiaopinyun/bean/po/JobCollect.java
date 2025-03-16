@@ -14,7 +14,7 @@ import lombok.Data;
 public class JobCollect {
     // 自增id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 学生id
     private Integer aid;
     // 招聘信息id

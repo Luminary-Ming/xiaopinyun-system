@@ -8,8 +8,8 @@ import lombok.Data;
  */
 @Data
 public class JobExpectationVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 求职类型 0全职、1兼职、2实习
     private String jobType;
     // 期望行业 最多三个 例计算机软件、互联网、企业服务

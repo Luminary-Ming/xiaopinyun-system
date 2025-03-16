@@ -28,10 +28,10 @@ const publicRoutes = [
                 props: true,
             },
             {
-                path: "/resume",
-                name: "Resume",
-                component: () => import("@/views/student/ResumeEditor.vue"),
-                meta: { title: "我的简历" },
+                path: "/profile",
+                name: "Profile",
+                component: () => import("@/views/public/Profile.vue"),
+                meta: { title: "个人中心" },
             },
         ],
     },
@@ -42,6 +42,7 @@ const publicRoutes = [
         component: () => import("@/views/public/AuthDialog.vue"),
         meta: { title: "用户登录" },
     },
+
     // 404处理
     // {
     //     path: "/:pathMatch(.*)*",

@@ -5,7 +5,7 @@ body.auth-page {
     height: 100vh;
     overflow: hidden;
     background: var(--bgColor);
-    background-image: url(/src/assets/images/黄昏.jpg);
+    background-image: url(/src/assets/images/background-img/dusk.jpg);
     background-size: cover;
     transition: all 0.3s;
 }
@@ -14,6 +14,6 @@ body.auth-page.show-password {
     --bgColor: rgba(0, 0, 0, 0.9);
     --inputColor: white;
     --border: rgb(255, 255, 255);
-    background-image: url(/src/assets/images/落日.jpg);
+    background-image: url(/src/assets/images/background-img/setting-sun.jpg);
     background-size: cover;
 }

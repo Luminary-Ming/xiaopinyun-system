@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class AttachmentVO {
     // 主键
-    private Integer id;
+    private Long id;
     // 附件简历（仅支持PDF）
     private String resumePDF;
 

@@ -13,7 +13,7 @@ import lombok.Data;
 public class ResumeSubmit {
     // 主键
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 投递的招聘职位
     private Integer recid;
     // 投递在线简历

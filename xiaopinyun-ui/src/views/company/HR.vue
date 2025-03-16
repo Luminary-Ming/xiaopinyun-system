@@ -1,4 +1,4 @@
-<!-- HR 个人信息 -->
+<!-- HR 个人中心 -->
 <template>
     <div>个人信息</div>
 </template>

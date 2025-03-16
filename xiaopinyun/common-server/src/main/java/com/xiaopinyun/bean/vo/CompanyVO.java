@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 public class CompanyVO {
     // 主键
-    private Integer id;
+    private Long id;
     // 头像
     private String profileImgUrl;
     // 公司名

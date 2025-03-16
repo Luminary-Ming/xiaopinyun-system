@@ -7,8 +7,8 @@ import lombok.Data;
  */
 @Data
 public class RecruitVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 招聘标题 例Java工程师-2025届(J14894)
     private String title;
     // 薪资 例9k-15k

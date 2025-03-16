@@ -8,8 +8,8 @@ import lombok.Data;
  */
 @Data
 public class EducationalBackgroundVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 学校名称
     private String name;
     // 学历 0初中及以下 1中专 2高中 3大专 4本科 5硕士 6博士 --> 将数字转换为字符串

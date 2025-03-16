@@ -10,8 +10,8 @@ import java.util.List;
  */
 @Data
 public class ResumeVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 个人信息
     private ApplicantVO applicantVO;
     // 专业技能

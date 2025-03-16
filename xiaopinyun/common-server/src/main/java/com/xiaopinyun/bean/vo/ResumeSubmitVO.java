@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ResumeSubmitVO {
     // 主键
-    private Integer id;
+    private Long id;
     // HR 姓名
     private String HRName;
     // HR 身份

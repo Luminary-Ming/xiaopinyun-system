@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class UserVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 用户名
     private String username;
     // 密码

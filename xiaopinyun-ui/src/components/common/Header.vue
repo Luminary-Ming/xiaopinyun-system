@@ -22,7 +22,7 @@
                     <router-link to="/login">登录/注册</router-link>
                 </el-menu-item>
                 <el-menu-item index="6">
-                    <router-link to="/person">
+                    <router-link to="/profile">
                         鲁米
                         <el-avatar shape="square" :size="35" :src="squareUrl" style="vertical-align: middle" />
                     </router-link>

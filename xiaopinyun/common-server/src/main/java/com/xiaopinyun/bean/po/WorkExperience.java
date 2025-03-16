@@ -14,7 +14,7 @@ import lombok.Data;
 public class WorkExperience {
     // id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 学生id
     private Integer aid;
     // 公司名

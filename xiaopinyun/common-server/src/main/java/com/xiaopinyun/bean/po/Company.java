@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 @Data
 @TableName("company")
 public class Company {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 头像
     private String profileImg;
     // 公司名

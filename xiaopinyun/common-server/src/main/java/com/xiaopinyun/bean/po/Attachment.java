@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class Attachment {
     // 主键
-    private Integer id;
+    private Long id;
     // 附件简历（仅支持PDF）
     @TableField("resume_pdf")
     private String resumePDF;

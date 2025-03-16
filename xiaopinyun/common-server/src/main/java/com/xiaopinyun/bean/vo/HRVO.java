@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class HRVO {
     // 主键
-    private Integer id;
+    private Long id;
     // 头像
     private String profileImgUrl;
     // 姓名

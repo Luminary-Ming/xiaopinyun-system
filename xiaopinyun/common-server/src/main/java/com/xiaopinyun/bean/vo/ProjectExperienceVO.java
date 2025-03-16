@@ -8,8 +8,8 @@ import lombok.Data;
  */
 @Data
 public class ProjectExperienceVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 项目名称
     private String projectName;
     // 项目角色

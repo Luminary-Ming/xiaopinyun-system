@@ -15,7 +15,7 @@ import lombok.Data;
 public class User {
     // id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 学生id
     private Integer aid;
     // HR id

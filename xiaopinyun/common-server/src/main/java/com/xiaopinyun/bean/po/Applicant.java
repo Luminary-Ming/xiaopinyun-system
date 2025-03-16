@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 @TableName("applicant")
 public class Applicant {
-    // 自增id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 头像
     private String profileImg;
     // 姓名

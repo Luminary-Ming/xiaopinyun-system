@@ -7,8 +7,8 @@ import lombok.Data;
  */
 @Data
 public class JobCollectVO {
-    // 自增id
-    private Integer id;
+    // 主键
+    private Long id;
     // HR 姓名
     private String HRName;
     // HR 身份

@@ -14,7 +14,7 @@ import lombok.Data;
 public class Recruit {
     // id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 公司信息id
     private Integer cid;
     // HRid

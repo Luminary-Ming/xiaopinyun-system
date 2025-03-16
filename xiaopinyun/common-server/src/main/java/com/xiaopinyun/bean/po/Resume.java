@@ -15,7 +15,7 @@ import lombok.Data;
 public class Resume {
     // id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 个人信息
     private Integer aid;
     // 专业技能

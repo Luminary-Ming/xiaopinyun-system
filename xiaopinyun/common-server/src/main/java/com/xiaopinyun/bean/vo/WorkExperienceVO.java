@@ -8,8 +8,8 @@ import lombok.Data;
  */
 @Data
 public class WorkExperienceVO {
-    // id
-    private Integer id;
+    // 主键
+    private Long id;
     // 公司名
     private String companyName;
     // 所属行业

@@ -12,11 +12,11 @@ import lombok.Data;
 @Data
 @TableName("educational_background")
 public class EducationalBackground {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    // 学生id
-    private Integer aid;
+    private Long id;
+    // 学生信息主键
+    private Long pk_applicant;
     // 学校名称
     private String name;
     // 学历 0初中及以下 1中专 2高中 3大专 4本科 5硕士 6博士

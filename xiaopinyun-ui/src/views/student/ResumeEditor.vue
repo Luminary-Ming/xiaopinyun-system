@@ -514,7 +514,7 @@
 
                     <div class="resume-wenjian">文件（3/3）</div>
                     <el-menu-item index="9">
-                        <img class="pdf_img" src="/src/assets/images/icon-pdf.png" />
+                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
                         <div class="resume-info">
                             <div class="resume-name">java工程师.pdf</div>
                             <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
@@ -523,7 +523,7 @@
                     </el-menu-item>
 
                     <el-menu-item index="10">
-                        <img class="pdf_img" src="/src/assets/images/icon-pdf.png" />
+                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
                         <div class="resume-info">
                             <div class="resume-name">实施工程师.pdf</div>
                             <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
@@ -531,7 +531,7 @@
                         <span class="iconfont icon-file-menu"></span>
                     </el-menu-item>
                     <el-menu-item index="11">
-                        <img class="pdf_img" src="/src/assets/images/icon-pdf.png" />
+                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
                         <div class="resume-info">
                             <div class="resume-name">运维工程师.pdf</div>
                             <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
@@ -560,7 +560,7 @@ let honorFlag = ref(true);
 let evaluateFlag = ref(true);
 
 /* ------------------------------------- 个人信息 -------------------------------------- */
-let squareUrl = ref("/src/assets/images/默认头像.png"); // 头像
+let squareUrl = ref("/src/assets/images/profile-img/default.png"); // 头像
 
 let applicant = reactive({
     name: "",
@@ -1049,7 +1049,7 @@ let onCancel = function (index) {
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
-    background: url(/src/assets/images/精灵图.png) 0 0 / 16px auto no-repeat;
+    background: url(/src/assets/images/icon-img/elf.png) 0 0 / 16px auto no-repeat;
 }
 
 .fz-experience {

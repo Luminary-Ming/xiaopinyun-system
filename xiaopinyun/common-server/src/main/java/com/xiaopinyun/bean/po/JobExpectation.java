@@ -14,7 +14,7 @@ import lombok.Data;
 public class JobExpectation {
     // id
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     // 学生id
     private Integer aid;
     // 求职类型 0全职、1兼职、2实习
