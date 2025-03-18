@@ -11,6 +11,8 @@ import lombok.Data;
 public class Attachment {
     // 主键
     private Long id;
+     // 简历主键
+    private Long pk_resume;
     // 附件简历（仅支持PDF）
     @TableField("resume_pdf")
     private String resumePDF;
