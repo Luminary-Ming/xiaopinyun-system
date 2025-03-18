@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 @TableName("job_collect")
 public class JobCollect {
-    // 自增id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 学生id
-    private Integer aid;
-    // 招聘信息id
-    private Integer rid;
+    // 学生信息主键
+    private Long pk_applicant;
+    // 招聘信息主键
+    private Long pk_recruit;
     // 是否已取消收藏  0已收藏、1取消收藏
     @TableLogic
     private Integer dr;

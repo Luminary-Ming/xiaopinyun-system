@@ -22,7 +22,7 @@ public class HR {
     // 性别  0男、1女
     private Integer sex;
     // 所属公司
-    private String companyName;
+    private Long pk_company;
     // 身份  例人事总监、HR、招聘专家、人事专员、技术总监、经理、校招顾问、项目总监
     private String identity;
     // 手机号

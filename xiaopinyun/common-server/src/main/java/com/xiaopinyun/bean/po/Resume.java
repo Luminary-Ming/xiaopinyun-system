@@ -13,21 +13,17 @@ import lombok.Data;
 @Data
 @TableName("resume")
 public class Resume {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 个人信息
-    private Integer aid;
+    // 学生信息主键
+    private Long pk_applicant;
     // 专业技能
     private String majorSkill;
-    // 求职期望 例1,2,3
-    private String jids;
-    // 教育背景 例1,2,3
-    private String eids;
-    // 项目经历 例1,2,3
-    private String pids;
-    // 工作/实习经历 例1,2,3
-    private String wids;
+    // 求职期望
+    // 教育背景
+    // 项目经历
+    // 工作/实习经历
     // 获奖荣誉
     private String honor;
     // 自我评价

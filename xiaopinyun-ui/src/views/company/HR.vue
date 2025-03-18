@@ -142,17 +142,17 @@ let squareUrl = ref("/src/assets/images/profile-img/default.png"); // 头像
 let hr = reactive({
     name: "徐晨",
     sex: "男",
-    identity: "HR",
-    qualification: "本科",
-    status: "0",
+    identity: "招聘专家",
+    qualification: "2-3天内活跃",
+    status: "0", // 0在线 1隐身
 });
 
 // 选项卡内容
 let contents = reactive([
     {
         hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "徐晨", // hr名字
-        hr_identity: "招聘者", // hr身份
+        hr_name: "鲁米", // hr名字
+        hr_identity: "求职者", // hr身份
         title: "Java工程师-2025届(J14894)", // 招聘标题
         address: "天津·滨海新区", // 工作地点
         salary: "6-8k", // 薪资
@@ -165,8 +165,36 @@ let contents = reactive([
     },
     {
         hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "徐晨", // hr名字
-        hr_identity: "招聘者", // hr身份
+        hr_name: "鲁米", // hr名字
+        hr_identity: "求职者", // hr身份
+        title: "Java工程师-2025届(J14894)", // 招聘标题
+        address: "天津·滨海新区", // 工作地点
+        salary: "6-8k", // 薪资
+        requirement: "经验不限", // 工作要求
+        education: "本科", // 学历要求
+        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
+        companyName: "壹加科技", // 公司名
+        industryType: "计算机服务", // 行业分类
+        people: "22-99人", // 公司人数
+    },
+    {
+        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
+        hr_name: "鲁米", // hr名字
+        hr_identity: "求职者", // hr身份
+        title: "Java工程师-2025届(J14894)", // 招聘标题
+        address: "天津·滨海新区", // 工作地点
+        salary: "6-8k", // 薪资
+        requirement: "经验不限", // 工作要求
+        education: "本科", // 学历要求
+        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
+        companyName: "壹加科技", // 公司名
+        industryType: "计算机服务", // 行业分类
+        people: "22-99人", // 公司人数
+    },
+    {
+        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
+        hr_name: "鲁米", // hr名字
+        hr_identity: "求职者", // hr身份
         title: "Java工程师-2025届(J14894)", // 招聘标题
         address: "天津·滨海新区", // 工作地点
         salary: "6-8k", // 薪资
@@ -207,6 +235,7 @@ let handleMenuClick = function (menu) {
     width: 885px;
     height: 100%;
     margin-right: 15px;
+    margin-bottom: 200px;
 }
 
 .profile-info .userinfo-banner {

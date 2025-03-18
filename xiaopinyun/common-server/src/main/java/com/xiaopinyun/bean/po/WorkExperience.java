@@ -12,11 +12,11 @@ import lombok.Data;
 @Data
 @TableName("work_experience")
 public class WorkExperience {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 学生id
-    private Integer aid;
+    // 简历主键
+    private Long pk_resume;
     // 公司名
     private String companyName;
     // 所属行业

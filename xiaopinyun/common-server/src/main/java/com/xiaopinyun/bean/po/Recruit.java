@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 @TableName("recruit")
 public class Recruit {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 公司信息id
-    private Integer cid;
-    // HRid
-    private Integer hid;
+    // 公司信息主键
+    private Long pk_company;
+    // HR信息主键
+    private Long pk_hr;
     // 招聘标题
     private String title;
     // 薪资 例9k-15k

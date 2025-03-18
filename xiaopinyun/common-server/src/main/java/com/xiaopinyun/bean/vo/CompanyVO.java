@@ -16,17 +16,17 @@ public class CompanyVO {
     private String profileImgUrl;
     // 公司名
     private String companyName;
-    // 公司人数
-    private Integer people;
-    // 行业分类   互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
+    // 公司人数  0-20人、20-99人、100-499人、500-999人、10000人以上
+    private String people;
+    // 行业分类  互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
     private String industryType;
-    // 工作时间 例8:30 - 17:30
+    // 工作时间  例8:30 - 17:30
     private String workingHours;
-    // 休假情况   0双休、1单休、2无休 --> 将数字转换为字符串
+    // 休假情况  0双休、1单休、2无休 --> 将数字转换为字符串
     private String holiday;
-    // 加班情况   0弹性工作、1偶尔加班、2经常加班 --> 将数字转换为字符串
+    // 加班情况  0弹性工作、1偶尔加班、2经常加班 --> 将数字转换为字符串
     private String overtime;
-    // 员工福利   例五险一金、定期体检、年终奖、带薪年假、节日福利
+    // 员工福利  例五险一金、定期体检、年终奖、带薪年假、节日福利
     private String benefit;
     // 公司地址
     private String companyAddress;

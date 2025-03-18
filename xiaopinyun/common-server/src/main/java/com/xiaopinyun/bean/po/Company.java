@@ -22,8 +22,8 @@ public class Company {
     private String profileImg;
     // 公司名
     private String companyName;
-    // 公司人数
-    private Integer people;
+    // 公司人数 0-20人、20-99人、100-499人、500-999人、10000人以上
+    private String people;
     // 行业分类   互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
     private String industryType;
     // 工作时间 例08:30 - 17:30

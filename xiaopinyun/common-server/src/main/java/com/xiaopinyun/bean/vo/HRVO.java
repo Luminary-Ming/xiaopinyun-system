@@ -16,8 +16,8 @@ public class HRVO {
     private String name;
     // 性别  0男、1女 --> 将数字转换为字符串
     private String sex;
-    //所属公司
-    private String companyName;
+    // 所属公司
+    private Long pk_company;
     // 身份  例人事总监、HR、招聘专家、人事专员、技术总监、经理、校招顾问、项目总监
     private String identity;
     // 手机号 --> 进行脱敏处理，中间四位 * 号代替
@@ -34,7 +34,6 @@ public class HRVO {
         this.profileImgUrl = hr.getProfileImg();
         this.name = hr.getName();
         this.sex = convertSex(hr.getSex());
-        this.companyName = hr.getCompanyName();
         this.identity = hr.getIdentity();
         this.telephone = hr.getTelephone();
         this.email = hr.getEmail();

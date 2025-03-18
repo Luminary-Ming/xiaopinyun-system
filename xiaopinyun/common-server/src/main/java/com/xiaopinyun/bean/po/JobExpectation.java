@@ -12,11 +12,11 @@ import lombok.Data;
 @Data
 @TableName("job_expectation")
 public class JobExpectation {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 学生id
-    private Integer aid;
+    // 简历主键
+    private Long pk_resume;
     // 求职类型 0全职、1兼职、2实习
     private String jobType;
     // 期望行业 最多三个 例计算机软件、互联网、企业服务

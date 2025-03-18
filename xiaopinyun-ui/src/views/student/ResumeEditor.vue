@@ -2,52 +2,54 @@
 <template>
     <div class="resume-box">
         <div class="resume-list">
-            <el-col :span="12">
-                <el-menu active-text-color="#000" background-color="#fff" class="el-menu-vertical-demo" default-active="2" text-color="#000" @open="handleOpen" @close="handleClose">
-                    <div class="mb-2">
-                        <h3>简历目录</h3>
-                    </div>
-                    <el-menu-item index="1">
-                        <el-icon><User /></el-icon>
-                        <span>个人信息</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <el-icon><Histogram /></el-icon>
-                        <span>专业技能</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                        <el-icon><document /></el-icon>
-                        <span>求职期望</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <el-icon><School /></el-icon>
-                        <span>教育背景</span>
-                    </el-menu-item>
-                    <el-menu-item index="5">
-                        <el-icon><Monitor /></el-icon>
-                        <span>项目经历</span>
-                    </el-menu-item>
-                    <el-menu-item index="6">
-                        <el-icon><OfficeBuilding /></el-icon>
-                        <span>工作/实习经历</span>
-                    </el-menu-item>
-                    <el-menu-item index="7">
-                        <el-icon><GoldMedal /></el-icon>
-                        <span>获奖荣誉</span>
-                    </el-menu-item>
-                    <el-menu-item index="8">
-                        <el-icon><EditPen /></el-icon>
-                        <span>自我评价</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-col>
+            <div class="resume-list-box">
+                <el-col :span="12">
+                    <el-menu active-text-color="#000" background-color="#fff" class="el-menu-vertical-demo" default-active="2" text-color="#000" @open="handleOpen" @close="handleClose">
+                        <div class="mb-2">
+                            <h3>简历目录</h3>
+                        </div>
+                        <el-menu-item index="1" @click="scrollToSection('section1')">
+                            <el-icon><User /></el-icon>
+                            <span>个人信息</span>
+                        </el-menu-item>
+                        <el-menu-item index="2" @click="scrollToSection('section2')">
+                            <el-icon><Histogram /></el-icon>
+                            <span>专业技能</span>
+                        </el-menu-item>
+                        <el-menu-item index="3" @click="scrollToSection('section3')">
+                            <el-icon><document /></el-icon>
+                            <span>求职期望</span>
+                        </el-menu-item>
+                        <el-menu-item index="4" @click="scrollToSection('section4')">
+                            <el-icon><School /></el-icon>
+                            <span>教育背景</span>
+                        </el-menu-item>
+                        <el-menu-item index="5" @click="scrollToSection('section5')">
+                            <el-icon><Monitor /></el-icon>
+                            <span>项目经历</span>
+                        </el-menu-item>
+                        <el-menu-item index="6" @click="scrollToSection('section6')">
+                            <el-icon><OfficeBuilding /></el-icon>
+                            <span>工作/实习经历</span>
+                        </el-menu-item>
+                        <el-menu-item index="7" @click="scrollToSection('section7')">
+                            <el-icon><GoldMedal /></el-icon>
+                            <span>获奖荣誉</span>
+                        </el-menu-item>
+                        <el-menu-item index="8" @click="scrollToSection('section8')">
+                            <el-icon><EditPen /></el-icon>
+                            <span>自我评价</span>
+                        </el-menu-item>
+                    </el-menu>
+                </el-col>
+            </div>
         </div>
         <div class="resume-editor">
             <div class="resume-editor-header">
                 <h3>我的在线简历</h3>
             </div>
 
-            <div class="resume-editor-person">
+            <div class="resume-editor-person" id="section1">
                 <div v-if="personFlag">
                     <div class="resume-editor-person-image">
                         <el-avatar shape="square" :size="80" :src="squareUrl" style="vertical-align: middle; border-radius: 10px" />
@@ -119,7 +121,7 @@
                     </el-form>
                 </div>
             </div>
-            <div class="resume-editor-skill">
+            <div class="resume-editor-skill" id="section2">
                 <div class="title">专业技能</div>
                 <div class="resume-editor-skill-info" v-if="skillFlag">
                     <div class="op">
@@ -143,7 +145,7 @@
                 </div>
             </div>
 
-            <div class="resume-editor-expectation">
+            <div class="resume-editor-expectation" id="section3">
                 <div class="title">
                     求职期望
                     <span @click="addJobExpectation()">
@@ -216,7 +218,7 @@
                 </div>
             </div>
 
-            <div class="resume-editor-education">
+            <div class="resume-editor-education" id="section4">
                 <div class="title">教育背景</div>
                 <div class="resume-editor-education-info" v-if="educationFlag">
                     <div class="op">
@@ -301,7 +303,7 @@
                 </div>
             </div>
 
-            <div class="resume-editor-project">
+            <div class="resume-editor-project" id="section5">
                 <div class="title">
                     项目经历
                     <span @click="addProjectExperience()">
@@ -373,7 +375,7 @@
                     </el-form>
                 </div>
             </div>
-            <div class="resume-editor-work">
+            <div class="resume-editor-work" id="section6">
                 <div class="title">
                     工作/实习经历
                     <span @click="addWorkExperience()">
@@ -451,7 +453,7 @@
                     </el-form>
                 </div>
             </div>
-            <div class="resume-editor-honor">
+            <div class="resume-editor-honor" id="section7">
                 <div class="title">获奖荣誉</div>
                 <div class="resume-editor-honor-info" v-if="honorFlag">
                     <div class="op">
@@ -476,7 +478,7 @@
                     </el-form>
                 </div>
             </div>
-            <div class="resume-editor-evaluate">
+            <div class="resume-editor-evaluate" id="section8">
                 <div class="title">自我评价</div>
                 <div class="resume-editor-evaluate-info" v-if="evaluateFlag">
                     <div class="op">
@@ -549,6 +551,17 @@ import { ref, reactive } from "vue";
 import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 // import { studentApi } from "@/api/student";
+// 锚点
+const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }
+};
+
 /* ------------------------------------- 表单显示隐藏标记 -------------------------------------- */
 let personFlag = ref(true);
 let skillFlag = ref(true);
@@ -573,7 +586,7 @@ let applicant = reactive({
 });
 
 // 转换求职状态
-let convertStatus = function (status) {
+const convertStatus = function (status) {
     switch (status) {
         case "0":
             return "离校-随时到岗";
@@ -615,7 +628,7 @@ let currentJobExpectation = reactive({
 let currentIndex = ref(null);
 
 // 求职期望添加、编辑、删除、完成按钮
-let addJobExpectation = function () {
+const addJobExpectation = function () {
     currentJobExpectation.jobType = "";
     currentJobExpectation.expectedIndustry = "";
     currentJobExpectation.district = "";
@@ -625,19 +638,19 @@ let addJobExpectation = function () {
     expectationFlag.value = false;
 };
 
-let onJobExpectationUpdate = function (index) {
+const onJobExpectationUpdate = function (index) {
     expectationFlag.value = false;
     currentIndex.value = index;
     Object.assign(currentJobExpectation, jobExpectations[index]);
     console.log("编辑", index);
 };
-let onJobExpectationDelete = function (index) {
+const onJobExpectationDelete = function (index) {
     jobExpectations.splice(index, 1);
     // ...删除库中数据
     ElMessage.success("操作成功");
 };
 
-let onJobExpectationSubmit = function () {
+const onJobExpectationSubmit = function () {
     if (currentIndex.value == null) {
         jobExpectations.push({ ...currentJobExpectation });
     } else {
@@ -658,7 +671,7 @@ let currentEducationalBackground = reactive({
 });
 
 // 转换求职状态
-let convertQualification = function (status) {
+const convertQualification = function (status) {
     switch (status) {
         case "0":
             return "初中及以下";
@@ -699,7 +712,7 @@ let currentProjectExperience = reactive({
 let currentProjectExperienceIndex = ref(null);
 
 // 项目经历添加、编辑、删除、完成按钮
-let addProjectExperience = function () {
+const addProjectExperience = function () {
     currentProjectExperience.projectName = "";
     currentProjectExperience.projectRole = "";
     currentProjectExperience.startTime = "";
@@ -709,18 +722,19 @@ let addProjectExperience = function () {
     projectFlag.value = false;
 };
 
-let onProjectExperienceUpdate = function (index) {
+const onProjectExperienceUpdate = function (index) {
     projectFlag.value = false;
     currentProjectExperienceIndex.value = index;
     Object.assign(currentProjectExperienceIndex, projectExperiences[index]);
 };
-let onProjectExperienceDelete = function (index) {
+
+const onProjectExperienceDelete = function (index) {
     projectExperiences.splice(index, 1);
     // ...删除库中数据
     ElMessage.success("操作成功");
 };
 
-let onProjectExperienceSubmit = function () {
+const onProjectExperienceSubmit = function () {
     if (currentProjectExperienceIndex.value == null) {
         projectExperiences.push({ ...currentProjectExperience });
     } else {
@@ -756,7 +770,7 @@ let currentWorkExperience = reactive({
 let currentWorkExperienceIndex = ref(null);
 
 // 工作/实习经历添加、编辑、删除、完成按钮
-let addWorkExperience = function () {
+const addWorkExperience = function () {
     currentWorkExperience.companyName = "";
     currentWorkExperience.industryType = "";
     currentWorkExperience.department = "";
@@ -768,18 +782,19 @@ let addWorkExperience = function () {
     workFlag.value = false;
 };
 
-let onWorkExperienceUpdate = function (index) {
+const onWorkExperienceUpdate = function (index) {
     workFlag.value = false;
     currentWorkExperienceIndex.value = index;
     Object.assign(currentWorkExperienceIndex, workExperiences[index]);
 };
-let onWorkExperienceDelete = function (index) {
+
+const onWorkExperienceDelete = function (index) {
     workExperiences.splice(index, 1);
     // ...删除库中数据
     ElMessage.success("操作成功");
 };
 
-let onWorkExperienceSubmit = function () {
+const onWorkExperienceSubmit = function () {
     if (currentWorkExperienceIndex.value == null) {
         workExperiences.push({ ...currentWorkExperience });
     } else {
@@ -800,7 +815,7 @@ let selfEvaluation = reactive({
 });
 
 /* ------------------------------------- 编辑、确定、取消按钮 -------------------------------------- */
-let onUpdate = function (index) {
+const onUpdate = function (index) {
     switch (index) {
         case 0:
             return (personFlag.value = false);
@@ -821,7 +836,7 @@ let onUpdate = function (index) {
     }
 };
 
-let onSubmit = function (index) {
+const onSubmit = function (index) {
     switch (index) {
         case 0:
             return (personFlag.value = true);
@@ -842,7 +857,7 @@ let onSubmit = function (index) {
     }
 };
 
-let onCancel = function (index) {
+const onCancel = function (index) {
     switch (index) {
         case 0:
             return (personFlag.value = true);
@@ -1773,8 +1788,10 @@ i {
 .resume-list {
     width: 200px;
     height: 280px;
-    border: 1px #e6e7ec solid;
-    border-radius: 15px;
+}
+
+.resume-list-box {
+    position: fixed;
 }
 
 .resume-file {

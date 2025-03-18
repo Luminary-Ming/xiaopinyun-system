@@ -14,12 +14,12 @@ public class ResumeSubmit {
     // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 投递的招聘职位
-    private Integer recid;
-    // 投递在线简历
-    private Integer resid;
+    // 招聘信息主键
+    private Long pk_recruit;
+    // 简历主键
+    private Long pk_resume;
     // 投递附件简历
-    private Integer aid;
+    private Long aid;
     // 筛选状态（HR功能） 0、默认、1退回、2通过、3感兴趣
     private Integer filterStatus;
     // 简历退回回复（HR功能）

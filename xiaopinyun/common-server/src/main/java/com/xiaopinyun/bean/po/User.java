@@ -13,13 +13,15 @@ import lombok.Data;
 @Data
 @TableName("user")
 public class User {
-    // id
+    // 主键
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-    // 学生id
-    private Integer aid;
-    // HR id
-    private Integer hid;
+    // 学生信息主键
+    private Long pk_applicant;
+    // HR信息主键
+    private Long pk_hr;
+    // 管理员信息主键
+    private Long pk_admin;
     // 用户名
     private String username;
     // 密码

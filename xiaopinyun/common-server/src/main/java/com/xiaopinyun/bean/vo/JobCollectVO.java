@@ -25,7 +25,7 @@ public class JobCollectVO {
     private String education;
     // 公司头像
     private String profileImg;
-    // 行业分类   互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
+    // 行业分类  互联网、电子商务、社交网络、金融科技、游戏娱乐、物流配送、内容创作与管理
     private String industryType;
     // 公司人数
     private Integer people;
