@@ -1,10 +1,14 @@
 package com.xiaopinyun.bean.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 工作 / 实习经历
@@ -13,10 +17,10 @@ import lombok.Data;
 @TableName("work_experience")
 public class WorkExperience {
     // 主键
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
-    // 简历主键
-    private Long pk_resume;
+    // 学生信息主键
+    private Long pk_applicant;
     // 公司名
     private String companyName;
     // 所属行业
@@ -35,5 +39,6 @@ public class WorkExperience {
     @TableLogic
     private Integer dr;
     // 时间戳
-    private String ts;
+    @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充
+    private LocalDateTime ts;
 }

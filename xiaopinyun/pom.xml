@@ -18,21 +18,25 @@
 
     <!-- 子模块 -->
     <modules>
+        <!-- 管理员模块（审核、统计分析） -->
+        <module>admin-server</module>
         <!-- 实体类工具类模块 -->
         <module>common-server</module>
+        <!-- 公司模块 -->
+        <module>company-server</module>
         <!-- 个人信息维护模块 -->
-        <module>information-maintenance-server</module>
+        <module>info-server</module>
         <!-- 职位收藏模块 -->
         <module>job-collect-server</module>
-        <!-- 招聘管理模块 -->
+        <!-- 招聘管理模块（职位） -->
         <module>recruit-server</module>
-        <!-- 简历管理模块 -->
+        <!-- 简历管理模块（在线简历、附件简历） -->
         <module>resume-server</module>
         <!-- 简历投递模块 -->
         <module>resume-submit-server</module>
         <!-- 文件上传下载模块 -->
         <module>upload-server</module>
-        <!-- 用户管理模块 -->
+        <!-- 用户管理模块（登录/注册、首页） -->
         <module>user-server</module>
     </modules>
 
@@ -45,7 +49,7 @@
         <minio.version>8.5.13</minio.version>
         <mybatis-plus.version>3.5.8</mybatis-plus.version>
         <common-server.version>1.0-SNAPSHOT</common-server.version>
-        <information-maintenance-server.version>1.0-SNAPSHOT</information-maintenance-server.version>
+        <info-server.version>1.0-SNAPSHOT</info-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -86,8 +90,8 @@
             <!-- 个人信息维护模块 -->
             <dependency>
                 <groupId>com.xiaopinyun</groupId>
-                <artifactId>information-maintenance-server</artifactId>
-                <version>${information-maintenance-server.version}</version>
+                <artifactId>info-server</artifactId>
+                <version>${info-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -164,6 +168,20 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
+        <!-- hutool 糊涂包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.36</version>
+        </dependency>
+
+        <!-- 配置元数据生成工具 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

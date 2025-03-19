@@ -1,6 +1,6 @@
 package com.xiaopinyun.exception;
 
-import com.xiaopinyun.bean.vo.Result;
+import com.xiaopinyun.bean.dto.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

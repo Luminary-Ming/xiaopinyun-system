@@ -1,7 +1,7 @@
 package com.xiaopinyun.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.xiaopinyun.bean.vo.Result;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.config.MinIOConfig;
 import com.xiaopinyun.service.UploadService;
 import io.minio.GetObjectArgs;

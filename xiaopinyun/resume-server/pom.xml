@@ -28,8 +28,8 @@
         <!-- 个人信息维护模块 -->
         <dependency>
             <groupId>com.xiaopinyun</groupId>
-            <artifactId>information-maintenance-server</artifactId>
-            <version>${information-maintenance-server.version}</version>
+            <artifactId>info-server</artifactId>
+            <version>${info-server.version}</version>
         </dependency>
     </dependencies>
 

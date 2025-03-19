@@ -1,6 +1,6 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.vo.Result;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.service.UploadService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

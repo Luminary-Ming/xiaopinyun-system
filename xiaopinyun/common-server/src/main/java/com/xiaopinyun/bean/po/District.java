@@ -12,7 +12,7 @@ import lombok.Data;
 @TableName("rc_district")
 public class District {
     // 自增id
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Integer districtId;
     // 父级关系
     private Integer pid;
@@ -20,6 +20,4 @@ public class District {
     private String district;
     // 子属关系
     private Integer level;
-    // 时间戳
-    private String ts;
 }

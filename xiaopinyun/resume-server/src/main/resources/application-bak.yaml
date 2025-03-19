@@ -1,6 +1,6 @@
 # 配置端口
 server:
-  port: 5050
+  port: 6060
 
 spring:
   application:
@@ -39,6 +39,10 @@ mybatis-plus:
       # 逻辑已删除值
       logic-delete-field: 1
 
+# 雪花算法配置
+snowflake:
+  machine-id: 6      # 机器 ID（0~31）
+  data-center-id: 1  # 数据中心 ID（0~31）
 
 # 配置 springboot 日志级别
 logging:

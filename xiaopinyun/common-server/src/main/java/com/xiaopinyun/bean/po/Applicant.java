@@ -1,10 +1,14 @@
 package com.xiaopinyun.bean.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 求职者 / 大学生 个人信息
@@ -13,7 +17,7 @@ import lombok.Data;
 @TableName("applicant")
 public class Applicant {
     // 主键
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 头像
     private String profileImg;
@@ -39,5 +43,6 @@ public class Applicant {
     @TableLogic
     private Integer dr;
     // 时间戳
-    private String ts;
+    @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充
+    private LocalDateTime ts;
 }

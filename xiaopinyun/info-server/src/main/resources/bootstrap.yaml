@@ -1,0 +1,16 @@
+# bootstrap.yml 文件是系统级的资源配置项，application.yml 是用户级的资源配置项
+# 加载优先级顺序：bootstrap.yml > application.properties > application.yml
+# 需导入 spring-cloud-starter-bootstrap 依赖后配置文件才能生效
+spring:
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848  # Nacos 的 URL
+        file-extension: yaml  # 配置文件格式
+        prefix: info-server  # 配置文件前缀
+        group: DEFAULT_GROUP  # 默认分组
+        # 如果nacos管理的服务的配置文件不再默认的 public 空间下，就需要单独配置namespace配置
+        # 指定对应的名称空间
+        # namespace:

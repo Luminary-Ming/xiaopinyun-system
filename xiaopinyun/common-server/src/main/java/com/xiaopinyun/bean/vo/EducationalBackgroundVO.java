@@ -1,6 +1,6 @@
 package com.xiaopinyun.bean.vo;
 
-import com.xiaopinyun.bean.po.EducationalBackground;
+import com.xiaopinyun.bean.po.Educational;
 import lombok.Data;
 
 /**
@@ -24,14 +24,14 @@ public class EducationalBackgroundVO {
     private String majorCourse;
 
     // 构造方法，用于从 EducationalBackground 对象转换
-    public EducationalBackgroundVO(EducationalBackground educationalBackground) {
-        this.id = educationalBackground.getId();
-        this.name = educationalBackground.getName();
-        this.qualification = convertQualification(educationalBackground.getQualification());
-        this.major = educationalBackground.getMajor();
-        this.startTime = educationalBackground.getStartTime();
-        this.endTime = educationalBackground.getEndTime();
-        this.majorCourse = educationalBackground.getMajorCourse();
+    public EducationalBackgroundVO(Educational educational) {
+        this.id = educational.getId();
+        this.name = educational.getName();
+        this.qualification = convertQualification(educational.getQualification());
+        this.major = educational.getMajor();
+        this.startTime = educational.getStartTime();
+        this.endTime = educational.getEndTime();
+        this.majorCourse = educational.getMajorCourse();
     }
 
     // 私有方法，用于转换学历描述

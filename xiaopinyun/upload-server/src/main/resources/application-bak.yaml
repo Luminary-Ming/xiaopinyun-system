@@ -1,7 +1,7 @@
 # Nacos 上的 yaml 文件备份
 # 配置端口
 server:
-  port: 7070
+  port: 8080
 
 spring:
   application:

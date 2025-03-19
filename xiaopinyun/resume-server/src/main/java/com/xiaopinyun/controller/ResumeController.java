@@ -1,6 +1,6 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.po.Resume;
+import com.xiaopinyun.bean.po.Advantage;
 import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.bean.vo.ResumeVO;
 import com.xiaopinyun.service.ResumeService;
@@ -32,16 +32,16 @@ public class ResumeController {
      * 添加简历信息
      */
     @PostMapping
-    public Result<ResumeVO> saveVO(@RequestBody Resume resume) {
-        return resumeService.saveVO(resume);
+    public Result<ResumeVO> saveVO(@RequestBody Advantage advantage) {
+        return resumeService.saveVO(advantage);
     }
 
     /**
      * 更新简历信息
      */
     @PutMapping
-    public Result<ResumeVO> updateVO(@RequestBody Resume resume) {
-        return resumeService.updateVO(resume);
+    public Result<ResumeVO> updateVO(@RequestBody Advantage advantage) {
+        return resumeService.updateVO(advantage);
     }
 
     /**
