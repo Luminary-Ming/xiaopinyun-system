@@ -34,11 +34,14 @@ public class HR {
     // 电子邮箱
     private String email;
     // 状态  0-在线、1-昨日活跃、2-3天内活跃、3-7天内活跃、4-1月内活跃
+    @TableField(fill = FieldFill.INSERT)
     private Integer status;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer checkStatus;
     // 是否已删除 0正常、1已删除
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer dr;
     // 时间戳
     @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充

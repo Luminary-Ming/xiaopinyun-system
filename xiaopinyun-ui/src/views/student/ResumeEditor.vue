@@ -52,7 +52,9 @@
             <div class="resume-editor-person" id="section1">
                 <div v-if="personFlag">
                     <div class="resume-editor-person-image">
-                        <el-avatar shape="square" :size="80" :src="squareUrl" style="vertical-align: middle; border-radius: 10px" />
+                        <el-upload :show-file-list="false" :on-success="handleAvatarSuccess">
+                            <el-avatar shape="square" :size="80" :src="squareUrl" style="vertical-align: middle; border-radius: 10px" />
+                        </el-upload>
                     </div>
                     <div class="resume-editor-person-info">
                         <div class="op">
@@ -63,19 +65,19 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="resume-editor-person-name">{{ applicant.name }}</div>
+                        <div class="resume-editor-person-name">{{ applicantView.name }}</div>
                         <div class="info-flex">
                             <div class="info-flex-item">
                                 <div class="info-labels">
                                     <p>
-                                        <span class="prev-line"><i class="fz-resume fz-experience"></i>25年应届生</span>
-                                        <span class="prev-line"><i class="fz-resume fz-degree"></i>本科</span>
-                                        <span class="prev-line"><i class="fz-resume fz-status"></i>{{ convertStatus(applicant.status) }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-experience"></i>{{ applicantView.identity }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-degree"></i>{{ applicantView.education }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-status"></i>{{ applicantView.status }}</span>
                                     </p>
                                     <p>
-                                        <span class="prev-line"><i class="fz-resume fz-tel"></i>{{ applicant.telephone }}</span>
-                                        <span class="prev-line"><i class="fz-resume fz-weixin"></i>{{ applicant.telephone }}</span>
-                                        <span class="prev-line"><i class="fz-resume fz-mail"></i>{{ applicant.email }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-tel"></i>{{ applicantView.telephone }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-weixin"></i>{{ applicantView.telephone }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-mail"></i>{{ applicantView.email }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -575,7 +577,27 @@ let evaluateFlag = ref(true);
 /* ------------------------------------- 个人信息 -------------------------------------- */
 let squareUrl = ref("/src/assets/images/profile-img/default.png"); // 头像
 
+const handleAvatarSuccess = function (response, uploadFile) {
+    squareUrl.value = "/src/assets/images/icon-img/icon-pdf.png";
+};
+
+// 视图对象
+let applicantView = reactive({
+    id: "",
+    name: "",
+    sex: "",
+    birthday: "",
+    address: "",
+    status: "",
+    telephone: "",
+    email: "",
+    identity: "",
+    education: "",
+});
+
+// 表单对象
 let applicant = reactive({
+    id: "",
     name: "",
     sex: "",
     birthday: "",
@@ -584,22 +606,6 @@ let applicant = reactive({
     telephone: "",
     email: "",
 });
-
-// 转换求职状态
-const convertStatus = function (status) {
-    switch (status) {
-        case "0":
-            return "离校-随时到岗";
-        case "1":
-            return "在校-月内到岗";
-        case "2":
-            return "在校-看看机会";
-        case "3":
-            return "在校-暂不考虑";
-        default:
-            return "未知状态";
-    }
-};
 
 /* ------------------------------------- 专业技能 -------------------------------------- */
 let majorSkill = reactive({

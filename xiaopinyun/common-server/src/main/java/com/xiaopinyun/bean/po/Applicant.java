@@ -36,11 +36,14 @@ public class Applicant {
     // 电子邮箱
     private String email;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer checkStatus;
     // 是否就业（管理员统计就业率）  0未就业、1已就业
+    @TableField(fill = FieldFill.INSERT)
     private Integer employStatus;
     // 是否已删除 0正常、1已删除
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer dr;
     // 时间戳
     @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充

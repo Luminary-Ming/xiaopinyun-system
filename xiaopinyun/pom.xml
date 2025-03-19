@@ -38,6 +38,7 @@
         <module>upload-server</module>
         <!-- 用户管理模块（登录/注册、首页） -->
         <module>user-server</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>
@@ -50,6 +51,7 @@
         <mybatis-plus.version>3.5.8</mybatis-plus.version>
         <common-server.version>1.0-SNAPSHOT</common-server.version>
         <info-server.version>1.0-SNAPSHOT</info-server.version>
+        <resume-server.version>1.0-SNAPSHOT</resume-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -93,15 +95,22 @@
                 <artifactId>info-server</artifactId>
                 <version>${info-server.version}</version>
             </dependency>
+
+            <!-- 简历模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>resume-server</artifactId>
+                <version>${resume-server.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- SpringMVC 启动器 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+        <!-- SpringMVC 启动器（Spring MVC 与 Spring Cloud Gateway 不兼容，因此注释掉） -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
 
         <!-- 单元测试启动器 -->
         <dependency>
@@ -177,11 +186,17 @@
             <version>5.8.36</version>
         </dependency>
 
-        <!-- 配置元数据生成工具 -->
+        <!-- 配置元数据生成工具（配置自定义属性） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- 网关 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
     </dependencies>
 

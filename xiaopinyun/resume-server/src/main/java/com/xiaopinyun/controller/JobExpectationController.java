@@ -1,8 +1,8 @@
 package com.xiaopinyun.controller;
 
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.JobExpectation;
 import com.xiaopinyun.bean.vo.JobExpectationVO;
-import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.JobExpectationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

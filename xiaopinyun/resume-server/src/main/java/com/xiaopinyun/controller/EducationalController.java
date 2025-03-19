@@ -1,9 +1,9 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.po.EducationalBackground;
-import com.xiaopinyun.bean.vo.EducationalBackgroundVO;
-import com.xiaopinyun.bean.vo.Result;
-import com.xiaopinyun.service.EducationalBackgroundService;
+import com.xiaopinyun.bean.dto.Result;
+import com.xiaopinyun.bean.po.Educational;
+import com.xiaopinyun.bean.vo.EducationalVO;
+import com.xiaopinyun.service.EducationalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +18,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/background")
-public class EducationalBackgroundController {
+public class EducationalController {
     @Autowired
-    private EducationalBackgroundService backgroundService;
+    private EducationalService backgroundService;
 
     /**
      * 根据学生（aid）查询教育背景
      */
     @GetMapping("/{aid}")
-    public Result<List<EducationalBackgroundVO>> queryVOByAid(@PathVariable Integer aid) {
+    public Result<List<EducationalVO>> queryVOByAid(@PathVariable Integer aid) {
         return backgroundService.queryVOByAid(aid);
     }
 
@@ -34,7 +34,7 @@ public class EducationalBackgroundController {
      * 添加教育背景
      */
     @PostMapping
-    public Result<EducationalBackgroundVO> saveVO(@RequestBody EducationalBackground background) {
+    public Result<EducationalVO> saveVO(@RequestBody Educational background) {
         return backgroundService.saveVO(background);
     }
 
@@ -42,7 +42,7 @@ public class EducationalBackgroundController {
      * 修改教育背景
      */
     @PutMapping
-    public Result<EducationalBackgroundVO> updateVO(@RequestBody EducationalBackground background) {
+    public Result<EducationalVO> updateVO(@RequestBody Educational background) {
         return backgroundService.updateVO(background);
     }
 

@@ -2,9 +2,9 @@ package com.xiaopinyun.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.JobExpectation;
 import com.xiaopinyun.bean.vo.JobExpectationVO;
-import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.mapper.JobExpectationMapper;
 import com.xiaopinyun.service.JobExpectationService;
 import com.xiaopinyun.util.BizCode;

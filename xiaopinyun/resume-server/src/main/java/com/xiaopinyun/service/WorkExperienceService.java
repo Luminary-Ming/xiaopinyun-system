@@ -1,8 +1,8 @@
 package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.WorkExperience;
-import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.bean.vo.WorkExperienceVO;
 
 /**

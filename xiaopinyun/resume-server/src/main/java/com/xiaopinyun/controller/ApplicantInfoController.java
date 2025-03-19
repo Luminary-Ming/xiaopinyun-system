@@ -1,9 +1,9 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.po.Applicant;
-import com.xiaopinyun.bean.vo.ApplicantVO;
+import com.xiaopinyun.bean.dto.ApplicantDTO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
+import com.xiaopinyun.bean.vo.ApplicantVO;
 import com.xiaopinyun.service.ApplicantInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 学生信息
+ */
 @RestController
 @RequestMapping("/applicant")
 public class ApplicantInfoController {
@@ -25,10 +28,10 @@ public class ApplicantInfoController {
     private ApplicantInfoService applicantInfoService;
 
     /**
-     * 根据 id 查询学生信息
+     * 查询学生信息
      */
     @GetMapping("/{id}")
-    public Result<ApplicantVO> selectApplicantById(@PathVariable Integer id) {
+    public Result<ApplicantDTO> selectApplicantById(@PathVariable Long id) {
         return applicantInfoService.queryVOById(id);
     }
 
@@ -36,7 +39,7 @@ public class ApplicantInfoController {
      * 条件查询、分页查询学生信息
      */
     @GetMapping
-    public Result<PageResult<List<ApplicantVO>>> selectApplicant(
+    public Result<PageResult<List<ApplicantDTO>>> selectApplicant(
             @RequestParam(name = "currentPage", defaultValue = "1") Integer currentPage,
             @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(name = "name", required = false) String name,
@@ -49,23 +52,23 @@ public class ApplicantInfoController {
      * 添加学生信息
      */
     @PostMapping
-    public Result<ApplicantVO> addApplicant(@RequestBody Applicant applicant) {
-        return applicantInfoService.saveVO(applicant);
+    public Result<ApplicantDTO> addApplicant(@RequestBody ApplicantVO applicantVO) {
+        return applicantInfoService.saveVO(applicantVO);
     }
 
     /**
      * 修改学生信息
      */
     @PutMapping
-    public Result<ApplicantVO> updateApplicant(@RequestBody Applicant applicant) {
-        return applicantInfoService.updateVO(applicant);
+    public Result<ApplicantDTO> updateApplicant(@RequestBody ApplicantVO applicantVO) {
+        return applicantInfoService.updateVO(applicantVO);
     }
 
     /**
      * 根据 id 删除学生信息
      */
     @DeleteMapping("/{id}")
-    public Result<Void> deleteApplicantById(@PathVariable Integer id) {
+    public Result<Void> deleteApplicantById(@PathVariable Long id) {
         return applicantInfoService.deleteVOById(id);
     }
 }

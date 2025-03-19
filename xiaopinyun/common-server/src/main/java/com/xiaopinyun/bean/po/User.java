@@ -34,6 +34,7 @@ public class User {
     private Integer role;
     // 是否已删除账户  0正常使用、1已删除账户
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer dr;
     // 时间戳
     @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充

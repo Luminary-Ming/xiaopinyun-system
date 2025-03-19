@@ -7,7 +7,7 @@ import lombok.Data;
  * 教育背景（展示层对象）
  */
 @Data
-public class EducationalBackgroundVO {
+public class EducationalVO {
     // 主键
     private Long id;
     // 学校名称
@@ -24,7 +24,7 @@ public class EducationalBackgroundVO {
     private String majorCourse;
 
     // 构造方法，用于从 EducationalBackground 对象转换
-    public EducationalBackgroundVO(Educational educational) {
+    public EducationalVO(Educational educational) {
         this.id = educational.getId();
         this.name = educational.getName();
         this.qualification = convertQualification(educational.getQualification());

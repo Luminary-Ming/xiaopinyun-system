@@ -40,11 +40,13 @@ public class Recruit {
     // 是否发布  0不发布（职位关闭）、1发布（招聘中）
     private Integer publishStatus;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer checkStatus;
     // 是否推荐到首页（管理员功能）  0不推荐、1推荐
     private Integer recommendStatus;
     // 是否已删除 0正常、1已删除
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer dr;
     // 时间戳
     @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充

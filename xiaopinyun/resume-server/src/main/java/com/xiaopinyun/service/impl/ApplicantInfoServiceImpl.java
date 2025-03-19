@@ -4,16 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaopinyun.bean.dto.ApplicantDTO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.Applicant;
+import com.xiaopinyun.bean.po.Educational;
 import com.xiaopinyun.bean.vo.ApplicantVO;
+import com.xiaopinyun.bean.vo.EducationalVO;
 import com.xiaopinyun.mapper.ApplicantInfoMapper;
+import com.xiaopinyun.mapper.EducationalMapper;
 import com.xiaopinyun.service.ApplicantInfoService;
 import com.xiaopinyun.util.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,16 +29,38 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
 
     @Autowired
     private ApplicantInfoMapper applicantInfoMapper;
+    @Autowired
+    private EducationalMapper educationalMapper;
 
     /**
      * 根据 id 查询学生信息
      */
     @Override
-    public Result<ApplicantVO> queryVOById(Integer id) {
+    public Result<ApplicantDTO> queryVOById(Long id) {
         Applicant applicant = applicantInfoMapper.selectById(id);
         if (applicant != null) {
             ApplicantVO applicantVO = new ApplicantVO(applicant);
-            return Result.ok(applicantVO);
+
+            ApplicantDTO applicantDTO = new ApplicantDTO();
+            applicantDTO.setApplicantVO(applicantVO);
+
+            QueryWrapper<Educational> wrapper = new QueryWrapper<>();
+            wrapper.eq("pk_applicant", id);
+            List<Educational> educationalList = educationalMapper.selectList(wrapper);
+            for (Educational educational : educationalList) {
+                EducationalVO educationalVO = new EducationalVO(educational);
+                applicantDTO.setEducation(educationalVO.getQualification());  // 学历
+
+                String endTime = educationalVO.getEndTime();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy");
+                String dateTime = LocalDateTime.now().format(dateTimeFormatter);
+                if (Integer.parseInt(endTime) <= Integer.parseInt(dateTime)) {
+                    applicantDTO.setIdentity(endTime + "应届生");  // 身份
+                } else {
+                    applicantDTO.setIdentity(endTime + "毕业生");
+                }
+            }
+            return Result.ok(applicantDTO);
         }
         return Result.ok(BizCode.NO_DATA);
     }
@@ -41,7 +69,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 条件查询、分页查询学生信息
      */
     @Override
-    public Result<PageResult<List<ApplicantVO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
+    public Result<PageResult<List<ApplicantDTO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
         Page<Applicant> page = new Page<>();
         QueryWrapper<Applicant> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name), "name", name)
@@ -58,34 +86,34 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
                 applicantVOList.add(applicantVO);
             }
             pageResult.setData(applicantVOList);
-            return Result.ok(pageResult);
+            return null;
         }
         return Result.ok(BizCode.NO_DATA);
     }
 
     /**
-     * 添加学生信息
+     * 新增学生信息
      */
     @Override
-    public Result<ApplicantVO> saveVO(Applicant applicant) {
-        if (applicant == null) {
+    public Result<ApplicantDTO> saveVO(ApplicantVO applicantVO) {
+        if (applicantVO == null) {
             return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
-        if (checkApplicant(applicant).isSuccess()) {
-            return checkApplicant(applicant);
+        if (checkApplicant(applicantVO).isSuccess()) {
+            return checkApplicant(applicantVO);
         }
-        // 添加需要审核
-        applicant.setCheckStatus(2);
-        // 默认未就业
-        applicant.setEmployStatus(0);
-        // 默认未删除
-        applicant.setDr(0);
+        Applicant applicant = new Applicant();
+        applicant.setProfileImg(applicantVO.getProfileImgUrl());
+        applicant.setName(applicantVO.getName());
+        applicant.setSex(Integer.valueOf(applicantVO.getSex()));
+        applicant.setBirthday(applicantVO.getBirthday());
+        applicant.setAddress(applicantVO.getAddress());
+        applicant.setStatus(Integer.valueOf(applicantVO.getStatus()));
+        applicant.setTelephone(applicantVO.getTelephone());
+        applicant.setEmail(applicantVO.getEmail());
         if (save(applicant)) {
-            // 添加之后的数据
-            Applicant applicantData = applicantInfoMapper.selectById(applicant.getId());
-            ApplicantVO applicantVO = new ApplicantVO(applicantData);
-            return Result.ok(applicantVO);
+            return Result.ok();
         }
         return Result.error();
     }
@@ -94,22 +122,28 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 修改学生信息
      */
     @Override
-    public Result<ApplicantVO> updateVO(Applicant applicant) {
+    public Result<ApplicantDTO> updateVO(ApplicantVO applicantVO) {
         // 如果没有要更新的数据直接返回更新成功
-        if (applicant == null) {
+        if (applicantVO == null) {
             return Result.ok();
         }
         // 校验对象的字段
-        if (checkApplicant(applicant).isSuccess()) {
-            return checkApplicant(applicant);
+        if (checkApplicant(applicantVO).isSuccess()) {
+            return checkApplicant(applicantVO);
         }
-        // 更新需要审核
-        applicant.setCheckStatus(2);
+        Applicant applicant = new Applicant();
+        applicant.setId(applicantVO.getId());
+        applicant.setProfileImg(applicantVO.getProfileImgUrl());
+        applicant.setName(applicantVO.getName());
+        applicant.setSex(Integer.valueOf(applicantVO.getSex()));
+        applicant.setBirthday(applicantVO.getBirthday());
+        applicant.setAddress(applicantVO.getAddress());
+        applicant.setStatus(Integer.valueOf(applicantVO.getStatus()));
+        applicant.setTelephone(applicantVO.getTelephone());
+        applicant.setEmail(applicantVO.getEmail());
         if (updateById(applicant)) {
             // 修改之后的数据
-            Applicant applicantData = applicantInfoMapper.selectById(applicant.getId());
-            ApplicantVO applicantVO = new ApplicantVO(applicantData);
-            return Result.ok(applicantVO);
+            return queryVOById(applicant.getId());
         }
         return Result.error();
     }
@@ -118,7 +152,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 根据 id 删除学生信息
      */
     @Override
-    public Result<Void> deleteVOById(Integer id) {
+    public Result<Void> deleteVOById(Long id) {
         if (removeById(id)) {
             return Result.ok();
         }
@@ -128,10 +162,10 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
     /**
      * 校验所传入的字段
      */
-    private Result<ApplicantVO> checkApplicant(Applicant applicant) {
-        // 校验性别
-        if (applicant.getSex() != 0 && applicant.getSex() != 1) {
-            return Result.paramError("性别参数错误");
+    private Result<ApplicantDTO> checkApplicant(ApplicantVO applicant) {
+        // 校检性别
+        if (!Pattern.matches("[0-1]", applicant.getSex())) {
+            return Result.paramError("性别错误");
         }
         // 校验手机号
         if (!Pattern.matches("^1[3-9]\\d{9}$", applicant.getTelephone())) {
@@ -146,7 +180,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return Result.paramError("出生年月格式错误");
         }
         // 校检求职状态
-        if (!Pattern.matches("[0-3]", applicant.getStatus().toString())) {
+        if (!Pattern.matches("[0-3]", applicant.getStatus())) {
             return Result.paramError("求职状态错误");
         }
         return Result.ok();

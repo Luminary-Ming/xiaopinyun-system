@@ -2,6 +2,7 @@ package com.xiaopinyun.bean.vo;
 
 import com.xiaopinyun.bean.po.Applicant;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 // 字段选择：VO 对象只包含前端展示所需的字段，以减少不必要的数据传输和增强安全性；
 // 数据格式：VO 对象中的字段数据格式应根据前端展示需求进行调整，如日期字段可能需要格式化为特定的字符串格式。
 // 计算属性：VO 对象中可以包含一些计算属性，这些属性是根据其他字段的值计算得出的，用于满足特定的展示需求。
@@ -10,6 +11,7 @@ import lombok.Data;
  * 求职者 / 大学生 个人信息（展示层对象）
  */
 @Data
+@NoArgsConstructor
 public class ApplicantVO {
     // 主键
     private Long id;

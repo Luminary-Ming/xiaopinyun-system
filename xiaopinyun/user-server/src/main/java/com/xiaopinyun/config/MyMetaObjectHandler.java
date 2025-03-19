@@ -21,6 +21,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         strictInsertFill(metaObject, "id", Long.class, snowflake.nextId());
         strictInsertFill(metaObject, "ts", LocalDateTime.class, LocalDateTime.now());
+        strictInsertFill(metaObject, "dr", Integer.class, 0);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.JobExpectation;
 import com.xiaopinyun.bean.vo.JobExpectationVO;
-import com.xiaopinyun.bean.vo.Result;
 
 import java.util.List;
 

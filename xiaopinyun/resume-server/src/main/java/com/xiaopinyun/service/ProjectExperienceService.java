@@ -1,9 +1,9 @@
 package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.ProjectExperience;
 import com.xiaopinyun.bean.vo.ProjectExperienceVO;
-import com.xiaopinyun.bean.vo.Result;
 
 public interface ProjectExperienceService extends IService<ProjectExperience> {
 

@@ -33,6 +33,7 @@ public class ProjectExperience {
     private String describe;
     // 是否已删除 0正常、1已删除
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer dr;
     // 时间戳
     @TableField(fill = FieldFill.INSERT_UPDATE)  // 新增更新自动填充

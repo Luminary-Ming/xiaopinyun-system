@@ -1,8 +1,8 @@
 package com.xiaopinyun.controller;
 
+import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.ProjectExperience;
 import com.xiaopinyun.bean.vo.ProjectExperienceVO;
-import com.xiaopinyun.bean.vo.Result;
 import com.xiaopinyun.service.ProjectExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @Author 张金龙
- * @Date 2025/2/19 10:41
- * @Version 1.0
- */
+
 @RestController
 @RequestMapping("/projectExperience")
 public class ProjectExperienceController {
