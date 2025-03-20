@@ -52,8 +52,8 @@
             <div class="resume-editor-person" id="section1">
                 <div v-if="personFlag">
                     <div class="resume-editor-person-image">
-                        <el-upload :show-file-list="false" :on-success="handleAvatarSuccess">
-                            <el-avatar shape="square" :size="80" :src="squareUrl" style="vertical-align: middle; border-radius: 10px" />
+                        <el-upload :show-file-list="false" :action="uploadUrl" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                            <el-avatar shape="square" :size="80" :src="applicantView.profileImgUrl" style="vertical-align: middle; border-radius: 10px" />
                         </el-upload>
                     </div>
                     <div class="resume-editor-person-info">
@@ -86,24 +86,24 @@
                 </div>
                 <!-- 个人信息表单 -->
                 <div v-else>
-                    <el-form :model="applicant" style="max-width: 800px">
+                    <el-form :model="applicantView" style="max-width: 800px">
                         <el-form-item label="姓名">
-                            <el-input v-model="applicant.name" placeholder="输入姓名" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="applicantView.name" placeholder="输入姓名" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item label="性别">
-                            <el-select v-model="applicant.sex" placeholder="选择性别">
+                            <el-select v-model="applicantView.sex" placeholder="选择性别">
                                 <el-option label="男" value="0" />
                                 <el-option label="女" value="1" />
                             </el-select>
                         </el-form-item>
                         <el-form-item label="出生年月">
-                            <el-input v-model="applicant.birthday" placeholder="出生年月" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="applicantView.birthday" placeholder="出生年月" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item label="居住地">
-                            <el-input v-model="applicant.address" placeholder="居住地" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="applicantView.address" placeholder="居住地" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item label="求职状态">
-                            <el-select v-model="applicant.status" placeholder="选择求职状态">
+                            <el-select v-model="applicantView.status" placeholder="选择求职状态">
                                 <el-option label="离校-随时到岗" value="0" />
                                 <el-option label="在校-月内到岗" value="1" />
                                 <el-option label="在校-看看机会" value="2" />
@@ -111,10 +111,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="手机号">
-                            <el-input v-model="applicant.telephone" placeholder="输入手机号" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="applicantView.telephone" placeholder="输入手机号" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item label="电子邮箱">
-                            <el-input v-model="applicant.email" placeholder="输入电子邮箱" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="applicantView.email" placeholder="输入电子邮箱" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="onCancel(0)">取消</el-button>
@@ -549,11 +549,25 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-// import { studentApi } from "@/api/student";
-// 锚点
+import { studentApi } from "@/api/student";
+import { uploadApi } from "@/api/upload";
+
+/* ------------------------------------- API -------------------------------------- */
+onMounted(async () => {
+    // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
+    const response = await studentApi.getApplicant("1902289468778962946");
+    // 复制属性，直接给 applicantView={...} 赋值会失去响应式
+    Object.assign(applicantView, {
+        ...response.data.applicantVO,
+        identity: response.data.identity || "",
+        education: response.data.education || "",
+    });
+});
+
+/* ------------------------------------- 锚点 -------------------------------------- */
 const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -575,15 +589,25 @@ let honorFlag = ref(true);
 let evaluateFlag = ref(true);
 
 /* ------------------------------------- 个人信息 -------------------------------------- */
-let squareUrl = ref("/src/assets/images/profile-img/default.png"); // 头像
-
-const handleAvatarSuccess = function (response, uploadFile) {
-    squareUrl.value = "/src/assets/images/icon-img/icon-pdf.png";
+// 换头像
+const uploadUrl = "http://127.0.0.1:9999/upload-server/upload";
+const handleAvatarSuccess = (response, uploadFile) => {
+    applicantView.profileImgUrl = URL.createObjectURL(uploadFile.raw);
+};
+const beforeAvatarUpload = (rawFile) => {
+    if (rawFile.type !== "image/jpeg" && rawFile.type !== "image/png") {
+        ElMessage.error("不是图片格式！");
+        return false;
+    } else if (rawFile.size / 1024 / 1024 > 2) {
+        ElMessage.error("大小超过 2MB!");
+        return false;
+    }
+    return true;
 };
 
-// 视图对象
 let applicantView = reactive({
     id: "",
+    profileImgUrl: "/src/assets/images/profile-img/default.png", // 默认头像
     name: "",
     sex: "",
     birthday: "",
@@ -593,18 +617,6 @@ let applicantView = reactive({
     email: "",
     identity: "",
     education: "",
-});
-
-// 表单对象
-let applicant = reactive({
-    id: "",
-    name: "",
-    sex: "",
-    birthday: "",
-    address: "",
-    status: "",
-    telephone: "",
-    email: "",
 });
 
 /* ------------------------------------- 专业技能 -------------------------------------- */

@@ -13,8 +13,8 @@ import io.minio.StatObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import io.minio.http.Method;
 import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +69,7 @@ public class UploadServiceImpl implements UploadService {
     /**
      * 文件下载
      */
-    public Result<Void> downloadFile(String filename, HttpServletResponse response) {
+    public Result<Void> downloadFile(String filename, MockHttpServletResponse response) {
         // 如果文件名为空
         if (StringUtils.isBlank(filename)) {
             return Result.paramError("文件名不能为空");

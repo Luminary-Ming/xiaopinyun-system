@@ -16,13 +16,13 @@ public class GlobalExceptionAdvice {
         return Result.unkown();
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public Result<String> handlerRuntimeException() {
-        return Result.unkown();
-    }
-
-    @ExceptionHandler(Exception.class)
-    public Result<String> handlerException() {
-        return Result.unkown();
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public Result<String> handlerRuntimeException() {
+//        return Result.unkown();
+//    }
+//
+//    @ExceptionHandler(Exception.class)
+//    public Result<String> handlerException() {
+//        return Result.unkown();
+//    }
 }

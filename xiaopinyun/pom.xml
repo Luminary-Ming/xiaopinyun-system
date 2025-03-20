@@ -38,7 +38,7 @@
         <module>upload-server</module>
         <!-- 用户管理模块（登录/注册、首页） -->
         <module>user-server</module>
-        <module>gateway-service</module>
+        <module>gateway-server</module>
     </modules>
 
     <properties>
@@ -197,6 +197,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+
+        <!-- 补充HttpServletResponse类，导入网关依赖后发现没有HttpServletResponse类 -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
     </dependencies>
 

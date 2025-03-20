@@ -1,7 +1,7 @@
 package com.xiaopinyun.service;
 
 import com.xiaopinyun.bean.dto.Result;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -15,7 +15,7 @@ public interface UploadService {
     /**
      * 下载文件
      */
-    Result<Void> downloadFile(String filename, HttpServletResponse response);
+    Result<Void> downloadFile(String filename, MockHttpServletResponse response);
 
     /**
      * 预览文件

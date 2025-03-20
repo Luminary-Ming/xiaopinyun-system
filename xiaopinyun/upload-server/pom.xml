@@ -18,7 +18,6 @@
     </properties>
 
     <dependencies>
-
         <!-- MinIO服务器依赖 -->
         <dependency>
             <groupId>io.minio</groupId>
@@ -31,7 +30,5 @@
             <artifactId>common-server</artifactId>
             <version>${common-server.version}</version>
         </dependency>
-
     </dependencies>
-
 </project>

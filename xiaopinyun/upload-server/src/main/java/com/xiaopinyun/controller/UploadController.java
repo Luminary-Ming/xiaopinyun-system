@@ -2,16 +2,16 @@ package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.service.UploadService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -24,15 +24,15 @@ public class UploadController {
      * 文件上传
      */
     @PostMapping
-    public Result<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        return uploadService.uploadFile(file);
+    public Result<String> uploadFile(@RequestPart("file") FilePart filePartFlux) {
+        return null;
     }
 
     /**
      * 下载文件
      */
     @PostMapping("/{filename}")
-    public Result<Void> downloadFile(@PathVariable String filename, HttpServletResponse response) {
+    public Result<Void> downloadFile(@PathVariable String filename, MockHttpServletResponse response) {
         return uploadService.downloadFile(filename, response);
     }
 

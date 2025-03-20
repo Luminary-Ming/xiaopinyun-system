@@ -15,9 +15,11 @@ spring:
         dashboard: 127.0.0.1:2233
   servlet:
     multipart:
+      enabled: true
       # 文件上传限制
       max-file-size: 20MB
       max-request-size: 100MB
+
   mvc:
     servlet:
       # 项目根路径

@@ -41,8 +41,10 @@ mybatis-plus:
 
 # 雪花算法配置
 snowflake:
-  machine-id: 3      # 机器 ID（0~31）
-  data-center-id: 1  # 数据中心 ID（0~31）
+  # 机器 ID（0~31）
+  machine-id: 6
+  # 数据中心 ID（0~31）
+  data-center-id: 1
 
 # 配置 springboot 日志级别
 logging:
