@@ -52,6 +52,7 @@
         <common-server.version>1.0-SNAPSHOT</common-server.version>
         <info-server.version>1.0-SNAPSHOT</info-server.version>
         <resume-server.version>1.0-SNAPSHOT</resume-server.version>
+        <upload-server.version>1.0-SNAPSHOT</upload-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -101,6 +102,13 @@
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>resume-server</artifactId>
                 <version>${resume-server.version}</version>
+            </dependency>
+
+            <!-- 下载模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>upload-server</artifactId>
+                <version>${upload-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -197,12 +205,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-
-        <!-- 补充HttpServletResponse类，导入网关依赖后发现没有HttpServletResponse类 -->
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
     </dependencies>
 
