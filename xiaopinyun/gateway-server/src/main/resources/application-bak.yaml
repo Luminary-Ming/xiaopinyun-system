@@ -34,6 +34,13 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: user_server
+          uri: http://127.0.0.1:9091
+          predicates:
+            - Path=/user-server/**
+          filters:
+            - StripPrefix=1
+
       # 处理跨域 CORS
       globalcors:
         cors-configurations:

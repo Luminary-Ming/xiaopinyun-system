@@ -36,7 +36,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 根据 id 查询学生信息
      */
     @Override
-    public Result<ApplicantDTO> queryVOById(Long id) {
+    public Result<ApplicantDTO> queryById(String id) {
         Applicant applicant = applicantInfoMapper.selectById(id);
         if (applicant != null) {
             ApplicantVO applicantVO = new ApplicantVO(applicant);
@@ -69,7 +69,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 条件查询、分页查询学生信息
      */
     @Override
-    public Result<PageResult<List<ApplicantDTO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
+    public Result<PageResult<List<ApplicantDTO>>> query(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status) {
         Page<Applicant> page = new Page<>();
         QueryWrapper<Applicant> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name), "name", name)
@@ -95,7 +95,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      * 新增学生信息
      */
     @Override
-    public Result<ApplicantDTO> saveVO(ApplicantVO applicantVO) {
+    public Result<ApplicantDTO> save(ApplicantVO applicantVO) {
         if (applicantVO == null) {
             return Result.paramError(BizCode.PLEASE_WRITE);
         }
@@ -104,14 +104,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return checkApplicant(applicantVO);
         }
         Applicant applicant = new Applicant();
-        applicant.setProfileImg(applicantVO.getProfileImgUrl());
-        applicant.setName(applicantVO.getName());
-        applicant.setSex(Integer.valueOf(applicantVO.getSex()));
-        applicant.setBirthday(applicantVO.getBirthday());
-        applicant.setAddress(applicantVO.getAddress());
-        applicant.setStatus(Integer.valueOf(applicantVO.getStatus()));
-        applicant.setTelephone(applicantVO.getTelephone());
-        applicant.setEmail(applicantVO.getEmail());
+        convertApplicantVO(applicantVO, applicant);
         if (save(applicant)) {
             return Result.ok();
         }
@@ -119,10 +112,21 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
     }
 
     /**
+     * 新增一条空记录，不对外提供请求，仅处理内部逻辑
+     */
+    @Override
+    public Applicant save() {
+        Applicant applicant = new Applicant();
+        applicant.setDr(0);
+        applicantInfoMapper.insert(applicant);
+        return applicant;
+    }
+
+    /**
      * 修改学生信息
      */
     @Override
-    public Result<ApplicantDTO> updateVO(ApplicantVO applicantVO) {
+    public Result<ApplicantDTO> update(ApplicantVO applicantVO) {
         // 如果没有要更新的数据直接返回更新成功
         if (applicantVO == null) {
             return Result.ok();
@@ -132,7 +136,16 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return checkApplicant(applicantVO);
         }
         Applicant applicant = new Applicant();
-        applicant.setId(applicantVO.getId());
+        applicant.setId(Long.valueOf(applicantVO.getId()));
+        convertApplicantVO(applicantVO, applicant);
+        if (updateById(applicant)) {
+            // 修改之后的数据
+            return queryById(applicant.getId().toString());
+        }
+        return Result.error();
+    }
+
+    private void convertApplicantVO(ApplicantVO applicantVO, Applicant applicant) {
         applicant.setProfileImg(applicantVO.getProfileImgUrl());
         applicant.setName(applicantVO.getName());
         applicant.setSex(Integer.valueOf(applicantVO.getSex()));
@@ -141,18 +154,13 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
         applicant.setStatus(Integer.valueOf(applicantVO.getStatus()));
         applicant.setTelephone(applicantVO.getTelephone());
         applicant.setEmail(applicantVO.getEmail());
-        if (updateById(applicant)) {
-            // 修改之后的数据
-            return queryVOById(applicant.getId());
-        }
-        return Result.error();
     }
 
     /**
      * 根据 id 删除学生信息
      */
     @Override
-    public Result<Void> deleteVOById(Long id) {
+    public Result<Void> deleteById(String id) {
         if (removeById(id)) {
             return Result.ok();
         }
@@ -164,7 +172,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
      */
     private Result<ApplicantDTO> checkApplicant(ApplicantVO applicant) {
         // 校检性别
-        if (!Pattern.matches("[0-1]", applicant.getSex())) {
+        if (!Pattern.matches("[0-1]", applicant.getSex().toString())) {
             return Result.paramError("性别错误");
         }
         // 校验手机号
@@ -180,7 +188,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return Result.paramError("出生年月格式错误");
         }
         // 校检求职状态
-        if (!Pattern.matches("[0-3]", applicant.getStatus())) {
+        if (!Pattern.matches("[0-3]", applicant.getStatus().toString())) {
             return Result.paramError("求职状态错误");
         }
         return Result.ok();

@@ -13,25 +13,30 @@ public interface ApplicantInfoService extends IService<Applicant> {
     /**
      * 查询学生信息
      */
-    Result<ApplicantDTO> queryVOById(Long id);
+    Result<ApplicantDTO> queryById(String id);
 
     /**
      * 条件查询、分页查询学生信息
      */
-    Result<PageResult<List<ApplicantDTO>>> queryVO(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status);
+    Result<PageResult<List<ApplicantDTO>>> query(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status);
 
     /**
      * 新增学生信息
      */
-    Result<ApplicantDTO> saveVO(ApplicantVO applicantVO);
+    Result<ApplicantDTO> save(ApplicantVO applicantVO);
+
+    /**
+     * 新增一条空记录，不对外提供请求，仅处理内部逻辑
+     */
+    Applicant save();
 
     /**
      * 更新学生信息
      */
-    Result<ApplicantDTO> updateVO(ApplicantVO applicantVO);
+    Result<ApplicantDTO> update(ApplicantVO applicantVO);
 
     /**
      * 删除学生信息
      */
-    Result<Void> deleteVOById(Long id);
+    Result<Void> deleteById(String id);
 }

@@ -1,18 +1,18 @@
 <template>
     <!-- 登录页面 -->
     <div class="shell" v-if="isLoginPage">
-        <form>
+        <form :model="login">
             <h2>LOGIN</h2>
             <div class="form-item">
                 <label for="username">Username</label>
                 <div class="input-wrapper">
-                    <input type="text" id="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
+                    <input v-model="login.username" type="text" id="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
                 </div>
             </div>
             <div class="form-item">
                 <label for="password">Password</label>
                 <div class="input-wrapper">
-                    <input :type="passwordType" id="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
+                    <input v-model="login.password" :type="passwordType" id="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
                     <button type="button" id="eyeball" @click="togglePasswordVisibility">
                         <div class="eye"></div>
                     </button>
@@ -24,9 +24,9 @@
                     <el-button class="el-button_qxzsfdl"> {{ selectedRole }} </el-button>
                     <template #dropdown>
                         <el-dropdown-menu class="el-dropdown-item">
-                            <el-dropdown-item command="学生">学生</el-dropdown-item>
-                            <el-dropdown-item command="HR">HR</el-dropdown-item>
-                            <el-dropdown-item command="管理员">管理员</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: '学生', value: '0' }">学生</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: 'HR', value: '1' }">HR</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: '管理员', value: '2' }">管理员</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -34,24 +34,24 @@
                     注册一个<el-icon><ArrowRightBold /></el-icon>
                 </el-button>
             </div>
-            <button id="submit">Sign in</button>
+            <button id="submit" @click="signIn()">Sign in</button>
         </form>
     </div>
 
     <!-- 注册页面 -->
     <div class="shell" v-else>
-        <form>
+        <form :model="login">
             <h2>REGISTER</h2>
             <div class="form-item">
                 <label for="username">Username</label>
                 <div class="input-wrapper">
-                    <input type="text" id="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
+                    <input v-model="login.username" type="text" id="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
                 </div>
             </div>
             <div class="form-item">
                 <label for="password">Password</label>
                 <div class="input-wrapper">
-                    <input :type="passwordType" id="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
+                    <input v-model="login.password" :type="passwordType" id="password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" />
                     <button type="button" id="eyeball" @click="togglePasswordVisibility">
                         <div class="eye"></div>
                     </button>
@@ -63,9 +63,9 @@
                     <el-button class="el-button_qxzsfdl"> {{ selectedRole }} </el-button>
                     <template #dropdown>
                         <el-dropdown-menu class="el-dropdown-item">
-                            <el-dropdown-item command="学生">学生</el-dropdown-item>
-                            <el-dropdown-item command="HR">HR</el-dropdown-item>
-                            <el-dropdown-item command="管理员">管理员</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: '学生', value: '0' }">学生</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: 'HR', value: '1' }">HR</el-dropdown-item>
+                            <el-dropdown-item :command="{ text: '管理员', value: '2' }">管理员</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -73,20 +73,108 @@
                     返回登录<el-icon><ArrowRightBold /></el-icon>
                 </el-button>
             </div>
-            <button id="submit">Register</button>
+            <button id="submit" @click="register()">Register</button>
         </form>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
+import { ref, reactive, onMounted, onBeforeMount, onBeforeUnmount } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import "@/assets/styles/variables.css";
 import "@/assets/styles/auth.css";
+import { userApi } from "@/api/user.js";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/userStore";
+/*------------------------------------- API -------------------------------------*/
+let login = reactive({
+    username: "",
+    password: "",
+    role: "",
+});
 
+const router = useRouter();
+const userStore = useUserStore();
+// 注册
+const register = async () => {
+    const resp = await userApi.register(login);
+    if (resp.code == 200) {
+        ElMessage.success("注册成功");
+
+        userStore.setToken(resp.data.token); // 保存token
+
+        // 传递给跳转页面数据，新注册的用户要补充信息
+        userStore.setUserInfo({
+            pk_applicant: resp.data.pk_applicant,
+            pk_hr: resp.data.pk_hr,
+            pk_admin: resp.data.pk_admin,
+            role: resp.data.role,
+            flag: "register",
+        });
+
+        // 根据角色跳转到不同页面
+        switch (login.role) {
+            case "0": // 学生
+                router.push("/resume"); // 跳转简历
+                ElMessageBox.alert("请填写简历完整信息", "提示", {
+                    confirmButtonText: "OK",
+                });
+                break;
+            case "1": // HR
+                router.push("/home");
+                break;
+            case "2": // 管理员
+                router.push("/home");
+                break;
+            default:
+                router.push("/");
+        }
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 登录
+const signIn = async () => {
+    const resp = await userApi.login(login);
+    debugger;
+    if (resp.code == 200) {
+        ElMessage.success("登录成功");
+
+        userStore.setToken(resp.data.token); // 保存token
+
+        // 保存用户信息
+        userStore.setUserInfo({
+            pk_applicant: resp.data.pk_applicant,
+            pk_hr: resp.data.pk_hr,
+            pk_admin: resp.data.pk_admin,
+            role: resp.data.role,
+            flag: "login",
+        });
+
+        switch (login.role) {
+            case "0": // 学生
+                router.push("/home");
+                break;
+            case "1": // HR
+                router.push("/home");
+                break;
+            case "2": // 管理员
+                router.push("/home");
+                break;
+            default:
+                router.push("/");
+        }
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+/*----------------------------------------------------------------------------*/
 // 选择身份后更新按钮文本
 const selectedRole = ref("请选择身份登录");
-const handleSelect = (role) => {
-    selectedRole.value = role;
+const handleSelect = (command) => {
+    selectedRole.value = command.text; // 显示文本
+    login.role = command.value; // 存储数值
 };
 
 // 组件挂载前添加 auth-page 类

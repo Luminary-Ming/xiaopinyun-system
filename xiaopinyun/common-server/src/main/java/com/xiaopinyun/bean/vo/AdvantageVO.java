@@ -1,10 +1,10 @@
 package com.xiaopinyun.bean.vo;
 
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class AdvantageVO {
     // 主键
     private Long id;
@@ -18,8 +18,4 @@ public class AdvantageVO {
     private String selfEvaluation;
     // 是否核实，审核通过（管理员功能）  0审核不通过、1审核通过、2审核中
     private Integer checkStatus;
-    // 是否已删除 0正常、1已删除
-    private Integer dr;
-    // 时间戳
-    private LocalDateTime ts;
 }

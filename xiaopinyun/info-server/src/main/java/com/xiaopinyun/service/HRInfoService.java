@@ -25,6 +25,7 @@ public interface HRInfoService extends IService<HR> {
      */
     Result<HRVO> saveVO(HR hr);
 
+    HR save();
     /**
      * 修改 HR 信息
      */

@@ -7,4 +7,22 @@ export const uploadApi = {
             method: "post",
         });
     },
+    downloadFile(filename) {
+        return request({
+            url: `/upload-server/upload/download/${filename}`,
+            method: "get",
+        });
+    },
+    previewFile(filename) {
+        return request({
+            url: `/upload-server/upload/${filename}`,
+            method: "get",
+        });
+    },
+    deleteFile(id) {
+        return request({
+            url: `/upload-server/upload/${id}`,
+            method: "delete",
+        });
+    },
 };

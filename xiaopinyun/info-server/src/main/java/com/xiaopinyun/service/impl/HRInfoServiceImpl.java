@@ -87,6 +87,11 @@ public class HRInfoServiceImpl extends ServiceImpl<HRInfoMapper, HR> implements 
         return Result.error();
     }
 
+    @Override
+    public HR save() {
+        return null;
+    }
+
     /**
      * 修改 HR 信息
      */

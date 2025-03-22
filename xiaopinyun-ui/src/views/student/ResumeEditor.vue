@@ -72,7 +72,7 @@
                                     <p>
                                         <span class="prev-line"><i class="fz-resume fz-experience"></i>{{ applicantView.identity }}</span>
                                         <span class="prev-line"><i class="fz-resume fz-degree"></i>{{ applicantView.education }}</span>
-                                        <span class="prev-line"><i class="fz-resume fz-status"></i>{{ applicantView.status }}</span>
+                                        <span class="prev-line"><i class="fz-resume fz-status"></i>{{ convertStatus(applicantView.status) }}</span>
                                     </p>
                                     <p>
                                         <span class="prev-line"><i class="fz-resume fz-tel"></i>{{ applicantView.telephone }}</span>
@@ -554,17 +554,30 @@ import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/ico
 import { ElMessage } from "element-plus";
 import { studentApi } from "@/api/student";
 import { uploadApi } from "@/api/upload";
-
-/* ------------------------------------- API -------------------------------------- */
+import { useUserStore } from "@/store/userStore";
+const userStore = useUserStore();
+/* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
-    // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
-    const response = await studentApi.getApplicant("1902289468778962946");
-    // 复制属性，直接给 applicantView={...} 赋值会失去响应式
-    Object.assign(applicantView, {
-        ...response.data.applicantVO,
-        identity: response.data.identity || "",
-        education: response.data.education || "",
-    });
+    // 如果是新注册用户，则展开所有表单
+    if (userStore.flag == "register") {
+        personFlag.value = false;
+        skillFlag.value = false;
+        expectationFlag.value = false;
+        educationFlag.value = false;
+        projectFlag.value = false;
+        workFlag.value = false;
+        honorFlag.value = false;
+        evaluateFlag.value = false;
+    } else {
+        // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
+        const response = await studentApi.getApplicant(applicantView.id);
+        // 复制属性，直接给 applicantView={...} 赋值会失去响应式
+        Object.assign(applicantView, {
+            ...response.data.applicantVO,
+            identity: response.data.identity || "",
+            education: response.data.education || "",
+        });
+    }
 });
 
 /* ------------------------------------- 锚点 -------------------------------------- */
@@ -591,22 +604,30 @@ let evaluateFlag = ref(true);
 /* ------------------------------------- 个人信息 -------------------------------------- */
 // 换头像
 const uploadUrl = "http://127.0.0.1:9999/upload-server/upload";
-const handleAvatarSuccess = (response, uploadFile) => {
-    applicantView.profileImgUrl = URL.createObjectURL(uploadFile.raw);
+const handleAvatarSuccess = async (response, uploadFile) => {
+    // applicantView.profileImgUrl = URL.createObjectURL(uploadFile.raw);
+    applicantView.profileImgUrl = response.data;
+    const resp = await studentApi.updateApplicant(applicantView);
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+    debugger;
 };
 const beforeAvatarUpload = (rawFile) => {
     if (rawFile.type !== "image/jpeg" && rawFile.type !== "image/png") {
         ElMessage.error("不是图片格式！");
         return false;
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error("大小超过 2MB!");
+    } else if (rawFile.size / 1024 / 1024 > 5) {
+        ElMessage.error("大小超过 5MB!");
         return false;
     }
     return true;
 };
 
 let applicantView = reactive({
-    id: "",
+    id: userStore.pk_applicant,
     profileImgUrl: "/src/assets/images/profile-img/default.png", // 默认头像
     name: "",
     sex: "",
@@ -618,6 +639,39 @@ let applicantView = reactive({
     identity: "",
     education: "",
 });
+
+// 转换求职状态
+const convertStatus = function (status) {
+    switch (status) {
+        case "0":
+            return "离校-随时到岗";
+        case "1":
+            return "在校-月内到岗";
+        case "2":
+            return "在校-看看机会";
+        case "3":
+            return "在校-暂不考虑";
+    }
+};
+
+// 完成按钮
+const applicantSubmit = async function () {
+    if (applicantView.id) {
+        const resp = await studentApi.updateApplicant(applicantView);
+        if (resp.code == 200) {
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
+    } else {
+        const resp = await studentApi.addApplicant(applicantView);
+        if (resp.code == 200) {
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
+    }
+};
 
 /* ------------------------------------- 专业技能 -------------------------------------- */
 let majorSkill = reactive({
@@ -688,7 +742,7 @@ let currentEducationalBackground = reactive({
     majorCourse: "",
 });
 
-// 转换求职状态
+// 转换学历
 const convertQualification = function (status) {
     switch (status) {
         case "0":
@@ -857,6 +911,7 @@ const onUpdate = function (index) {
 const onSubmit = function (index) {
     switch (index) {
         case 0:
+            applicantSubmit();
             return (personFlag.value = true);
         case 1:
             return (skillFlag.value = true);

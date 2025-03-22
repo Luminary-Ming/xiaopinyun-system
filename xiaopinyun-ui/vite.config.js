@@ -26,6 +26,10 @@ export default defineConfig({
                 target: "http://127.0.0.1:9999",
                 changeOrigin: true,
             },
+            "/user-server": {
+                target: "http://127.0.0.1:9999",
+                changeOrigin: true,
+            },
         },
     },
 });
