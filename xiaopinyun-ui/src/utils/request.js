@@ -10,20 +10,31 @@ const service = axios.create({
 });
 
 // 请求拦截器
-// service.interceptors.request.use((config) => {
-//     const userStore = useUserStore();
-//     if (userStore.token) {
-//         config.headers.Authorization = `Bearer ${userStore.token}`;
-//     }
-//     return config;
-// });
+service.interceptors.request.use(
+    (config) => {
+        // 请求成功时的拦截逻辑
+        const userStore = useUserStore();
+        if (userStore.token) {
+            // 如果存在token，则将其添加到请求头的 Authorization 字段中，类型为 Bearer token
+            config.headers["Authorization"] = `Bearer ${userStore.token}`;
+        }
+        return config;
+    },
+    (error) => {
+        // 请求失败时的拦截逻辑
+        return Promise.reject(error); // 抛出错误
+    }
+);
 
 // 响应拦截器
 service.interceptors.response.use(
     (response) => response.data,
     (error) => {
+        // 遇到 401 错误时自动登出并跳转登录页
         if (error.response?.status === 401) {
-            useUserStore().logout();
+            const userStore = useUserStore();
+            userStore.logout();
+            router.push("/login");
         }
         return Promise.reject(error);
     }

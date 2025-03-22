@@ -10,7 +10,7 @@ import "element-plus/dist/index.css";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 // Icon 图标
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import { pinia } from "@/store";
+import { pinia } from "@/store/index.js";
 import App from "./App.vue";
 import router from "./router";
 
