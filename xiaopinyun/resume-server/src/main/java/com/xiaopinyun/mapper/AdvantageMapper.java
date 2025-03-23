@@ -1,4 +1,7 @@
 package com.xiaopinyun.mapper;
 
-public class AdvantageMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xiaopinyun.bean.po.Advantage;
+
+public interface AdvantageMapper extends BaseMapper<Advantage> {
 }

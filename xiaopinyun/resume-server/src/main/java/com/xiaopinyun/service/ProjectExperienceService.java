@@ -5,25 +5,27 @@ import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.ProjectExperience;
 import com.xiaopinyun.bean.vo.ProjectExperienceVO;
 
+import java.util.List;
+
 public interface ProjectExperienceService extends IService<ProjectExperience> {
 
     /**
-     * 根据 id 查询项目经历
+     * 查询项目经历
      */
-    Result<ProjectExperienceVO> queryVOById(Integer id);
+    Result<List<ProjectExperienceVO>> query(String pkApplicant);
 
     /**
      * 添加项目经历
      */
-    Result<ProjectExperienceVO> saveVO(ProjectExperience projectExperience);
+    Result<ProjectExperienceVO> insert(ProjectExperienceVO projectExperienceVO);
 
     /**
      * 修改项目经历
      */
-    Result<ProjectExperienceVO> updateVO(ProjectExperience projectExperience);
+    Result<ProjectExperienceVO> update(ProjectExperienceVO projectExperienceVO);
 
     /**
-     * 根据 id 删除项目经历
+     * 删除项目经历
      */
-    Result<Void> deleteVOById(Integer id);
+    Result<Void> delete(String id);
 }

@@ -2,14 +2,18 @@ package com.xiaopinyun.bean.vo;
 
 import com.xiaopinyun.bean.po.WorkExperience;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 工作 / 实习经历（展示层对象）
  */
 @Data
+@NoArgsConstructor
 public class WorkExperienceVO {
     // 主键
-    private Long id;
+    private String id;
+    // 学生信息主键
+    private String pkApplicant;
     // 公司名
     private String companyName;
     // 所属行业
@@ -27,7 +31,8 @@ public class WorkExperienceVO {
 
     // 构造方法，用于从 WorkExperience 对象转换
     public WorkExperienceVO(WorkExperience workExperience){
-        this.id = workExperience.getId();
+        this.id = workExperience.getId().toString();
+        this.pkApplicant = workExperience.getPkApplicant().toString();
         this.companyName  =workExperience.getCompanyName();
         this.industryType = workExperience.getIndustryType();
         this.department = workExperience.getDepartment();

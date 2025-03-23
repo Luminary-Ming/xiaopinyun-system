@@ -2,7 +2,7 @@ package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.dto.LoginDTO;
 import com.xiaopinyun.bean.dto.Result;
-import com.xiaopinyun.bean.vo.UserVO;
+import com.xiaopinyun.bean.dto.UserDTO;
 import com.xiaopinyun.service.AuthDialogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +17,12 @@ public class AuthDialogController {
     private AuthDialogService authDialogService;
 
     @PostMapping("/login")
-    public Result<UserVO> login(@RequestBody LoginDTO login) {
+    public Result<UserDTO> login(@RequestBody LoginDTO login) {
         return authDialogService.login(login);
     }
 
     @PostMapping("/register")
-    public Result<UserVO> register(@RequestBody LoginDTO login) {
+    public Result<UserDTO> register(@RequestBody LoginDTO login) {
         return authDialogService.register(login);
     }
 }

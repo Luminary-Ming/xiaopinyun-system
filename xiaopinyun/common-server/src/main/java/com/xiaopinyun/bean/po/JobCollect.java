@@ -20,9 +20,9 @@ public class JobCollect {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 招聘信息主键
-    private Long pk_recruit;
+    private Long pkRecruit;
     // 是否已取消收藏  0已收藏、1取消收藏
     @TableLogic
     @TableField(fill = FieldFill.INSERT)

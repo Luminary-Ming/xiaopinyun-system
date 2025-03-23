@@ -100,7 +100,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
-        if (checkApplicant(applicantVO).isSuccess()) {
+        if (!checkApplicant(applicantVO).isSuccess()) {
             return checkApplicant(applicantVO);
         }
         Applicant applicant = new Applicant();
@@ -132,7 +132,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             return Result.ok();
         }
         // 校验对象的字段
-        if (checkApplicant(applicantVO).isSuccess()) {
+        if (!checkApplicant(applicantVO).isSuccess()) {
             return checkApplicant(applicantVO);
         }
         Applicant applicant = new Applicant();

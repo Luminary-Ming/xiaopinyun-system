@@ -20,9 +20,9 @@ public class Recruit {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 公司信息主键
-    private Long pk_company;
+    private Long pkApplicant;
     // HR信息主键
-    private Long pk_hr;
+    private Long pkHr;
     // 招聘标题
     private String title;
     // 薪资 例9k-15k

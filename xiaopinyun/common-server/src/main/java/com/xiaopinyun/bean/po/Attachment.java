@@ -20,7 +20,7 @@ public class Attachment {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 附件简历（仅支持PDF）
     @TableField("resume_pdf")
     private String resumePDF;

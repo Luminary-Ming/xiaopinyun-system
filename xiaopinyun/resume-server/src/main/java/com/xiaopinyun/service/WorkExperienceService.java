@@ -5,6 +5,8 @@ import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.WorkExperience;
 import com.xiaopinyun.bean.vo.WorkExperienceVO;
 
+import java.util.List;
+
 /**
  * @Author 张金龙
  * @Date 2025/2/19 10:42
@@ -12,22 +14,22 @@ import com.xiaopinyun.bean.vo.WorkExperienceVO;
  */
 public interface WorkExperienceService extends IService<WorkExperience> {
     /**
-     * 根据 id 查询工作经历
+     * 查询工作经历
      */
-    Result<WorkExperienceVO> queryVOById(Integer id);
+    Result<List<WorkExperienceVO>> query(String pkApplicant);
 
     /**
      * 添加工作经历
      */
-    Result<WorkExperienceVO> saveVO(WorkExperience workExperience);
+    Result<WorkExperienceVO> insert(WorkExperienceVO workExperienceVO);
 
     /**
      * 修改工作经历
      */
-    Result<WorkExperienceVO> updateVO(WorkExperience workExperience);
+    Result<WorkExperienceVO> update(WorkExperienceVO workExperienceVO);
 
     /**
-     * 根据 id 删除工作经历
+     * 删除工作经历
      */
-    Result<Void> deleteVOById(Integer id);
+    Result<Void> delete(String id);
 }

@@ -24,14 +24,14 @@ public class UserVO {
 
     public UserVO(User user) {
         this.id = user.getId().toString();
-        if (user.getPk_applicant() != null) {
-            this.pk_applicant = user.getPk_applicant().toString();
+        if (user.getPkApplicant() != null) {
+            this.pk_applicant = user.getPkApplicant().toString();
         }
-        if (user.getPk_hr() != null) {
-            this.pk_hr = user.getPk_hr().toString();
+        if (user.getPkHr() != null) {
+            this.pk_hr = user.getPkHr().toString();
         }
-        if (user.getPk_admin() != null) {
-            this.pk_admin = user.getPk_admin().toString();
+        if (user.getPkAdmin() != null) {
+            this.pk_admin = user.getPkAdmin().toString();
         }
         this.username = user.getUsername();
         this.password = user.getPassword();

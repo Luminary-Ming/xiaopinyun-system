@@ -10,6 +10,4 @@ public class LoginDTO {
     private String password;
     // 角色
     private String role;
-    // token
-    private String token;
 }

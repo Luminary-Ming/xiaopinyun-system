@@ -25,12 +25,12 @@
                             <span>教育背景</span>
                         </el-menu-item>
                         <el-menu-item index="5" @click="scrollToSection('section5')">
-                            <el-icon><Monitor /></el-icon>
-                            <span>项目经历</span>
-                        </el-menu-item>
-                        <el-menu-item index="6" @click="scrollToSection('section6')">
                             <el-icon><OfficeBuilding /></el-icon>
                             <span>工作/实习经历</span>
+                        </el-menu-item>
+                        <el-menu-item index="6" @click="scrollToSection('section6')">
+                            <el-icon><Monitor /></el-icon>
+                            <span>项目经历</span>
                         </el-menu-item>
                         <el-menu-item index="7" @click="scrollToSection('section7')">
                             <el-icon><GoldMedal /></el-icon>
@@ -52,7 +52,7 @@
             <div class="resume-editor-person" id="section1">
                 <div v-if="personFlag">
                     <div class="resume-editor-person-image">
-                        <el-upload :show-file-list="false" :action="uploadUrl" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                        <el-upload :show-file-list="false" :action="uploadUrl" :headers="headers" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                             <el-avatar shape="square" :size="80" :src="applicantView.profileImgUrl" style="vertical-align: middle; border-radius: 10px" />
                         </el-upload>
                     </div>
@@ -134,12 +134,12 @@
                             </span>
                         </a>
                     </div>
-                    <div class="info-text">{{ majorSkill.text }}</div>
+                    <div class="info-text">{{ advantage.majorSkill }}</div>
                 </div>
                 <div v-else>
-                    <el-form :model="majorSkill" style="max-width: 800px">
+                    <el-form :model="advantage" style="max-width: 800px">
                         <el-form-item>
-                            <el-input v-model="majorSkill.text" maxlength="1000" rows="10" spellcheck="false" style="width: 700px" placeholder="输入专业技能" show-word-limit type="textarea" />
+                            <el-input v-model="advantage.majorSkill" maxlength="1000" rows="10" spellcheck="false" style="width: 700px" placeholder="输入专业技能" show-word-limit type="textarea" />
                             <el-button @click="onCancel(1)" class="cancel">取消</el-button>
                             <el-button @click="onSubmit(1)" class="success">完成</el-button>
                         </el-form-item>
@@ -156,7 +156,7 @@
                     </span>
                 </div>
                 <div class="resume-editor-expectation-info" v-if="expectationFlag">
-                    <div v-for="(jobExpectation, index) in jobExpectations" :key="index" class="info-item">
+                    <div v-for="(jobExpectation, index) in jobExpectationView" :key="index" class="info-item">
                         <div class="info-text">
                             <el-icon><Briefcase /></el-icon>
                             {{ jobExpectation.expectedJob }}&emsp;|&nbsp;&nbsp;
@@ -213,7 +213,7 @@
                             </el-form-item>
                             <el-form-item>
                                 <el-button @click="onCancel(2)" class="cancel">取消</el-button>
-                                <el-button @click="onJobExpectationSubmit()" class="success">完成</el-button>
+                                <el-button @click="onjobExpectationViewubmit()" class="success">完成</el-button>
                             </el-form-item>
                         </el-form-item>
                     </el-form>
@@ -233,22 +233,22 @@
                     </div>
                     <div class="info-text">
                         <h3>
-                            <el-icon><School /></el-icon>{{ currentEducationalBackground.name }}
+                            <el-icon><School /></el-icon>{{ backgroundView.name }}
                         </h3>
-                        <div class="time">{{ currentEducationalBackground.startTime }} - {{ currentEducationalBackground.endTime }}</div>
+                        <div class="time">{{ backgroundView.startTime }} - {{ backgroundView.endTime }}</div>
                         <div></div>
-                        <div class="major">{{ currentEducationalBackground.major }}</div>
-                        <div class="qualification">{{ convertQualification(currentEducationalBackground.qualification) }}</div>
-                        <div class="majorCourse">主修课程：{{ currentEducationalBackground.majorCourse }}</div>
+                        <div class="major">{{ backgroundView.major }}</div>
+                        <div class="qualification">{{ convertQualification(backgroundView.qualification) }}</div>
+                        <div class="majorCourse">主修课程：{{ backgroundView.majorCourse }}</div>
                     </div>
                 </div>
                 <div v-else>
-                    <el-form :model="currentEducationalBackground" style="max-width: 800px">
+                    <el-form :model="backgroundView" style="max-width: 800px">
                         <el-form-item label="学校名称">
-                            <el-input v-model="currentEducationalBackground.name" placeholder="输入学校名称" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="backgroundView.name" placeholder="输入学校名称" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <el-form-item label="学历">
-                            <el-select v-model="currentEducationalBackground.qualification" placeholder="选择学历">
+                            <el-select v-model="backgroundView.qualification" placeholder="选择学历">
                                 <el-option label="初中及以下" value="0" />
                                 <el-option label="中专" value="1" />
                                 <el-option label="高中" value="2" />
@@ -259,11 +259,11 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="专业">
-                            <el-input v-model="currentEducationalBackground.major" placeholder="输入专业" style="max-width: 300px; height: 40px" />
+                            <el-input v-model="backgroundView.major" placeholder="输入专业" style="max-width: 300px; height: 40px" />
                         </el-form-item>
                         <div class="time">
                             <el-form-item label="入学时间" class="startTime">
-                                <el-select v-model="currentEducationalBackground.startTime" placeholder="选择入学时间">
+                                <el-select v-model="backgroundView.startTime" placeholder="选择入学时间">
                                     <el-option label="2019" value="2019" />
                                     <el-option label="2020" value="2020" />
                                     <el-option label="2021" value="2021" />
@@ -274,7 +274,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="毕业时间" class="endTime">
-                                <el-select v-model="currentEducationalBackground.endTime" placeholder="选择毕业时间">
+                                <el-select v-model="backgroundView.endTime" placeholder="选择毕业时间">
                                     <el-option label="2022" value="2022" />
                                     <el-option label="2023" value="2023" />
                                     <el-option label="2024" value="2024" />
@@ -287,7 +287,7 @@
                         </div>
                         <el-form-item label="主修课程">
                             <el-input
-                                v-model="currentEducationalBackground.majorCourse"
+                                v-model="backgroundView.majorCourse"
                                 maxlength="200"
                                 rows="5"
                                 spellcheck="false"
@@ -304,80 +304,7 @@
                     </el-form>
                 </div>
             </div>
-
-            <div class="resume-editor-project" id="section5">
-                <div class="title">
-                    项目经历
-                    <span @click="addProjectExperience()">
-                        <el-icon class="add-icon"><CirclePlus /></el-icon>
-                        添加
-                    </span>
-                </div>
-                <div class="resume-editor-project-info" v-if="projectFlag">
-                    <div v-for="(projectExperience, index) in projectExperiences" :key="index" class="info-item">
-                        <div class="info-text">
-                            <div class="info-text-top">
-                                <div>
-                                    <div class="project-name">{{ projectExperience.projectName }}</div>
-                                    <div class="project-role">{{ projectExperience.projectRole }}</div>
-                                </div>
-                                <div class="time">{{ projectExperience.startTime }} - {{ projectExperience.endTime }}</div>
-                            </div>
-                            <div class="describe-box">
-                                <div class="neirong">内容：</div>
-                                <div class="describe-text">{{ projectExperience.describe }}</div>
-                            </div>
-                        </div>
-                        <div class="op">
-                            <a class="link-edit">
-                                <span @click="onProjectExperienceUpdate(index)">
-                                    <el-icon><EditPen /></el-icon>
-                                    编辑
-                                </span>
-                                <span @click="onProjectExperienceDelete(index)" class="del-icon">
-                                    <el-icon><DeleteFilled /></el-icon>
-                                    删除
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div v-else>
-                    <el-form :model="currentProjectExperience" style="max-width: 800px">
-                        <el-form-item>
-                            <el-form-item label="项目名称">
-                                <el-input v-model="currentProjectExperience.projectName" placeholder="输入项目名称" style="max-width: 300px; height: 40px" />
-                            </el-form-item>
-                            <el-form-item label="项目角色">
-                                <el-input v-model="currentProjectExperience.projectRole" placeholder="输入项目角色" style="max-width: 300px; height: 40px" />
-                            </el-form-item>
-                            <el-form-item label="项目开始时间">
-                                <el-input v-model="currentProjectExperience.startTime" placeholder="开始时间" style="max-width: 300px; height: 40px" />
-                            </el-form-item>
-                            <el-form-item label="项目结束时间">
-                                <el-input v-model="currentProjectExperience.endTime" placeholder="结束时间" style="max-width: 300px; height: 40px" />
-                            </el-form-item>
-                            <el-form-item label="主修课程">
-                                <el-input
-                                    v-model="currentProjectExperience.describe"
-                                    maxlength="3000"
-                                    rows="10"
-                                    spellcheck="false"
-                                    style="width: 690px"
-                                    placeholder="输入项目描述"
-                                    show-word-limit
-                                    type="textarea"
-                                />
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button @click="onCancel(4)" class="cancel">取消</el-button>
-                                <el-button @click="onProjectExperienceSubmit()" class="success">完成</el-button>
-                            </el-form-item>
-                        </el-form-item>
-                    </el-form>
-                </div>
-            </div>
-            <div class="resume-editor-work" id="section6">
+            <div class="resume-editor-work" id="section5">
                 <div class="title">
                     工作/实习经历
                     <span @click="addWorkExperience()">
@@ -386,7 +313,7 @@
                     </span>
                 </div>
                 <div class="resume-editor-work-info" v-if="workFlag">
-                    <div v-for="(workExperience, index) in workExperiences" :key="index" class="info-item">
+                    <div v-for="(workExperience, index) in workExperienceView" :key="index" class="info-item">
                         <div class="info-text">
                             <div class="info-text-top">
                                 <div>
@@ -395,9 +322,9 @@
                                 </div>
                                 <div class="time">{{ workExperience.startTime }} - {{ workExperience.endTime }}</div>
                             </div>
-                            <div class="describe-box">
+                            <div class="description-box">
                                 <div class="neirong">内容：</div>
-                                <div class="describe-text">{{ workExperience.jobContent }}</div>
+                                <div class="description-text">{{ workExperience.jobContent }}</div>
                             </div>
                         </div>
                         <div class="op">
@@ -449,12 +376,85 @@
                             </el-form-item>
                             <el-form-item>
                                 <el-button @click="onCancel(5)" class="cancel">取消</el-button>
-                                <el-button @click="onWorkExperienceSubmit()" class="success">完成</el-button>
+                                <el-button @click="onworkExperienceViewubmit()" class="success">完成</el-button>
                             </el-form-item>
                         </el-form-item>
                     </el-form>
                 </div>
             </div>
+            <div class="resume-editor-project" id="section6">
+                <div class="title">
+                    项目经历
+                    <span @click="addProjectExperience()">
+                        <el-icon class="add-icon"><CirclePlus /></el-icon>
+                        添加
+                    </span>
+                </div>
+                <div class="resume-editor-project-info" v-if="projectFlag">
+                    <div v-for="(projectExperience, index) in projectExperienceView" :key="index" class="info-item">
+                        <div class="info-text">
+                            <div class="info-text-top">
+                                <div>
+                                    <div class="project-name">{{ projectExperience.projectName }}</div>
+                                    <div class="project-role">{{ projectExperience.projectRole }}</div>
+                                </div>
+                                <div class="time">{{ projectExperience.startTime }} - {{ projectExperience.endTime }}</div>
+                            </div>
+                            <div class="description-box">
+                                <div class="neirong">内容：</div>
+                                <div class="description-text">{{ projectExperience.description }}</div>
+                            </div>
+                        </div>
+                        <div class="op">
+                            <a class="link-edit">
+                                <span @click="onProjectExperienceUpdate(index)">
+                                    <el-icon><EditPen /></el-icon>
+                                    编辑
+                                </span>
+                                <span @click="onProjectExperienceDelete(index)" class="del-icon">
+                                    <el-icon><DeleteFilled /></el-icon>
+                                    删除
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <el-form :model="currentProjectExperience" style="max-width: 800px">
+                        <el-form-item>
+                            <el-form-item label="项目名称">
+                                <el-input v-model="currentProjectExperience.projectName" placeholder="输入项目名称" style="max-width: 300px; height: 40px" />
+                            </el-form-item>
+                            <el-form-item label="项目角色">
+                                <el-input v-model="currentProjectExperience.projectRole" placeholder="输入项目角色" style="max-width: 300px; height: 40px" />
+                            </el-form-item>
+                            <el-form-item label="项目开始时间">
+                                <el-input v-model="currentProjectExperience.startTime" placeholder="开始时间" style="max-width: 300px; height: 40px" />
+                            </el-form-item>
+                            <el-form-item label="项目结束时间">
+                                <el-input v-model="currentProjectExperience.endTime" placeholder="结束时间" style="max-width: 300px; height: 40px" />
+                            </el-form-item>
+                            <el-form-item label="主修课程">
+                                <el-input
+                                    v-model="currentProjectExperience.description"
+                                    maxlength="3000"
+                                    rows="10"
+                                    spellcheck="false"
+                                    style="width: 690px"
+                                    placeholder="输入项目描述"
+                                    show-word-limit
+                                    type="textarea"
+                                />
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button @click="onCancel(4)" class="cancel">取消</el-button>
+                                <el-button @click="onprojectExperienceViewubmit()" class="success">完成</el-button>
+                            </el-form-item>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </div>
+
             <div class="resume-editor-honor" id="section7">
                 <div class="title">获奖荣誉</div>
                 <div class="resume-editor-honor-info" v-if="honorFlag">
@@ -466,12 +466,12 @@
                             </span>
                         </a>
                     </div>
-                    <div class="info-text">{{ honor.text }}</div>
+                    <div class="info-text">{{ advantage.honor }}</div>
                 </div>
                 <div v-else>
-                    <el-form :model="honor" style="max-width: 800px">
+                    <el-form :model="advantage" style="max-width: 800px">
                         <el-form-item>
-                            <el-input v-model="honor.text" maxlength="1000" rows="5" spellcheck="false" style="width: 700px" placeholder="输入获奖荣誉" show-word-limit type="textarea" />
+                            <el-input v-model="advantage.honor" maxlength="1000" rows="5" spellcheck="false" style="width: 700px" placeholder="输入获奖荣誉" show-word-limit type="textarea" />
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="onCancel(6)" class="cancel">取消</el-button>
@@ -491,12 +491,12 @@
                             </span>
                         </a>
                     </div>
-                    <div class="info-text">{{ selfEvaluation.text }}</div>
+                    <div class="info-text">{{ advantage.selfEvaluation }}</div>
                 </div>
                 <div v-else>
-                    <el-form :model="selfEvaluation" style="max-width: 800px">
+                    <el-form :model="advantage" style="max-width: 800px">
                         <el-form-item>
-                            <el-input v-model="selfEvaluation.text" maxlength="1000" rows="5" spellcheck="false" style="width: 700px" placeholder="输入自我评价" show-word-limit type="textarea" />
+                            <el-input v-model="advantage.selfEvaluation" maxlength="1000" rows="5" spellcheck="false" style="width: 700px" placeholder="输入自我评价" show-word-limit type="textarea" />
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="onCancel(7)" class="cancel">取消</el-button>
@@ -554,6 +554,7 @@ import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/ico
 import { ElMessage } from "element-plus";
 import { studentApi } from "@/api/student";
 import { uploadApi } from "@/api/upload";
+import { computed } from "vue";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
 /* ------------------------------------- 查询API -------------------------------------- */
@@ -570,13 +571,34 @@ onMounted(async () => {
         evaluateFlag.value = false;
     } else {
         // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
-        const response = await studentApi.getApplicant(applicantView.id);
+        const response = await studentApi.getApplicant(userStore.pkApplicant);
         // 复制属性，直接给 applicantView={...} 赋值会失去响应式
         Object.assign(applicantView, {
             ...response.data.applicantVO,
             identity: response.data.identity || "",
             education: response.data.education || "",
         });
+
+        // 个人优势
+        const respAdvantage = await studentApi.getAdvantage(userStore.pkApplicant);
+        Object.assign(advantage, respAdvantage.data);
+
+        // 求职期望
+        const respJobExpectation = await studentApi.getJobExpectation(userStore.pkApplicant);
+        Object.assign(jobExpectationView, respJobExpectation.data);
+
+        // 教育背景
+        const respBackground = await studentApi.getBackground(userStore.pkApplicant);
+        Object.assign(backgroundView, respBackground.data);
+
+        // 工作/实习经历
+        const respWorkExperience = await studentApi.getWorkExperience(userStore.pkApplicant);
+        debugger;
+        Object.assign(workExperienceView, respWorkExperience.data);
+
+        // 项目经历
+        const respProjectExperience = await studentApi.getProjectExperience(userStore.pkApplicant);
+        Object.assign(projectExperienceView, respProjectExperience.data);
     }
 });
 
@@ -602,18 +624,22 @@ let honorFlag = ref(true);
 let evaluateFlag = ref(true);
 
 /* ------------------------------------- 个人信息 -------------------------------------- */
-// 换头像
+/*------------- 换头像 ----------------- */
+// 计算属性获取headers
+const headers = computed(() => ({
+    Authorization: userStore.token,
+}));
 const uploadUrl = "http://127.0.0.1:9999/upload-server/upload";
 const handleAvatarSuccess = async (response, uploadFile) => {
     // applicantView.profileImgUrl = URL.createObjectURL(uploadFile.raw);
     applicantView.profileImgUrl = response.data;
     const resp = await studentApi.updateApplicant(applicantView);
     if (resp.code == 200) {
+        localStorage.setItem("profileImg", response.data);
         ElMessage.success(resp.message);
     } else {
         ElMessage.error(resp.message);
     }
-    debugger;
 };
 const beforeAvatarUpload = (rawFile) => {
     if (rawFile.type !== "image/jpeg" && rawFile.type !== "image/png") {
@@ -627,8 +653,8 @@ const beforeAvatarUpload = (rawFile) => {
 };
 
 let applicantView = reactive({
-    id: userStore.pk_applicant,
-    profileImgUrl: "/src/assets/images/profile-img/default.png", // 默认头像
+    id: userStore.pkApplicant,
+    profileImgUrl: userStore.profileImg,
     name: "",
     sex: "",
     birthday: "",
@@ -659,6 +685,7 @@ const applicantSubmit = async function () {
     if (applicantView.id) {
         const resp = await studentApi.updateApplicant(applicantView);
         if (resp.code == 200) {
+            localStorage.setItem("name", resp.data.applicantVO.name);
             ElMessage.success(resp.message);
         } else {
             ElMessage.error(resp.message);
@@ -673,14 +700,11 @@ const applicantSubmit = async function () {
     }
 };
 
-/* ------------------------------------- 专业技能 -------------------------------------- */
-let majorSkill = reactive({
-    text: "",
-});
-
 /* ------------------------------------- 求职期望 -------------------------------------- */
-let jobExpectations = reactive([
+let jobExpectationView = reactive([
     {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
         jobType: "",
         expectedIndustry: "",
         district: "",
@@ -690,6 +714,8 @@ let jobExpectations = reactive([
 ]);
 
 let currentJobExpectation = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
     jobType: "",
     expectedIndustry: "",
     district: "",
@@ -701,11 +727,15 @@ let currentIndex = ref(null);
 
 // 求职期望添加、编辑、删除、完成按钮
 const addJobExpectation = function () {
-    currentJobExpectation.jobType = "";
-    currentJobExpectation.expectedIndustry = "";
-    currentJobExpectation.district = "";
-    currentJobExpectation.expectedJob = "";
-    currentJobExpectation.salary = "";
+    Object.assign(currentJobExpectation, {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
+        jobType: "",
+        expectedIndustry: "",
+        district: "",
+        expectedJob: "",
+        salary: "",
+    });
     currentIndex.value = null;
     expectationFlag.value = false;
 };
@@ -713,27 +743,44 @@ const addJobExpectation = function () {
 const onJobExpectationUpdate = function (index) {
     expectationFlag.value = false;
     currentIndex.value = index;
-    Object.assign(currentJobExpectation, jobExpectations[index]);
+    Object.assign(currentJobExpectation, jobExpectationView[index]);
     console.log("编辑", index);
 };
-const onJobExpectationDelete = function (index) {
-    jobExpectations.splice(index, 1);
-    // ...删除库中数据
-    ElMessage.success("操作成功");
+const onJobExpectationDelete = async function (index) {
+    const resp = await studentApi.deleteJobExpectation(jobExpectationView[index].id);
+    if (resp.code == 200) {
+        jobExpectationView.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
 };
 
-const onJobExpectationSubmit = function () {
+const onjobExpectationViewubmit = async function () {
     if (currentIndex.value == null) {
-        jobExpectations.push({ ...currentJobExpectation });
+        const resp = await studentApi.addJobExpectation(currentJobExpectation);
+        jobExpectationView.push({ ...currentJobExpectation, id: resp.data.id });
+        if (resp.code == 200) {
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
     } else {
-        jobExpectations[currentIndex.value] = { ...currentJobExpectation };
+        jobExpectationView[currentIndex.value] = { ...currentJobExpectation };
+        const resp = await studentApi.updateJobExpectation(currentJobExpectation);
+        if (resp.code == 200) {
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
     }
     expectationFlag.value = true;
-    ElMessage.success("操作成功");
 };
 
 /* ------------------------------------- 教育经历 -------------------------------------- */
-let currentEducationalBackground = reactive({
+let backgroundView = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
     name: "",
     qualification: "",
     major: "",
@@ -762,34 +809,50 @@ const convertQualification = function (status) {
     }
 };
 
+const educationSubmit = async () => {
+    const resp = await studentApi.updateBackground(backgroundView);
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
 /* ------------------------------------- 项目经历 -------------------------------------- */
-let projectExperiences = reactive([
+let projectExperienceView = reactive([
     {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
         projectName: "",
         projectRole: "",
         startTime: "",
         endTime: "",
-        describe: "",
+        description: "",
     },
 ]);
 
 let currentProjectExperience = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
     projectName: "",
     projectRole: "",
     startTime: "",
     endTime: "",
-    describe: "",
+    description: "",
 });
 
 let currentProjectExperienceIndex = ref(null);
 
 // 项目经历添加、编辑、删除、完成按钮
 const addProjectExperience = function () {
-    currentProjectExperience.projectName = "";
-    currentProjectExperience.projectRole = "";
-    currentProjectExperience.startTime = "";
-    currentProjectExperience.endTime = "";
-    currentProjectExperience.describe = "";
+    Object.assign(currentProjectExperience, {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
+        projectName: "",
+        projectRole: "",
+        startTime: "",
+        endTime: "",
+        description: "",
+    });
     currentProjectExperienceIndex.value = null;
     projectFlag.value = false;
 };
@@ -797,28 +860,45 @@ const addProjectExperience = function () {
 const onProjectExperienceUpdate = function (index) {
     projectFlag.value = false;
     currentProjectExperienceIndex.value = index;
-    Object.assign(currentProjectExperienceIndex, projectExperiences[index]);
+    Object.assign(currentProjectExperience, projectExperienceView[index]);
 };
 
-const onProjectExperienceDelete = function (index) {
-    projectExperiences.splice(index, 1);
-    // ...删除库中数据
-    ElMessage.success("操作成功");
-};
-
-const onProjectExperienceSubmit = function () {
-    if (currentProjectExperienceIndex.value == null) {
-        projectExperiences.push({ ...currentProjectExperience });
+const onProjectExperienceDelete = async function (index) {
+    const resp = await studentApi.deleteProjectExperienceById(projectExperienceView[index].id);
+    if (resp.code == 200) {
+        projectExperienceView.splice(index, 1);
+        ElMessage.success(resp.message);
     } else {
-        projectExperiences[currentProjectExperienceIndex.value] = { ...currentProjectExperience };
+        ElMessage.error(resp.message);
+    }
+};
+
+const onprojectExperienceViewubmit = async function () {
+    if (currentProjectExperienceIndex.value == null) {
+        const resp = await studentApi.addProjectExperience(currentProjectExperience);
+        if (resp.code == 200) {
+            projectExperienceView.push({ ...currentProjectExperience, id: resp.data.id });
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
+    } else {
+        const resp = await studentApi.updateProjectExperience(currentProjectExperience);
+        if (resp.code == 200) {
+            projectExperienceView[currentProjectExperienceIndex.value] = { ...currentProjectExperience };
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
     }
     projectFlag.value = true;
-    ElMessage.success("操作成功");
 };
 
 /* ------------------------------------- 工作/实习经历 -------------------------------------- */
-let workExperiences = reactive([
+let workExperienceView = reactive([
     {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
         companyName: "",
         industryType: "",
         department: "",
@@ -830,6 +910,8 @@ let workExperiences = reactive([
 ]);
 
 let currentWorkExperience = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
     companyName: "",
     industryType: "",
     department: "",
@@ -843,13 +925,17 @@ let currentWorkExperienceIndex = ref(null);
 
 // 工作/实习经历添加、编辑、删除、完成按钮
 const addWorkExperience = function () {
-    currentWorkExperience.companyName = "";
-    currentWorkExperience.industryType = "";
-    currentWorkExperience.department = "";
-    currentWorkExperience.jobName = "";
-    currentWorkExperience.startTime = "";
-    currentWorkExperience.endTime = "";
-    currentWorkExperience.jobContent = "";
+    Object.assign(currentWorkExperience, {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
+        companyName: "",
+        industryType: "",
+        department: "",
+        jobName: "",
+        startTime: "",
+        endTime: "",
+        jobContent: "",
+    });
     currentWorkExperienceIndex.value = null;
     workFlag.value = false;
 };
@@ -857,35 +943,56 @@ const addWorkExperience = function () {
 const onWorkExperienceUpdate = function (index) {
     workFlag.value = false;
     currentWorkExperienceIndex.value = index;
-    Object.assign(currentWorkExperienceIndex, workExperiences[index]);
+    Object.assign(currentWorkExperience, workExperienceView[index]);
 };
 
-const onWorkExperienceDelete = function (index) {
-    workExperiences.splice(index, 1);
-    // ...删除库中数据
-    ElMessage.success("操作成功");
-};
-
-const onWorkExperienceSubmit = function () {
-    if (currentWorkExperienceIndex.value == null) {
-        workExperiences.push({ ...currentWorkExperience });
+const onWorkExperienceDelete = async function (index) {
+    const resp = await studentApi.deleteWorkExperienceById(workExperienceView[index].id);
+    if (resp.code == 200) {
+        workExperienceView.splice(index, 1);
+        ElMessage.success(resp.message);
     } else {
-        workExperiences[currentWorkExperienceIndex.value] = { ...currentWorkExperience };
+        ElMessage.error(resp.message);
+    }
+};
+
+const onworkExperienceViewubmit = async function () {
+    if (currentWorkExperienceIndex.value == null) {
+        const resp = await studentApi.addWorkExperience(currentWorkExperience);
+        if (resp.code == 200) {
+            workExperienceView.push({ ...currentWorkExperience, id: resp.data.id });
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
+    } else {
+        const resp = await studentApi.updateWorkExperience(currentWorkExperience);
+        if (resp.code == 200) {
+            workExperienceView[currentWorkExperienceIndex.value] = { ...currentWorkExperience };
+            ElMessage.success(resp.message);
+        } else {
+            ElMessage.error(resp.message);
+        }
     }
     workFlag.value = true;
-    ElMessage.success("操作成功");
 };
-
-/* ------------------------------------- 获奖荣誉 -------------------------------------- */
-let honor = reactive({
-    text: "",
+/* ------------------------------------- 个人优势（专业技能、获奖荣誉、自我评价） -------------------------------------- */
+let advantage = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
+    majorSkill: "",
+    honor: "",
+    selfEvaluation: "",
 });
 
-/* ------------------------------------- 自我评价 -------------------------------------- */
-let selfEvaluation = reactive({
-    text: "",
-});
-
+const advantageSubmit = async () => {
+    const resp = await studentApi.updateAdvantage(advantage);
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
 /* ------------------------------------- 编辑、确定、取消按钮 -------------------------------------- */
 const onUpdate = function (index) {
     switch (index) {
@@ -914,18 +1021,22 @@ const onSubmit = function (index) {
             applicantSubmit();
             return (personFlag.value = true);
         case 1:
+            advantageSubmit();
             return (skillFlag.value = true);
         case 2:
             return (expectationFlag.value = true);
         case 3:
+            educationSubmit();
             return (educationFlag.value = true);
         case 4:
             return (projectFlag.value = true);
         case 5:
             return (workFlag.value = true);
         case 6:
+            advantageSubmit();
             return (honorFlag.value = true);
         case 7:
+            advantageSubmit();
             return (evaluateFlag.value = true);
     }
 };
@@ -1567,7 +1678,7 @@ i {
     color: #999;
 }
 
-.resume-editor-project .info-text .describe-box {
+.resume-editor-project .info-text .description-box {
     display: flex;
     width: 700px;
     height: auto;
@@ -1580,7 +1691,7 @@ i {
     color: #222;
     font-weight: 800;
 }
-.resume-editor-project .info-text .describe-text {
+.resume-editor-project .info-text .description-text {
     width: 700px;
     cursor: pointer;
     color: #333;
@@ -1709,7 +1820,7 @@ i {
     color: #999;
 }
 
-.resume-editor-work .info-text .describe-box {
+.resume-editor-work .info-text .description-box {
     display: flex;
     width: 700px;
     height: auto;
@@ -1722,7 +1833,7 @@ i {
     color: #222;
     font-weight: 800;
 }
-.resume-editor-work .info-text .describe-text {
+.resume-editor-work .info-text .description-text {
     width: 700px;
     cursor: pointer;
     color: #333;

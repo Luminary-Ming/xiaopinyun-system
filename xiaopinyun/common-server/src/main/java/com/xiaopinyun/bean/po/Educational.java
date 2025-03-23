@@ -20,7 +20,7 @@ public class Educational {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 学校名称
     private String name;
     // 学历 0初中及以下 1中专 2高中 3大专 4本科 5硕士 6博士

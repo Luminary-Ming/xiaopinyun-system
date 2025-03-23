@@ -21,11 +21,11 @@ public class User {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // HR信息主键
-    private Long pk_hr;
+    private Long pkHr;
     // 管理员信息主键
-    private Long pk_admin;
+    private Long pkAdmin;
     // 用户名
     private String username;
     // 密码

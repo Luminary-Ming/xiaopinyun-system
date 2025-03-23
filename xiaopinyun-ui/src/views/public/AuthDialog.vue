@@ -91,6 +91,9 @@ let login = reactive({
     username: "",
     password: "",
     role: "",
+    name: "",
+    profileImg: "",
+    token: "",
 });
 
 const router = useRouter();
@@ -98,17 +101,21 @@ const userStore = useUserStore();
 // 注册
 const register = async () => {
     const resp = await userApi.register(login);
+    debugger;
     if (resp.code == 200) {
+        debugger;
         ElMessage.success("注册成功");
 
         userStore.setToken(resp.data.token); // 保存token
 
         // 传递给跳转页面数据，新注册的用户要补充信息
         userStore.setUserInfo({
-            pk_applicant: resp.data.pk_applicant,
-            pk_hr: resp.data.pk_hr,
-            pk_admin: resp.data.pk_admin,
-            role: resp.data.role,
+            pkApplicant: resp.data.userVO.pkApplicant,
+            pkHr: resp.data.userVO.pkHr,
+            pkAdmin: resp.userVO.data.pkAdmin,
+            role: resp.data.userVO.role,
+            name: "新用户",
+            profileImg: "/src/assets/images/profile-img/default.png",
             flag: "register",
         });
 
@@ -145,16 +152,18 @@ const signIn = async () => {
 
         // 保存用户信息
         userStore.setUserInfo({
-            pk_applicant: resp.data.pk_applicant,
-            pk_hr: resp.data.pk_hr,
-            pk_admin: resp.data.pk_admin,
-            role: resp.data.role,
+            pkApplicant: resp.data.userVO.pkApplicant,
+            pkHr: resp.data.userVO.pkHr,
+            pkAdmin: resp.data.userVO.pkAdmin,
+            role: resp.data.userVO.role,
+            name: resp.data.name,
+            profileImg: resp.data.profileImg,
             flag: "login",
         });
 
         switch (login.role) {
             case "0": // 学生
-                router.push("/home");
+                router.push("/");
                 break;
             case "1": // HR
                 router.push("/home");

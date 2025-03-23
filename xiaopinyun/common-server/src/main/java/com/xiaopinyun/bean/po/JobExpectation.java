@@ -20,7 +20,7 @@ public class JobExpectation {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 求职类型 0全职、1兼职、2实习
     private String jobType;
     // 期望行业 最多三个 例计算机软件、互联网、企业服务

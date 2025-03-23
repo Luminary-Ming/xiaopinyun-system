@@ -20,7 +20,7 @@ public class ProjectExperience {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 项目名称
     private String projectName;
     // 项目角色
@@ -29,8 +29,8 @@ public class ProjectExperience {
     private String startTime;
     // 项目结束时间 例2024.07
     private String endTime;
-    // 项目描述
-    private String describe;
+    // 项目描述（草了，describe还是个mysql保留字）
+    private String description;
     // 是否已删除 0正常、1已删除
     @TableLogic
     @TableField(fill = FieldFill.INSERT)

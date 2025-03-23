@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AttachmentVO {
     // 主键
-    private Long id;
+    private String id;
     // 学生信息主键
-    private Long pk_applicant;
+    private String pkApplicant;
     // 附件简历（仅支持PDF）
     private String resumePDF;
     // 时间戳
@@ -23,9 +23,9 @@ public class AttachmentVO {
 
     // 构造方法，用于从 Attachment 对象转换
     private AttachmentVO(Attachment attachment) {
-        this.id = attachment.getId();
+        this.id = attachment.getId().toString();
         this.resumePDF = attachment.getResumePDF();
-        this.pk_applicant = attachment.getPk_applicant();
+        this.pkApplicant = attachment.getPkApplicant().toString();
         this.ts = attachment.getTs();
     }
 }

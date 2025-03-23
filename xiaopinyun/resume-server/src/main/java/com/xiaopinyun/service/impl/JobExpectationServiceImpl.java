@@ -20,12 +20,12 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
     private JobExpectationMapper jobExpectationMapper;
 
     /**
-     * 根据学生（aid）查询求职期望
+     * 查询求职期望
      */
     @Override
-    public Result<List<JobExpectationVO>> queryVOByAid(Integer aid) {
+    public Result<List<JobExpectationVO>> query(String pkApplicant) {
         QueryWrapper<JobExpectation> wrapper = new QueryWrapper<>();
-        wrapper.eq("aid", aid);
+        wrapper.eq("pk_applicant", pkApplicant);
         List<JobExpectation> jobExpectationList = jobExpectationMapper.selectList(wrapper);
         List<JobExpectationVO> jobExpectationVOList = new ArrayList<>();
         for (JobExpectation jobExpectation : jobExpectationList) {
@@ -39,14 +39,20 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      * 添加求职期望
      */
     @Override
-    public Result<JobExpectationVO> saveVO(JobExpectation jobExpectation) {
-        if (jobExpectation == null) {
+    public Result<JobExpectationVO> insert(JobExpectationVO jobExpectationVO) {
+        if (jobExpectationVO == null) {
             return Result.paramError(BizCode.PLEASE_WRITE);
         }
+        JobExpectation jobExpectation = new JobExpectation();
+        jobExpectation.setPkApplicant(Long.valueOf(jobExpectationVO.getPkApplicant()));
+        jobExpectation.setJobType(jobExpectationVO.getJobType());
+        jobExpectation.setExpectedIndustry(jobExpectationVO.getExpectedIndustry());
+        jobExpectation.setDistrict(jobExpectationVO.getDistrict());
+        jobExpectation.setExpectedJob(jobExpectationVO.getExpectedJob());
+        jobExpectation.setSalary(jobExpectationVO.getSalary());
         if (save(jobExpectation)) {
-            JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
-            JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
-            return Result.ok(jobExpectationVO);
+            JobExpectationVO jobExpectationVOData = new JobExpectationVO(jobExpectation);
+            return Result.ok(jobExpectationVOData);
         }
         return Result.error();
     }
@@ -55,24 +61,30 @@ public class JobExpectationServiceImpl extends ServiceImpl<JobExpectationMapper,
      * 修改求职期望
      */
     @Override
-    public Result<JobExpectationVO> updateVO(JobExpectation jobExpectation) {
+    public Result<JobExpectationVO> update(JobExpectationVO jobExpectationVO) {
         // 如果没有更新数据直接返回更新成功
-        if (jobExpectation == null) {
+        if (jobExpectationVO == null) {
             return Result.ok();
         }
+        JobExpectation jobExpectation = new JobExpectation();
+        jobExpectation.setId(Long.valueOf(jobExpectationVO.getId()));
+        jobExpectation.setPkApplicant(Long.valueOf(jobExpectationVO.getPkApplicant()));
+        jobExpectation.setJobType(jobExpectationVO.getJobType());
+        jobExpectation.setExpectedIndustry(jobExpectationVO.getExpectedIndustry());
+        jobExpectation.setDistrict(jobExpectationVO.getDistrict());
+        jobExpectation.setExpectedJob(jobExpectationVO.getExpectedJob());
+        jobExpectation.setSalary(jobExpectationVO.getSalary());
         if (updateById(jobExpectation)) {
-            JobExpectation jobExpectationData = jobExpectationMapper.selectById(jobExpectation.getId());
-            JobExpectationVO jobExpectationVO = new JobExpectationVO(jobExpectationData);
             return Result.ok(jobExpectationVO);
         }
         return Result.error();
     }
 
     /**
-     * 根据 id 删除求职期望
+     * 删除求职期望
      */
     @Override
-    public Result<Void> deleteVOById(Integer id) {
+    public Result<Void> delete(String id) {
         if (removeById(id)) {
             return Result.ok();
         }

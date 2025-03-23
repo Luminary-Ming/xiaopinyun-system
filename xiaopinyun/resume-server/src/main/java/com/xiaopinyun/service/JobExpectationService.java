@@ -9,22 +9,22 @@ import java.util.List;
 
 public interface JobExpectationService extends IService<JobExpectation> {
     /**
-     * 根据学生（aid）查询求职期望
+     * 查询求职期望
      */
-    Result<List<JobExpectationVO>> queryVOByAid(Integer aid);
+    Result<List<JobExpectationVO>> query(String pkApplicant);
 
     /**
      * 添加求职期望
      */
-    Result<JobExpectationVO> saveVO(JobExpectation jobExpectation);
+    Result<JobExpectationVO> insert(JobExpectationVO jobExpectationVO);
 
     /**
      * 修改求职期望
      */
-    Result<JobExpectationVO> updateVO(JobExpectation jobExpectation);
+    Result<JobExpectationVO> update(JobExpectationVO jobExpectationVO);
 
     /**
-     * 根据 id 删除求职期望
+     * 删除求职期望
      */
-    Result<Void> deleteVOById(Integer id);
+    Result<Void> delete(String id);
 }

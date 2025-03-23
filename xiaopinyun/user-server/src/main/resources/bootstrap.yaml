@@ -1,6 +1,3 @@
-# bootstrap.yml 文件是系统级的资源配置项，application.yml 是用户级的资源配置项
-# 加载优先级顺序：bootstrap.yml > application.properties > application.yml
-# 需导入 spring-cloud-starter-bootstrap 依赖后配置文件才能生效
 spring:
   profiles:
     active: dev

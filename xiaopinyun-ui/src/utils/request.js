@@ -15,8 +15,8 @@ service.interceptors.request.use(
         // 请求成功时的拦截逻辑
         const userStore = useUserStore();
         if (userStore.token) {
-            // 如果存在token，则将其添加到请求头的 Authorization 字段中，类型为 Bearer token
-            config.headers["Authorization"] = `Bearer ${userStore.token}`;
+            // 如果存在token，则将其添加到请求头的 Authorization 字段中
+            config.headers["Authorization"] = `${userStore.token}`;
         }
         return config;
     },

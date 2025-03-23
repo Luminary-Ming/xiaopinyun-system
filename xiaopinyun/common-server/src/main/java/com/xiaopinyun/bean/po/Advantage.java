@@ -21,7 +21,7 @@ public class Advantage {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 专业技能
     private String majorSkill;
     // 获奖荣誉

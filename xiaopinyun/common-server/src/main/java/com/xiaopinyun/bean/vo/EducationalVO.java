@@ -2,14 +2,18 @@ package com.xiaopinyun.bean.vo;
 
 import com.xiaopinyun.bean.po.Educational;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 教育背景（展示层对象）
  */
 @Data
+@NoArgsConstructor
 public class EducationalVO {
     // 主键
-    private Long id;
+    private String id;
+    // 学生信息主键
+    private String pkApplicant;
     // 学校名称
     private String name;
     // 学历 0初中及以下 1中专 2高中 3大专 4本科 5硕士 6博士 --> 将数字转换为字符串
@@ -25,7 +29,8 @@ public class EducationalVO {
 
     // 构造方法，用于从 EducationalBackground 对象转换
     public EducationalVO(Educational educational) {
-        this.id = educational.getId();
+        this.id = educational.getId().toString();
+        this.pkApplicant = educational.getPkApplicant().toString();
         this.name = educational.getName();
         this.qualification = convertQualification(educational.getQualification());
         this.major = educational.getMajor();

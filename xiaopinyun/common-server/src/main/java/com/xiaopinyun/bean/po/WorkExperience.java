@@ -20,7 +20,7 @@ public class WorkExperience {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 学生信息主键
-    private Long pk_applicant;
+    private Long pkApplicant;
     // 公司名
     private String companyName;
     // 所属行业

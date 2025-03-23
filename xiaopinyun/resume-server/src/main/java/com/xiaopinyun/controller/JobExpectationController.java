@@ -1,7 +1,6 @@
 package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.dto.Result;
-import com.xiaopinyun.bean.po.JobExpectation;
 import com.xiaopinyun.bean.vo.JobExpectationVO;
 import com.xiaopinyun.service.JobExpectationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +24,32 @@ public class JobExpectationController {
     /**
      * 根据学生（aid）查询求职期望
      */
-    @GetMapping("/{aid}")
-    public Result<List<JobExpectationVO>> queryVOByAid(@PathVariable Integer aid) {
-        return jobExpectationService.queryVOByAid(aid);
+    @GetMapping("/{pkApplicant}")
+    public Result<List<JobExpectationVO>> query(@PathVariable String pkApplicant) {
+        return jobExpectationService.query(pkApplicant);
     }
 
     /**
      * 添加求职期望
      */
     @PostMapping
-    public Result<JobExpectationVO> saveVO(@RequestBody JobExpectation jobExpectation) {
-        return jobExpectationService.saveVO(jobExpectation);
+    public Result<JobExpectationVO> insert(@RequestBody JobExpectationVO jobExpectationVO) {
+        return jobExpectationService.insert(jobExpectationVO);
     }
 
     /**
      * 修改求职期望
      */
     @PutMapping
-    public Result<JobExpectationVO> updateVO(@RequestBody JobExpectation jobExpectation) {
-        return jobExpectationService.updateVO(jobExpectation);
+    public Result<JobExpectationVO> update(@RequestBody JobExpectationVO jobExpectationVO) {
+        return jobExpectationService.update(jobExpectationVO);
     }
 
     /**
      * 根据 id 删除求职期望
      */
     @DeleteMapping("/{id}")
-    public Result<Void> deleteVOById(@PathVariable Integer id) {
-        return jobExpectationService.deleteVOById(id);
+    public Result<Void> delete(@PathVariable String id) {
+        return jobExpectationService.delete(id);
     }
 }

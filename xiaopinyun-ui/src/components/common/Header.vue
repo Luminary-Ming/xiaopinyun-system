@@ -17,16 +17,20 @@
                 <el-menu-item index="4">
                     <router-link to="/resume">我的简历</router-link>
                 </el-menu-item>
-                <el-menu-item index="5">
+                <el-menu-item index="5" v-if="!token">
                     <el-icon><User /></el-icon>
                     <router-link to="/login">登录/注册</router-link>
                 </el-menu-item>
-                <el-menu-item index="6">
+                <el-menu-item index="6" v-else>
                     <router-link to="/profile">
-                        鲁米
+                        {{ name }}
                         <el-avatar shape="square" :size="35" :src="squareUrl" style="vertical-align: middle" />
                     </router-link>
                 </el-menu-item>
+                <el-sub-menu index="7" :popper-offset="20" v-if="token">
+                    <template #title>退出</template>
+                    <el-menu-item index="7-1" @click="loginout()">确定退出</el-menu-item>
+                </el-sub-menu>
             </el-menu>
         </div>
     </header>
@@ -35,8 +39,22 @@
 <script setup>
 import { User } from "@element-plus/icons-vue";
 import { ref } from "vue";
+import { useUserStore } from "@/store/userStore";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const userStore = useUserStore();
 
-let squareUrl = ref("/src/assets/images/默认头像.png"); // 头像
+let squareUrl = ref(userStore.profileImg); // 头像
+let name = ref(userStore.name); // 名字
+let token = ref(userStore.token); // tokne
+
+const loginout = async () => {
+    userStore.logout();
+    await router.push("/home");
+    window.location.reload();
+    ElMessage.success("退出成功");
+};
 </script>
 
 <style scoped>

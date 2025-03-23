@@ -10,6 +10,8 @@ spring:
     nacos:
       server-addr: localhost:8848
     sentinel:
+      # 取消控制台懒加载，项目启动即连接 Sentinel
+      eager: true
       transport:
         dashboard: 127.0.0.1:2233
     # 网关
