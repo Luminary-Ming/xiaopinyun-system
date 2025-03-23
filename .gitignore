@@ -6,10 +6,10 @@ xiaopinyun/_idea
 *.ipr
 target/
 out/
+src/resources/rebel.xml
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
 ### VS Code ###
 xiaopinyun-ui/.vscode/
 xiaopinyun-ui/_vscode/
