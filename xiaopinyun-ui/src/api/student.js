@@ -143,4 +143,25 @@ export const studentApi = {
             method: "delete",
         });
     },
+
+    // 附件
+    getAttachment(pkApplicant) {
+        return request({
+            url: `/resume-server/attachment/${pkApplicant}`,
+            method: "get",
+        });
+    },
+    addAttachment(attachmentView) {
+        return request({
+            url: `/resume-server/attachment`,
+            method: "post",
+            data: attachmentView,
+        });
+    },
+    deleteAttachmentById(id) {
+        return request({
+            url: `/resume-server/attachment/${id}`,
+            method: "delete",
+        });
+    },
 };

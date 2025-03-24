@@ -103,16 +103,14 @@ const register = async () => {
     const resp = await userApi.register(login);
     debugger;
     if (resp.code == 200) {
-        debugger;
         ElMessage.success("注册成功");
-
         userStore.setToken(resp.data.token); // 保存token
 
         // 传递给跳转页面数据，新注册的用户要补充信息
         userStore.setUserInfo({
             pkApplicant: resp.data.userVO.pkApplicant,
             pkHr: resp.data.userVO.pkHr,
-            pkAdmin: resp.userVO.data.pkAdmin,
+            pkAdmin: resp.data.userVO.pkAdmin,
             role: resp.data.userVO.role,
             name: "新用户",
             profileImg: "/src/assets/images/profile-img/default.png",
@@ -144,10 +142,8 @@ const register = async () => {
 // 登录
 const signIn = async () => {
     const resp = await userApi.login(login);
-    debugger;
     if (resp.code == 200) {
         ElMessage.success("登录成功");
-
         userStore.setToken(resp.data.token); // 保存token
 
         // 保存用户信息

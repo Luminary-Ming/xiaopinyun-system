@@ -10,7 +10,7 @@ export const useUserStore = defineStore("user", {
         name: localStorage.getItem("name") || "新用户", // 姓名
         profileImg: localStorage.getItem("profileImg") || "/src/assets/images/profile-img/default.png", // 头像
         token: localStorage.getItem("token") || "",
-        flag: "", // 注册标志
+        flag: localStorage.getItem("flag") || "", // 注册标志
     }),
     actions: {
         setToken(token) {
@@ -34,6 +34,7 @@ export const useUserStore = defineStore("user", {
             localStorage.removeItem("name");
             localStorage.removeItem("profileImg");
             localStorage.removeItem("token");
+            localStorage.removeItem("flag");
         },
         setUserInfo(userInfo) {
             this.pkApplicant = userInfo.pkApplicant;
@@ -49,6 +50,7 @@ export const useUserStore = defineStore("user", {
             localStorage.setItem("role", userInfo.role);
             localStorage.setItem("name", userInfo.name);
             localStorage.setItem("profileImg", userInfo.profileImg);
+            localStorage.setItem("flag", userInfo.flag);
         },
     },
 });
