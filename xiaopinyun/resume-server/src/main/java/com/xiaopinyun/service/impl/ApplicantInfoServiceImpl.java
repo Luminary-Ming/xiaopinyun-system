@@ -48,9 +48,14 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             wrapper.eq("pk_applicant", id);
             List<Educational> educationalList = educationalMapper.selectList(wrapper);
             for (Educational educational : educationalList) {
+                // 如果没有填写教育背景，默认本科应届生
+                if (educational.getName() == null) {
+                    applicantDTO.setEducation("本科");  // 学历
+                    applicantDTO.setIdentity("应届生");  // 身份
+                    continue;
+                }
                 EducationalVO educationalVO = new EducationalVO(educational);
                 applicantDTO.setEducation(educationalVO.getQualification());  // 学历
-
                 String endTime = educationalVO.getEndTime();
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy");
                 String dateTime = LocalDateTime.now().format(dateTimeFormatter);

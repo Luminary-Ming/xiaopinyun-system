@@ -10,11 +10,11 @@ public class UserVO {
     // 主键
     private String id;
     // 学生信息主键
-    private String pk_applicant;
+    private String pkApplicant;
     // HR信息主键
-    private String pk_hr;
+    private String pkHr;
     // 管理员信息主键
-    private String pk_admin;
+    private String pkAdmin;
     // 用户名
     private String username;
     // 密码
@@ -25,13 +25,13 @@ public class UserVO {
     public UserVO(User user) {
         this.id = user.getId().toString();
         if (user.getPkApplicant() != null) {
-            this.pk_applicant = user.getPkApplicant().toString();
+            this.pkApplicant = user.getPkApplicant().toString();
         }
         if (user.getPkHr() != null) {
-            this.pk_hr = user.getPkHr().toString();
+            this.pkHr = user.getPkHr().toString();
         }
         if (user.getPkAdmin() != null) {
-            this.pk_admin = user.getPkAdmin().toString();
+            this.pkAdmin = user.getPkAdmin().toString();
         }
         this.username = user.getUsername();
         this.password = user.getPassword();

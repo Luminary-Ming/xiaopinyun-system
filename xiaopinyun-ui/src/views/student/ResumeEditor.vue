@@ -513,34 +513,27 @@
                         <h3>
                             附件管理<el-icon><Paperclip /></el-icon>
                         </h3>
-                        <el-icon style="font-size: 20px"><Plus /></el-icon>
+                        <el-upload :show-file-list="false" :action="uploadUrl" :headers="headers" :on-success="handleFileSuccess" :before-upload="beforeFileUpload">
+                            <el-icon style="font-size: 20px"><Plus /></el-icon>
+                        </el-upload>
                     </div>
 
-                    <div class="resume-wenjian">文件（3/3）</div>
-                    <el-menu-item index="9">
+                    <div class="resume-wenjian">文件（{{ attachmentView.length }}/3）</div>
+                    <el-menu-item index="9" v-for="(attachment, index) in attachmentView" :key="index" v-if="attachmentView.length">
                         <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                        <div class="resume-info">
-                            <div class="resume-name">java工程师.pdf</div>
-                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
+                        <div class="resume-info" :title="attachment.name">
+                            <div class="resume-name">{{ attachment.name }}</div>
+                            <div class="resume-font">{{ attachment.size }}kb 更新于 {{ attachment.ts }}</div>
                         </div>
-                        <span class="iconfont icon-file-menu"></span>
-                    </el-menu-item>
-
-                    <el-menu-item index="10">
-                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                        <div class="resume-info">
-                            <div class="resume-name">实施工程师.pdf</div>
-                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
-                        </div>
-                        <span class="iconfont icon-file-menu"></span>
-                    </el-menu-item>
-                    <el-menu-item index="11">
-                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                        <div class="resume-info">
-                            <div class="resume-name">运维工程师.pdf</div>
-                            <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
-                        </div>
-                        <span class="iconfont icon-file-menu"></span>
+                        <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#e33b46" title="确定要删除吗？" placement="right">
+                            <template #reference>
+                                <span class="iconfont icon-file-menu"> </span>
+                            </template>
+                            <template #actions="{ confirm, cancel }">
+                                <el-button @click="cancel" style="width: 43px; height: 24px; border-radius: 4px">No</el-button>
+                                <el-button @click="confirmRemove(index)" style="width: 43px; height: 24px; border-radius: 4px" type="danger">Yes</el-button>
+                            </template>
+                        </el-popconfirm>
                     </el-menu-item>
                 </el-menu>
             </el-col>
@@ -552,53 +545,106 @@
 import { ref, reactive, onMounted } from "vue";
 import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { InfoFilled } from "@element-plus/icons-vue";
 import { studentApi } from "@/api/student";
-import { uploadApi } from "@/api/upload";
 import { computed } from "vue";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
-    // 如果是新注册用户，则展开所有表单
-    if (userStore.flag == "register") {
-        personFlag.value = false;
-        skillFlag.value = false;
-        expectationFlag.value = false;
-        educationFlag.value = false;
-        projectFlag.value = false;
-        workFlag.value = false;
-        honorFlag.value = false;
-        evaluateFlag.value = false;
-    } else {
-        // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
-        const response = await studentApi.getApplicant(userStore.pkApplicant);
-        // 复制属性，直接给 applicantView={...} 赋值会失去响应式
+    // await 异步操作的关键字，它的作用是 等待一个 Promise 对象完成
+    const response = await studentApi.getApplicant(userStore.pkApplicant);
+    // 复制属性，直接给 applicantView={...} 赋值会失去响应式
+    if (response.code == 200) {
         Object.assign(applicantView, {
             ...response.data.applicantVO,
             identity: response.data.identity || "",
             education: response.data.education || "",
         });
+    }
 
-        // 个人优势
-        const respAdvantage = await studentApi.getAdvantage(userStore.pkApplicant);
+    // 个人优势（专业技能、获奖荣誉、自我评价）
+    const respAdvantage = await studentApi.getAdvantage(userStore.pkApplicant);
+    if (respAdvantage.code == 200) {
         Object.assign(advantage, respAdvantage.data);
+    }
+
+    // 求职期望
+    const respJobExpectation = await studentApi.getJobExpectation(userStore.pkApplicant);
+    if (respJobExpectation.code == 200) {
+        Object.assign(jobExpectationView, respJobExpectation.data);
+    }
+
+    // 教育背景
+    const respBackground = await studentApi.getBackground(userStore.pkApplicant);
+    if (respBackground.code == 200) {
+        Object.assign(backgroundView, respBackground.data);
+    }
+
+    // 工作/实习经历
+    const respWorkExperience = await studentApi.getWorkExperience(userStore.pkApplicant);
+    if (respWorkExperience.code == 200) {
+        Object.assign(workExperienceView, respWorkExperience.data);
+    }
+
+    // 项目经历
+    const respProjectExperience = await studentApi.getProjectExperience(userStore.pkApplicant);
+    if (respProjectExperience.code == 200) {
+        Object.assign(projectExperienceView, respProjectExperience.data);
+    }
+
+    // 附件
+    const respAttachment = await studentApi.getAttachment(userStore.pkApplicant);
+    if (respAttachment.code == 200) {
+        Object.assign(attachmentView, respAttachment.data);
+    }
+
+    // 如果是新注册用户，则展开所有表单
+    if (userStore.flag == "register") {
+        personFlag.value = false;
+        skillFlag.value = false;
+        honorFlag.value = false;
+        evaluateFlag.value = false;
+        expectationFlag.value = false;
+        educationFlag.value = false;
+        projectFlag.value = false;
+        workFlag.value = false;
+
+        // 个人信息
+        if (response.data.applicantVO.name) {
+            personFlag.value = true;
+        }
+
+        // 个人优势（专业技能、获奖荣誉、自我评价）
+        if (respAdvantage.data.majorSkill) {
+            skillFlag.value = true;
+        }
+        if (respAdvantage.data.honor) {
+            honorFlag.value = true;
+        }
+        if (respAdvantage.data.selfEvaluation) {
+            evaluateFlag.value = true;
+        }
 
         // 求职期望
-        const respJobExpectation = await studentApi.getJobExpectation(userStore.pkApplicant);
-        Object.assign(jobExpectationView, respJobExpectation.data);
+        if (respJobExpectation.data[0].expectedJob) {
+            expectationFlag.value = true;
+        }
 
         // 教育背景
-        const respBackground = await studentApi.getBackground(userStore.pkApplicant);
-        Object.assign(backgroundView, respBackground.data);
+        if (respBackground.data.name) {
+            educationFlag.value = true;
+        }
 
         // 工作/实习经历
-        const respWorkExperience = await studentApi.getWorkExperience(userStore.pkApplicant);
-        debugger;
-        Object.assign(workExperienceView, respWorkExperience.data);
+        if (respWorkExperience.data[0].companyName) {
+            workFlag.value = true;
+        }
 
         // 项目经历
-        const respProjectExperience = await studentApi.getProjectExperience(userStore.pkApplicant);
-        Object.assign(projectExperienceView, respProjectExperience.data);
+        if (respProjectExperience.data[0].projectName) {
+            projectFlag.value = true;
+        }
     }
 });
 
@@ -623,8 +669,7 @@ let workFlag = ref(true);
 let honorFlag = ref(true);
 let evaluateFlag = ref(true);
 
-/* ------------------------------------- 个人信息 -------------------------------------- */
-/*------------- 换头像 ----------------- */
+/*------------------------------------- 换头像 ------------------------------------- */
 // 计算属性获取headers
 const headers = computed(() => ({
     Authorization: userStore.token,
@@ -651,7 +696,55 @@ const beforeAvatarUpload = (rawFile) => {
     }
     return true;
 };
+/*------------------------------------- 上传附件 -------------------------------------*/
+let attachmentView = reactive([]);
 
+let addAttachmentView = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
+    resumePDF: "",
+    ts: "",
+    name: "",
+    size: "",
+});
+
+const handleFileSuccess = async (response, uploadFile) => {
+    addAttachmentView.resumePDF = response.data;
+    addAttachmentView.name = uploadFile.name;
+    addAttachmentView.size = (uploadFile.size / 1024).toFixed(1); // 保留一位小数
+    const resp = await studentApi.addAttachment(addAttachmentView);
+    if (resp.code == 200) {
+        addAttachmentView.ts = resp.data.ts;
+        attachmentView.push({ ...addAttachmentView, id: resp.data.id });
+        await studentApi.getAttachment(userStore.pkApplicant);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+const beforeFileUpload = (rawFile) => {
+    if (rawFile.type !== "application/pdf") {
+        ElMessage.error("不是 PDF 格式！");
+        return false;
+    } else if (rawFile.size / 1024 / 1024 > 5) {
+        ElMessage.error("大小超过 5MB!");
+        return false;
+    }
+    return true;
+};
+
+// 删除附件
+const confirmRemove = async (index) => {
+    const resp = await studentApi.deleteAttachmentById(attachmentView[index].id);
+    if (resp.code == 200) {
+        attachmentView.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+/* ------------------------------------- 个人信息 -------------------------------------- */
 let applicantView = reactive({
     id: userStore.pkApplicant,
     profileImgUrl: userStore.profileImg,
@@ -701,17 +794,7 @@ const applicantSubmit = async function () {
 };
 
 /* ------------------------------------- 求职期望 -------------------------------------- */
-let jobExpectationView = reactive([
-    {
-        id: "",
-        pkApplicant: userStore.pkApplicant,
-        jobType: "",
-        expectedIndustry: "",
-        district: "",
-        expectedJob: "",
-        salary: "",
-    },
-]);
+let jobExpectationView = reactive([]);
 
 let currentJobExpectation = reactive({
     id: "",
@@ -723,7 +806,7 @@ let currentJobExpectation = reactive({
     salary: "",
 });
 
-let currentIndex = ref(null);
+let currentIndex = ref(0);
 
 // 求职期望添加、编辑、删除、完成按钮
 const addJobExpectation = function () {
@@ -766,7 +849,12 @@ const onjobExpectationViewubmit = async function () {
             ElMessage.error(resp.message);
         }
     } else {
-        jobExpectationView[currentIndex.value] = { ...currentJobExpectation };
+        if (userStore.flag == "register") {
+            currentJobExpectation.id = jobExpectationView[currentIndex.value].id;
+            jobExpectationView[currentIndex.value] = { ...currentJobExpectation };
+        } else {
+            jobExpectationView[currentIndex.value] = { ...currentJobExpectation };
+        }
         const resp = await studentApi.updateJobExpectation(currentJobExpectation);
         if (resp.code == 200) {
             ElMessage.success(resp.message);
@@ -818,17 +906,7 @@ const educationSubmit = async () => {
     }
 };
 /* ------------------------------------- 项目经历 -------------------------------------- */
-let projectExperienceView = reactive([
-    {
-        id: "",
-        pkApplicant: userStore.pkApplicant,
-        projectName: "",
-        projectRole: "",
-        startTime: "",
-        endTime: "",
-        description: "",
-    },
-]);
+let projectExperienceView = reactive([]);
 
 let currentProjectExperience = reactive({
     id: "",
@@ -840,7 +918,7 @@ let currentProjectExperience = reactive({
     description: "",
 });
 
-let currentProjectExperienceIndex = ref(null);
+let currentProjectExperienceIndex = ref(0);
 
 // 项目经历添加、编辑、删除、完成按钮
 const addProjectExperience = function () {
@@ -883,9 +961,14 @@ const onprojectExperienceViewubmit = async function () {
             ElMessage.error(resp.message);
         }
     } else {
+        if (userStore.flag == "register") {
+            currentProjectExperience.id = projectExperienceView[currentProjectExperienceIndex.value].id;
+            projectExperienceView[currentProjectExperienceIndex.value] = { ...currentProjectExperience };
+        } else {
+            projectExperienceView[currentProjectExperienceIndex.value] = { ...currentProjectExperience };
+        }
         const resp = await studentApi.updateProjectExperience(currentProjectExperience);
         if (resp.code == 200) {
-            projectExperienceView[currentProjectExperienceIndex.value] = { ...currentProjectExperience };
             ElMessage.success(resp.message);
         } else {
             ElMessage.error(resp.message);
@@ -895,19 +978,7 @@ const onprojectExperienceViewubmit = async function () {
 };
 
 /* ------------------------------------- 工作/实习经历 -------------------------------------- */
-let workExperienceView = reactive([
-    {
-        id: "",
-        pkApplicant: userStore.pkApplicant,
-        companyName: "",
-        industryType: "",
-        department: "",
-        jobName: "",
-        startTime: "",
-        endTime: "",
-        jobContent: "",
-    },
-]);
+let workExperienceView = reactive([]);
 
 let currentWorkExperience = reactive({
     id: "",
@@ -921,7 +992,7 @@ let currentWorkExperience = reactive({
     jobContent: "",
 });
 
-let currentWorkExperienceIndex = ref(null);
+let currentWorkExperienceIndex = ref(0);
 
 // 工作/实习经历添加、编辑、删除、完成按钮
 const addWorkExperience = function () {
@@ -966,9 +1037,14 @@ const onworkExperienceViewubmit = async function () {
             ElMessage.error(resp.message);
         }
     } else {
+        if (userStore.flag == "register") {
+            currentWorkExperience.id = workExperienceView[currentWorkExperienceIndex.value].id;
+            workExperienceView[currentWorkExperienceIndex.value] = { ...currentWorkExperience };
+        } else {
+            workExperienceView[currentWorkExperienceIndex.value] = { ...currentWorkExperience };
+        }
         const resp = await studentApi.updateWorkExperience(currentWorkExperience);
         if (resp.code == 200) {
-            workExperienceView[currentWorkExperienceIndex.value] = { ...currentWorkExperience };
             ElMessage.success(resp.message);
         } else {
             ElMessage.error(resp.message);
@@ -1998,6 +2074,10 @@ i {
 .resume-name {
     margin-bottom: -35px;
     color: #414a60;
+    max-width: 150px; /* 设置最大宽度 */
+    white-space: nowrap; /* 禁止换行 */
+    overflow: hidden; /* 隐藏溢出部分 */
+    text-overflow: ellipsis; /* 显示省略号 */
 }
 .resume-font {
     font-size: 12px;

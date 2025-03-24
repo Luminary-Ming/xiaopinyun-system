@@ -41,6 +41,9 @@ public class EducationalVO {
 
     // 私有方法，用于转换学历描述
     private String convertQualification(Integer qualification) {
+        if(qualification == null){
+            qualification = 4;
+        }
         return switch (qualification) {
             case 0 -> "初中及以下";
             case 1 -> "中专";

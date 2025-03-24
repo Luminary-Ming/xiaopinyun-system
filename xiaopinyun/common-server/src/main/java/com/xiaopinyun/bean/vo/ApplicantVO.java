@@ -4,6 +4,7 @@ import com.xiaopinyun.bean.po.Applicant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 // 字段选择：VO 对象只包含前端展示所需的字段，以减少不必要的数据传输和增强安全性；
+
 /**
  * 求职者 / 大学生 个人信息（展示层对象）
  */
@@ -36,12 +37,24 @@ public class ApplicantVO {
     // 构造方法，用于从 Applicant 对象转换
     public ApplicantVO(Applicant applicant) {
         this.id = applicant.getId().toString();
-        this.profileImgUrl = applicant.getProfileImg();
+        if (applicant.getProfileImg() == null) {
+            this.profileImgUrl = "/src/assets/images/profile-img/default.png";
+        } else {
+            this.profileImgUrl = applicant.getProfileImg();
+        }
         this.name = applicant.getName();
-        this.sex = applicant.getSex().toString();
+        if (applicant.getSex() == null) {
+            this.sex = null;
+        } else {
+            this.sex = applicant.getSex().toString();
+        }
         this.birthday = applicant.getBirthday();
         this.address = applicant.getAddress();
-        this.status = applicant.getStatus().toString();
+        if (applicant.getStatus() == null) {
+            this.status = null;
+        } else {
+            this.status = applicant.getStatus().toString();
+        }
         this.telephone = applicant.getTelephone();
         this.email = applicant.getEmail();
         this.checkStatus = applicant.getCheckStatus().toString();

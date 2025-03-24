@@ -21,6 +21,10 @@ public class Attachment {
     private Long id;
     // 学生信息主键
     private Long pkApplicant;
+    // 附件名称
+    private String name;
+    // 附件大小
+    private Double size;
     // 附件简历（仅支持PDF）
     @TableField("resume_pdf")
     private String resumePDF;
