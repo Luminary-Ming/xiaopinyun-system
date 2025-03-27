@@ -520,18 +520,18 @@
 
                     <div class="resume-wenjian">文件（{{ attachmentView.length }}/3）</div>
                     <el-menu-item index="9" v-for="(attachment, index) in attachmentView" :key="index" v-if="attachmentView.length">
-                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                        <div class="resume-info" :title="attachment.name">
+                        <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" @click="previewFile(index)" />
+                        <div class="resume-info" :title="attachment.name" @click="previewFile(index)">
                             <div class="resume-name">{{ attachment.name }}</div>
                             <div class="resume-font">{{ attachment.size }}kb 更新于 {{ attachment.ts }}</div>
                         </div>
-                        <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#e33b46" title="确定要删除吗？" placement="right">
+                        <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#626AEF" title="对此附件的操作" placement="right">
                             <template #reference>
                                 <span class="iconfont icon-file-menu"> </span>
                             </template>
                             <template #actions="{ confirm, cancel }">
-                                <el-button @click="cancel" style="width: 43px; height: 24px; border-radius: 4px">No</el-button>
-                                <el-button @click="confirmRemove(index)" style="width: 43px; height: 24px; border-radius: 4px" type="danger">Yes</el-button>
+                                <el-button @click="download(index)" style="width: 43px; height: 24px; border-radius: 4px">下载</el-button>
+                                <el-button @click="confirmRemove(index)" style="width: 43px; height: 24px; border-radius: 4px" type="danger">删除</el-button>
                             </template>
                         </el-popconfirm>
                     </el-menu-item>
@@ -547,6 +547,7 @@ import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/ico
 import { ElMessage } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 import { studentApi } from "@/api/student";
+import { uploadApi } from "@/api/upload";
 import { computed } from "vue";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
@@ -712,11 +713,11 @@ const handleFileSuccess = async (response, uploadFile) => {
     addAttachmentView.resumePDF = response.data;
     addAttachmentView.name = uploadFile.name;
     addAttachmentView.size = (uploadFile.size / 1024).toFixed(1); // 保留一位小数
-    const resp = await studentApi.addAttachment(addAttachmentView);
+    const resp = await uploadApi.addAttachment(addAttachmentView);
     if (resp.code == 200) {
         addAttachmentView.ts = resp.data.ts;
         attachmentView.push({ ...addAttachmentView, id: resp.data.id });
-        await studentApi.getAttachment(userStore.pkApplicant);
+        await uploadApi.getAttachment(userStore.pkApplicant);
         ElMessage.success(resp.message);
     } else {
         ElMessage.error(resp.message);
@@ -736,9 +737,52 @@ const beforeFileUpload = (rawFile) => {
 
 // 删除附件
 const confirmRemove = async (index) => {
-    const resp = await studentApi.deleteAttachmentById(attachmentView[index].id);
+    const resp = await uploadApi.deleteAttachmentById(attachmentView[index].id);
     if (resp.code == 200) {
+        const pdfUrl = attachmentView[index].resumePDF;
+        const filename = pdfUrl.split("/filebucket/")[1];
+        await uploadApi.deleteFile(filename);
         attachmentView.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 下载附件
+const download = async (index) => {
+    // 获取文件名
+    const pdfUrl = attachmentView[index].resumePDF;
+    const filename = pdfUrl.split("/filebucket/")[1];
+    const resp = await uploadApi.downloadFile(filename);
+
+    // 创建Blob对象
+    const blob = new Blob([resp], { type: "application/pdf" });
+
+    // 创建下载链接
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = attachmentView[index].name; // 设置下载文件名
+
+    // 触发点击下载
+    document.body.appendChild(a);
+    a.click();
+
+    // 清理
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+};
+
+// 预览附件
+const previewFile = async (index) => {
+    const pdfUrl = attachmentView[index].resumePDF;
+    const filename = pdfUrl.split("/filebucket/")[1];
+    const resp = await uploadApi.previewFile(filename);
+    if (resp.code == 200) {
+        window.open(resp.data);
         ElMessage.success(resp.message);
     } else {
         ElMessage.error(resp.message);

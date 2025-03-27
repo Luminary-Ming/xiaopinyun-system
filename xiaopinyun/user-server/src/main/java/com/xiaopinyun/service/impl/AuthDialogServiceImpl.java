@@ -10,6 +10,7 @@ import com.xiaopinyun.bean.dto.UserDTO;
 import com.xiaopinyun.bean.po.Advantage;
 import com.xiaopinyun.bean.po.Applicant;
 import com.xiaopinyun.bean.po.Educational;
+import com.xiaopinyun.bean.po.HR;
 import com.xiaopinyun.bean.po.JobExpectation;
 import com.xiaopinyun.bean.po.ProjectExperience;
 import com.xiaopinyun.bean.po.User;
@@ -20,6 +21,7 @@ import com.xiaopinyun.mapper.AdvantageMapper;
 import com.xiaopinyun.mapper.ApplicantInfoMapper;
 import com.xiaopinyun.mapper.AuthDialogMapper;
 import com.xiaopinyun.mapper.EducationalMapper;
+import com.xiaopinyun.mapper.HRInfoMapper;
 import com.xiaopinyun.mapper.JobExpectationMapper;
 import com.xiaopinyun.mapper.ProjectExperienceMapper;
 import com.xiaopinyun.mapper.WorkExperienceMapper;
@@ -49,6 +51,8 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
     @Autowired
     private ProjectExperienceMapper projectExperienceMapper;
     @Autowired
+    private HRInfoMapper hrInfoMapper;
+    @Autowired
     private ApplicantFeignClient applicantFeignClient;
 
     @Override
@@ -64,12 +68,10 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
         String role = login.getRole();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username).eq("password", password).eq("role", role);
-        List<User> users = authDialogMapper.selectList(wrapper);
-        if (users.isEmpty()) {
+        User user = authDialogMapper.selectOne(wrapper);
+        if (user == null) {
             return Result.error("登录失败：账号或密码错误！");
         }
-        User user = users.get(0);
-        User user1 = authDialogMapper.selectById(user.getId());
         UserDTO userDTO = new UserDTO();
         userDTO.setUserVO(new UserVO(user));
         Applicant applicant = applicantInfoMapper.selectById(user.getPkApplicant());
@@ -113,7 +115,11 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
             // 新增空记录
             insertOfRegister(applicant.getId());
         } else if (login.getRole().equals("1")) {
-
+            HR hr = new HR();
+            hr.setDr(0);
+            hrInfoMapper.insert(hr);
+            user.setPkHr(hr.getId());
+            authDialogMapper.updateById(user);
         } else {
         }
         UserDTO userDTO = new UserDTO();

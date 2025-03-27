@@ -6,16 +6,16 @@
                 <div class="userinfo-banner">
                     <div class="head-img-box">
                         <div class="head-img">
-                            <el-avatar shape="square" :size="60" :src="squareUrl" style="vertical-align: middle; border-radius: 10px" />
+                            <el-avatar shape="square" :size="60" :src="applicantView.profileImgUrl" style="vertical-align: middle; border-radius: 10px" />
                         </div>
                     </div>
                     <div class="profile-content">
-                        <div class="name">{{ applicant.name }}</div>
-                        <div class="info">{{ applicant.age }} | {{ applicant.identity }} | {{ applicant.qualification }}</div>
+                        <div class="name">{{ applicantView.name }}</div>
+                        <div class="info">{{ getAge() }}岁 | {{ applicantView.identity }} | {{ backgroundView.qualification }}</div>
                         <div class="status">
-                            <el-form :model="applicant" style="max-width: 150px">
+                            <el-form :model="applicantView" style="max-width: 150px">
                                 <el-form-item>
-                                    <el-select v-model="applicant.status" placeholder="选择求职状态">
+                                    <el-select v-model="applicantView.status" placeholder="选择求职状态" @change="handleStatusChange">
                                         <el-option label="离校-随时到岗" value="0" />
                                         <el-option label="在校-月内到岗" value="1" />
                                         <el-option label="在校-看看机会" value="2" />
@@ -26,9 +26,17 @@
                         </div>
                     </div>
                     <div class="resume-content">
-                        <div><span>期望：后端开发</span> <span class="salary">5-10K</span></div>
-                        <div><span>河北经贸大学经济管理学院 · 计算机科学与技术</span><span class="time">2021-2025</span></div>
-                        <div><span>用友网络科技股份有限公司 · Java</span><span class="time">2024.11-2025.03</span></div>
+                        <div>
+                            <span>求职期望：{{ jobExpectationView[0].expectedJob }}</span> <span class="salary">{{ jobExpectationView[0].salary }}</span>
+                        </div>
+                        <div>
+                            <span>{{ backgroundView.name }} · {{ backgroundView.major }}</span
+                            ><span class="time">{{ backgroundView.startTime }}-{{ backgroundView.endTime }}</span>
+                        </div>
+                        <div>
+                            <span>{{ workExperienceView[0].companyName }} · {{ workExperienceView[0].jobName }}</span
+                            ><span class="time">{{ workExperienceView[0].startTime }}-{{ workExperienceView[0].endTime }}</span>
+                        </div>
                     </div>
                     <div class="edit-resume">
                         <router-link to="/resume">
@@ -97,34 +105,27 @@
                             <h3>
                                 附件管理<el-icon><Paperclip /></el-icon>
                             </h3>
-                            <el-icon style="font-size: 20px; cursor: pointer"><Plus /></el-icon>
+                            <el-upload :show-file-list="false" :action="uploadUrl" :headers="headers" :on-success="handleFileSuccess" :before-upload="beforeFileUpload">
+                                <el-icon style="font-size: 20px"><Plus /></el-icon>
+                            </el-upload>
                         </div>
 
-                        <div class="resume-wenjian">文件（3/3）</div>
-                        <el-menu-item index="9">
-                            <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                            <div class="resume-info">
-                                <div class="resume-name">java工程师.pdf</div>
-                                <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
+                        <div class="resume-wenjian">文件（{{ attachmentView.length }}/3）</div>
+                        <el-menu-item index="9" v-for="(attachment, index) in attachmentView" :key="index" v-if="attachmentView.length">
+                            <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" @click="previewFile(index)" />
+                            <div class="resume-info" :title="attachment.name" @click="previewFile(index)">
+                                <div class="resume-name">{{ attachment.name }}</div>
+                                <div class="resume-font">{{ attachment.size }}kb 更新于 {{ attachment.ts }}</div>
                             </div>
-                            <span class="iconfont icon-file-menu"></span>
-                        </el-menu-item>
-
-                        <el-menu-item index="10">
-                            <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                            <div class="resume-info">
-                                <div class="resume-name">实施工程师.pdf</div>
-                                <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
-                            </div>
-                            <span class="iconfont icon-file-menu"></span>
-                        </el-menu-item>
-                        <el-menu-item index="11">
-                            <img class="pdf_img" src="/src/assets/images/icon-img/icon-pdf.png" />
-                            <div class="resume-info">
-                                <div class="resume-name">运维工程师.pdf</div>
-                                <div class="resume-font">115.2KB 更新于 2025-03-06 21:21</div>
-                            </div>
-                            <span class="iconfont icon-file-menu"></span>
+                            <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#626AEF" title="对此附件的操作" placement="right">
+                                <template #reference>
+                                    <span class="iconfont icon-file-menu"> </span>
+                                </template>
+                                <template #actions="{ confirm, cancel }">
+                                    <el-button @click="download(index)" style="width: 43px; height: 24px; border-radius: 4px">下载</el-button>
+                                    <el-button @click="confirmRemove(index)" style="width: 43px; height: 24px; border-radius: 4px" type="danger">删除</el-button>
+                                </template>
+                            </el-popconfirm>
                         </el-menu-item>
                     </el-menu>
                 </el-col>
@@ -134,22 +135,149 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { InfoFilled } from "@element-plus/icons-vue";
+import { studentApi } from "@/api/student";
+import { uploadApi } from "@/api/upload";
+import { computed } from "vue";
+import { useUserStore } from "@/store/userStore";
+const userStore = useUserStore();
+/* ------------------------------------- 查询API -------------------------------------- */
+onMounted(async () => {
+    // 附件
+    const respAttachment = await studentApi.getAttachment(userStore.pkApplicant);
+    if (respAttachment.code == 200) {
+        Object.assign(attachmentView, respAttachment.data);
+    }
 
-let squareUrl = ref("/src/assets/images/profile-img/default.png"); // 头像
+    // 个人信息
+    const response = await studentApi.getApplicant(userStore.pkApplicant);
+    if (response.code == 200) {
+        Object.assign(applicantView, {
+            ...response.data.applicantVO,
+            identity: response.data.identity || "",
+            education: response.data.education || "",
+        });
+    }
 
-// 个人信息
-let applicant = reactive({
-    name: "张金龙",
-    age: "22岁",
-    identity: "25年应届生",
-    qualification: "本科",
-    status: "0",
+    // 求职期望
+    const respJobExpectation = await studentApi.getJobExpectation(userStore.pkApplicant);
+    if (respJobExpectation.code == 200) {
+        Object.assign(jobExpectationView, respJobExpectation.data);
+    }
+
+    // 教育背景
+    const respBackground = await studentApi.getBackground(userStore.pkApplicant);
+    if (respBackground.code == 200) {
+        Object.assign(backgroundView, respBackground.data);
+    }
+
+    // 工作/实习经历
+    const respWorkExperience = await studentApi.getWorkExperience(userStore.pkApplicant);
+    if (respWorkExperience.code == 200) {
+        Object.assign(workExperienceView, respWorkExperience.data);
+    }
 });
 
-// 选项卡内容
+/* ------------------------------------- 个人信息 -------------------------------------- */
+let applicantView = reactive({
+    id: userStore.pkApplicant,
+    profileImgUrl: userStore.profileImg,
+    name: "",
+    sex: "",
+    birthday: "",
+    address: "",
+    status: "",
+    telephone: "",
+    email: "",
+    identity: "",
+    education: "",
+});
+
+const getAge = () => {
+    const birthday = applicantView.birthday;
+    if (!birthday) {
+        return "";
+    }
+
+    // 分割年月
+    const [birthYear, birthMonth] = birthday.split("-").map(Number);
+
+    // 获取当前日期
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1; // getMonth() 返回 0-11
+
+    // 计算年龄
+    let age = currentYear - birthYear;
+
+    // 如果当前月份小于出生月份，年龄减1
+    if (currentMonth < birthMonth) {
+        age--;
+    }
+
+    return age;
+};
+
+// 更新求职状态
+const handleStatusChange = async (value) => {
+    try {
+        const resp = await studentApi.updateApplicant(applicantView);
+        if (resp.code === 200) {
+            ElMessage.success("状态更新成功");
+        } else {
+            ElMessage.error(resp.message || "更新失败");
+            // 更新失败时恢复原值
+            applicantView.status = resp.data.status;
+        }
+    } catch (error) {
+        console.error("状态更新失败:", error);
+        ElMessage.error("状态更新失败");
+    }
+};
+/* ------------------------------------- 求职期望 -------------------------------------- */
+let jobExpectationView = reactive([
+    {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
+        jobType: "",
+        expectedIndustry: "",
+        district: "",
+        expectedJob: "",
+        salary: "",
+    },
+]);
+
+/* ------------------------------------- 教育经历 -------------------------------------- */
+let backgroundView = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
+    name: "",
+    qualification: "",
+    major: "",
+    startTime: "",
+    endTime: "",
+    majorCourse: "",
+});
+
+/* ------------------------------------- 工作/实习经历 -------------------------------------- */
+let workExperienceView = reactive([
+    {
+        id: "",
+        pkApplicant: userStore.pkApplicant,
+        companyName: "",
+        industryType: "",
+        department: "",
+        jobName: "",
+        startTime: "",
+        endTime: "",
+        jobContent: "",
+    },
+]);
+
+/* ------------------------------------- 选项卡内容 -------------------------------------- */
 let contents = reactive([
     {
         hr_img: "/src/assets/images/profile-img/default.png", // hr头像
@@ -186,6 +314,103 @@ let activeMenu = ref("interest"); // 默认选中"感兴趣"选项
 let handleMenuClick = function (menu) {
     activeMenu.value = menu;
 };
+
+/*------------------------------------- 上传附件 -------------------------------------*/
+// 计算属性获取headers
+const headers = computed(() => ({
+    Authorization: userStore.token,
+}));
+const uploadUrl = "http://127.0.0.1:9999/upload-server/upload";
+let attachmentView = reactive([]);
+
+let addAttachmentView = reactive({
+    id: "",
+    pkApplicant: userStore.pkApplicant,
+    resumePDF: "",
+    ts: "",
+    name: "",
+    size: "",
+});
+
+const handleFileSuccess = async (response, uploadFile) => {
+    addAttachmentView.resumePDF = response.data;
+    addAttachmentView.name = uploadFile.name;
+    addAttachmentView.size = (uploadFile.size / 1024).toFixed(1); // 保留一位小数
+    const resp = await uploadApi.addAttachment(addAttachmentView);
+    if (resp.code == 200) {
+        addAttachmentView.ts = resp.data.ts;
+        attachmentView.push({ ...addAttachmentView, id: resp.data.id });
+        await uploadApi.getAttachment(userStore.pkApplicant);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+const beforeFileUpload = (rawFile) => {
+    if (rawFile.type !== "application/pdf") {
+        ElMessage.error("不是 PDF 格式！");
+        return false;
+    } else if (rawFile.size / 1024 / 1024 > 5) {
+        ElMessage.error("大小超过 5MB!");
+        return false;
+    }
+    return true;
+};
+
+// 删除附件
+const confirmRemove = async (index) => {
+    const resp = await uploadApi.deleteAttachmentById(attachmentView[index].id);
+    if (resp.code == 200) {
+        const pdfUrl = attachmentView[index].resumePDF;
+        const filename = pdfUrl.split("/filebucket/")[1];
+        await uploadApi.deleteFile(filename);
+        attachmentView.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 下载附件
+const download = async (index) => {
+    // 获取文件名
+    const pdfUrl = attachmentView[index].resumePDF;
+    const filename = pdfUrl.split("/filebucket/")[1];
+    const resp = await uploadApi.downloadFile(filename);
+
+    // 创建Blob对象
+    const blob = new Blob([resp], { type: "application/pdf" });
+
+    // 创建下载链接
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = attachmentView[index].name; // 设置下载文件名
+
+    // 触发点击下载
+    document.body.appendChild(a);
+    a.click();
+
+    // 清理
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+};
+
+// 预览附件
+const previewFile = async (index) => {
+    const pdfUrl = attachmentView[index].resumePDF;
+    const filename = pdfUrl.split("/filebucket/")[1];
+    const resp = await uploadApi.previewFile(filename);
+    if (resp.code == 200) {
+        window.open(resp.data);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
 </script>
 
 <style scoped>
@@ -203,6 +428,7 @@ let handleMenuClick = function (menu) {
     height: 100%;
     display: flex;
     margin-top: 20px;
+    margin-bottom: 200px;
 }
 /* --------------------- 个人信息 ---------------------------------- */
 .profile-container .profile-info {
@@ -523,6 +749,10 @@ let handleMenuClick = function (menu) {
 .profile-file .resume-name {
     margin-bottom: -35px;
     color: #414a60;
+    max-width: 150px; /* 设置最大宽度 */
+    white-space: nowrap; /* 禁止换行 */
+    overflow: hidden; /* 隐藏溢出部分 */
+    text-overflow: ellipsis; /* 显示省略号 */
 }
 .profile-file .resume-font {
     font-size: 12px;

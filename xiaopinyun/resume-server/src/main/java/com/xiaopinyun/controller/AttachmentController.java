@@ -25,6 +25,11 @@ public class AttachmentController {
         return attachmentService.query(pkApplicant);
     }
 
+    @GetMapping("/queryHR/{pkHr}")
+    public Result<List<AttachmentVO>> queryHR(@PathVariable String pkHr) {
+        return attachmentService.queryHR(pkHr);
+    }
+
     @PostMapping
     public Result<AttachmentVO> insert(@RequestBody AttachmentVO attachmentVO) {
         return attachmentService.insert(attachmentVO);

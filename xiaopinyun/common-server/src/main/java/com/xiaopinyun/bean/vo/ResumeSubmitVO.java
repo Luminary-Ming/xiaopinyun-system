@@ -1,11 +1,13 @@
 package com.xiaopinyun.bean.vo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 简历投递
  */
 @Data
+@NoArgsConstructor
 public class ResumeSubmitVO {
     // 主键
     private Long id;

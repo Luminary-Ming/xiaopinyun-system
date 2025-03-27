@@ -21,6 +21,8 @@ public class Attachment {
     private Long id;
     // 学生信息主键
     private Long pkApplicant;
+    // hr主键
+    private Long pkHr;
     // 附件名称
     private String name;
     // 附件大小

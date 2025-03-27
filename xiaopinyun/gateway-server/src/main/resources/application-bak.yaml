@@ -3,6 +3,16 @@ server:
   port: 9999
 
 spring:
+  mvc:
+    servlet:
+      # 项目根路径
+      path: /
+  # 配置数据库连接
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xiaopinyun_db
+    username: root
+    password: leesin
   application:
     name: gateway-server
   cloud:
@@ -16,17 +26,69 @@ spring:
         dashboard: 127.0.0.1:2233
     # 网关
     gateway:
+      # 处理跨域 CORS
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-headers:
+              - "*"
+            allowed-methods:
+              - "*"
+            allowed-origins:
+              - "*"
       routes:
-          # 标识，唯一不重复
-        - id: resume_server
-          uri: http://127.0.0.1:6060
+        # 标识，唯一不重复
+        - id: admin_server
+          uri: http://127.0.0.1:1010
           # 断言（定义路由规则）
           predicates:
             # 匹配请求路径
-            - Path=/resume-server/**
-          # 过滤器
+            - Path=/admin-server/**
+            # 过滤器
           filters:
             # 去除第一层前缀
+            - StripPrefix=1
+
+        - id: company_server
+          uri: http://127.0.0.1:2020
+          predicates:
+            - Path=/company-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: info_server
+          uri: http://127.0.0.1:3030
+          predicates:
+            - Path=/info-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: job_collect_server
+          uri: http://127.0.0.1:4040
+          predicates:
+            - Path=/job-collect-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: recruit_server
+          uri: http://127.0.0.1:5050
+          predicates:
+            - Path=/recruit-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: resume_server
+          uri: http://127.0.0.1:6060
+          predicates:
+            - Path=/resume-server/**
+          filters:
+            - StripPrefix=1
+
+        - id: resume_submit_server
+          uri: http://127.0.0.1:7070
+          predicates:
+            - Path=/resume-submit-server/**
+          filters:
             - StripPrefix=1
 
         - id: upload_server
@@ -42,27 +104,6 @@ spring:
             - Path=/user-server/**
           filters:
             - StripPrefix=1
-
-      # 处理跨域 CORS
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-headers:
-              - "*"
-            allowed-methods:
-              - "*"
-            allowed-origins:
-              - "*"
-  mvc:
-    servlet:
-      # 项目根路径
-      path: /
-  # 配置数据库连接
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/xiaopinyun_db
-    username: root
-    password: leesin
 
 # 配置 springboot 日志级别
 logging:

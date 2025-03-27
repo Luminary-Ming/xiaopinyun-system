@@ -1,9 +1,8 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.po.Company;
-import com.xiaopinyun.bean.vo.CompanyVO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
+import com.xiaopinyun.bean.vo.CompanyVO;
 import com.xiaopinyun.service.CompanyInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +27,8 @@ public class CompanyInfoController {
      * 根据 id 查询公司信息
      */
     @GetMapping("/{id}")
-    public Result<CompanyVO> selectCompanyById(@PathVariable Integer id) {
-        return companyInformationService.queryVOById(id);
+    public Result<CompanyVO> query(@PathVariable String id) {
+        return companyInformationService.query(id);
     }
 
     /**
@@ -49,23 +48,23 @@ public class CompanyInfoController {
      * 添加公司信息
      */
     @PostMapping
-    public Result<CompanyVO> addCompany(@RequestBody Company company) {
-        return companyInformationService.saveVO(company);
+    public Result<CompanyVO> insert(@RequestBody CompanyVO companyVO) {
+        return companyInformationService.insert(companyVO);
     }
 
     /**
      * 修改公司信息
      */
     @PutMapping
-    public Result<CompanyVO> updateCompany(@RequestBody Company company) {
-        return companyInformationService.updateVO(company);
+    public Result<CompanyVO> update(@RequestBody CompanyVO companyVO) {
+        return companyInformationService.update(companyVO);
     }
 
     /**
      * 根据 id 删除公司信息
      */
     @DeleteMapping("/{id}")
-    public Result<Void> deleteCompanyById(@PathVariable Integer id) {
-        return companyInformationService.deleteVOById(id);
+    public Result<Void> delete(@PathVariable String id) {
+        return companyInformationService.delete(id);
     }
 }

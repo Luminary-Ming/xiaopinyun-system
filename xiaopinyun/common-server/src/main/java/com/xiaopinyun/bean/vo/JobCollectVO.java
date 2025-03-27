@@ -1,11 +1,13 @@
 package com.xiaopinyun.bean.vo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 岗位收藏（展示层对象）
  */
 @Data
+@NoArgsConstructor
 public class JobCollectVO {
     // 主键
     private Long id;

@@ -1,11 +1,13 @@
 package com.xiaopinyun.bean.vo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 招聘信息 / 职位信息（展示层对象）
  */
 @Data
+@NoArgsConstructor
 public class RecruitVO {
     // 主键
     private Long id;

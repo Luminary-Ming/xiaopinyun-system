@@ -126,7 +126,7 @@ const register = async () => {
                 });
                 break;
             case "1": // HR
-                router.push("/home");
+                router.push("/profile");
                 break;
             case "2": // 管理员
                 router.push("/home");
@@ -162,7 +162,7 @@ const signIn = async () => {
                 router.push("/");
                 break;
             case "1": // HR
-                router.push("/home");
+                router.push("/profile");
                 break;
             case "2": // 管理员
                 router.push("/home");

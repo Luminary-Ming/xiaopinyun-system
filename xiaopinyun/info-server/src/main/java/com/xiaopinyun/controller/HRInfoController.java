@@ -1,9 +1,8 @@
 package com.xiaopinyun.controller;
 
-import com.xiaopinyun.bean.po.HR;
-import com.xiaopinyun.bean.vo.HRVO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
+import com.xiaopinyun.bean.vo.HRVO;
 import com.xiaopinyun.service.HRInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +27,8 @@ public class HRInfoController {
      * 根据 id 查询 HR 信息
      */
     @GetMapping("/{id}")
-    public Result<HRVO> selectHRById(@PathVariable Integer id) {
-        return hrInformationService.queryVOById(id);
+    public Result<HRVO> query(@PathVariable String id) {
+        return hrInformationService.query(id);
     }
 
     /**
@@ -49,23 +48,23 @@ public class HRInfoController {
      * 添加 HR 信息
      */
     @PostMapping
-    public Result<HRVO> addHR(@RequestBody HR hr) {
-        return hrInformationService.saveVO(hr);
+    public Result<HRVO> insert(@RequestBody HRVO hrVO) {
+        return hrInformationService.insert(hrVO);
     }
 
     /**
      * 修改 HR 信息
      */
     @PutMapping
-    public Result<HRVO> updateHR(@RequestBody HR hr) {
-        return hrInformationService.updateVO(hr);
+    public Result<HRVO> update(@RequestBody HRVO hrVO) {
+        return hrInformationService.update(hrVO);
     }
 
     /**
      * 根据 id 删除 HR 信息
      */
     @DeleteMapping("/{id}")
-    public Result<Void> deleteHRById(@PathVariable Integer id) {
-        return hrInformationService.deleteVOById(id);
+    public Result<Void> delete(@PathVariable String id) {
+        return hrInformationService.delete(id);
     }
 }

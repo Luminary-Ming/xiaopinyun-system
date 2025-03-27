@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface CompanyInfoService extends IService<Company> {
     /**
-     * 根据 id 查询公司信息
+     * 查询公司信息
      */
-    Result<CompanyVO> queryVOById(Integer id);
+    Result<CompanyVO> query(String id);
 
     /**
      * 条件查询、分页查询公司信息
@@ -22,15 +22,15 @@ public interface CompanyInfoService extends IService<Company> {
     /**
      * 添加公司信息
      */
-    Result<CompanyVO> saveVO(Company company);
+    Result<CompanyVO> insert(CompanyVO companyVO);
 
     /**
      * 修改公司信息
      */
-    Result<CompanyVO> updateVO(Company company);
+    Result<CompanyVO> update(CompanyVO companyVO);
 
     /**
      * 根据 id 删除公司信息
      */
-    Result<Void> deleteVOById(Integer id);
+    Result<Void> delete(String id);
 }

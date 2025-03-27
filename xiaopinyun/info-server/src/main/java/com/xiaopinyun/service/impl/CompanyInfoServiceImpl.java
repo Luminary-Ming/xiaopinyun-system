@@ -14,6 +14,7 @@ import com.xiaopinyun.util.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -27,7 +28,7 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
      * 根据 id 查询公司信息
      */
     @Override
-    public Result<CompanyVO> queryVOById(Integer id) {
+    public Result<CompanyVO> query(String id) {
         Company company = companyInfoMapper.selectById(id);
         if (company != null) {
             CompanyVO companyVO = new CompanyVO(company);
@@ -66,22 +67,40 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
      * 添加公司信息
      */
     @Override
-    public Result<CompanyVO> saveVO(Company company) {
-        if (company == null) {
+    public Result<CompanyVO> insert(CompanyVO companyVO) {
+        if (companyVO == null) {
             return Result.paramError(BizCode.PLEASE_WRITE);
         }
         // 校验对象的字段
-        if (checkCompany(company).isSuccess()) {
-            return checkCompany(company);
+        if (!checkCompany(companyVO).isSuccess()) {
+            return checkCompany(companyVO);
         }
-        // 添加需要审核
-        company.setCheckStatus(2);
-        // 默认未删除
-        company.setDr(0);
+
+        Company company = new Company();
+        company.setProfileImg(companyVO.getProfileImgUrl());
+        company.setCompanyName(companyVO.getCompanyName());
+        company.setPeople(companyVO.getPeople());
+        company.setIndustryType(companyVO.getIndustryType());
+        company.setWorkingHours(companyVO.getWorkingHours());
+        if (companyVO.getHoliday() != null) {
+            company.setHoliday(Integer.valueOf(companyVO.getHoliday()));
+        }
+        if (companyVO.getOvertime() != null) {
+            company.setOvertime(Integer.valueOf(companyVO.getOvertime()));
+        }
+        company.setBenefit(companyVO.getBenefit());
+        company.setCompanyAddress(companyVO.getCompanyAddress());
+        company.setIntroduce(companyVO.getIntroduce());
+        company.setCompanyFullName(companyVO.getCompanyFullName());
+        company.setLegalPerson(companyVO.getLegalPerson());
+        if (companyVO.getCapital() != null) {
+            company.setCapital(BigDecimal.valueOf(Long.parseLong(companyVO.getCapital())));
+        }
+        company.setFoundDate(companyVO.getFoundDate());
+
         if (save(company)) {
-            Company companyData = companyInfoMapper.selectById(company.getId());
-            CompanyVO companyVO = new CompanyVO(companyData);
-            return Result.ok(companyVO);
+            CompanyVO companyVOData = new CompanyVO(company);
+            return Result.ok(companyVOData);
         }
         return Result.error();
     }
@@ -90,21 +109,41 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
      * 修改公司信息
      */
     @Override
-    public Result<CompanyVO> updateVO(Company company) {
+    public Result<CompanyVO> update(CompanyVO companyVO) {
         // 如果没有要更新的数据直接返回更新成功
-        if (company == null) {
+        if (companyVO == null) {
             return Result.ok();
         }
         // 校验对象的字段
-        if (checkCompany(company).isSuccess()) {
-            return checkCompany(company);
+        if (!checkCompany(companyVO).isSuccess()) {
+            return checkCompany(companyVO);
         }
-        // 更新需要审核
-        company.setCheckStatus(2);
+
+        Company company = new Company();
+        company.setId(Long.valueOf(companyVO.getId()));
+        company.setProfileImg(companyVO.getProfileImgUrl());
+        company.setCompanyName(companyVO.getCompanyName());
+        company.setPeople(companyVO.getPeople());
+        company.setIndustryType(companyVO.getIndustryType());
+        company.setWorkingHours(companyVO.getWorkingHours());
+        if (companyVO.getHoliday() != null) {
+            company.setHoliday(Integer.valueOf(companyVO.getHoliday()));
+        }
+        if (companyVO.getOvertime() != null) {
+            company.setOvertime(Integer.valueOf(companyVO.getOvertime()));
+        }
+        company.setBenefit(companyVO.getBenefit());
+        company.setCompanyAddress(companyVO.getCompanyAddress());
+        company.setIntroduce(companyVO.getIntroduce());
+        company.setCompanyFullName(companyVO.getCompanyFullName());
+        company.setLegalPerson(companyVO.getLegalPerson());
+        if (companyVO.getCapital() != null) {
+            company.setCapital(BigDecimal.valueOf(Long.parseLong(companyVO.getCapital())));
+        }
+        company.setFoundDate(companyVO.getFoundDate());
+        company.setCheckStatus(Integer.valueOf(companyVO.getCheckStatus()));
+
         if (updateById(company)) {
-            // 修改之后的数据
-            Company companyData = companyInfoMapper.selectById(company.getId());
-            CompanyVO companyVO = new CompanyVO(companyData);
             return Result.ok(companyVO);
         }
         return Result.error();
@@ -114,7 +153,7 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
      * 根据 id 删除公司信息
      */
     @Override
-    public Result<Void> deleteVOById(Integer id) {
+    public Result<Void> delete(String id) {
         if (removeById(id)) {
             return Result.ok();
         }
@@ -124,25 +163,25 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
     /**
      * 校验所传入的字段
      */
-    private Result<CompanyVO> checkCompany(Company company) {
+    private Result<CompanyVO> checkCompany(CompanyVO companyVO) {
         // 校检工作时间
-        if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", company.getWorkingHours())) {
+        if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", companyVO.getWorkingHours())) {
             return Result.paramError("工作时间格式错误");
         }
         // 校检休假情况
-        if (!Pattern.matches("[0-2]", company.getHoliday().toString())) {
+        if (!Pattern.matches("[0-2]", companyVO.getHoliday())) {
             return Result.paramError("休假情况错误");
         }
         // 校检加班情况
-        if (!Pattern.matches("[0-2]", company.getOvertime().toString())) {
+        if (!Pattern.matches("[0-2]", companyVO.getOvertime())) {
             return Result.paramError("加班情况错误");
         }
         // 检验注册资本
-        if (!Pattern.matches("^\\d+(\\.\\d+)?$", company.getCapital().toString())) {
+        if (!Pattern.matches("^\\d+(\\.\\d+)?$", companyVO.getCapital())) {
             return Result.paramError("注册资本只能为数值");
         }
         // 检验成立日期
-        if (!Pattern.matches("^\\d{4}-\\d{2}-\\d{2}$", company.getFoundDate())) {
+        if (!Pattern.matches("^\\d{4}-\\d{2}-\\d{2}$", companyVO.getFoundDate())) {
             return Result.paramError("成立日期格式不正确");
         }
         return Result.ok();

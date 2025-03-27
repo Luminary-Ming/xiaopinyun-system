@@ -11,9 +11,9 @@ import java.util.List;
 public interface HRInfoService extends IService<HR> {
 
     /**
-     * 根据 id 查询 HR 信息
+     * 查询 HR 信息
      */
-    Result<HRVO> queryVOById(Integer id);
+    Result<HRVO> query(String id);
 
     /**
      * 条件查询、分页查询 HR 信息
@@ -23,16 +23,15 @@ public interface HRInfoService extends IService<HR> {
     /**
      * 添加 HR 信息
      */
-    Result<HRVO> saveVO(HR hr);
+    Result<HRVO> insert(HRVO hrVO);
 
-    HR save();
     /**
      * 修改 HR 信息
      */
-    Result<HRVO> updateVO(HR hr);
+    Result<HRVO> update(HRVO hrVO);
 
     /**
      * 根据 id 删除 HR 信息
      */
-    Result<Void> deleteVOById(Integer id);
+    Result<Void> delete(String id);
 }

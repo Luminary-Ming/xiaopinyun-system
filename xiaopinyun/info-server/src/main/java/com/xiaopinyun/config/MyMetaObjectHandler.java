@@ -22,10 +22,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         strictInsertFill(metaObject, "id", Long.class, snowflake.nextId());
         strictInsertFill(metaObject, "dr", Integer.class, 0);
         strictInsertFill(metaObject, "ts", LocalDateTime.class, LocalDateTime.now());
+        strictInsertFill(metaObject, "status", Integer.class, 0);  // HR新增信息默认状态为在线
+        strictInsertFill(metaObject, "checkStatus", Integer.class, 2);  // 审核中
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         strictInsertFill(metaObject, "ts", LocalDateTime.class, LocalDateTime.now());
+        strictInsertFill(metaObject, "checkStatus", Integer.class, 2);  // 审核中
     }
 }

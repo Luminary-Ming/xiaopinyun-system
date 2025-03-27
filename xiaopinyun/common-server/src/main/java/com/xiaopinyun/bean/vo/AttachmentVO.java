@@ -17,6 +17,8 @@ public class AttachmentVO {
     private String id;
     // 学生信息主键
     private String pkApplicant;
+    // hr主键
+    private String pkHr;
     // 附件名称
     private String name;
     // 附件大小
@@ -29,12 +31,22 @@ public class AttachmentVO {
     // 构造方法，用于从 Attachment 对象转换
     public AttachmentVO(Attachment attachment) {
         this.id = attachment.getId().toString();
-        this.pkApplicant = attachment.getPkApplicant().toString();
+        if (attachment.getPkApplicant() == null) {
+            this.pkApplicant = null;
+        } else {
+            this.pkApplicant = attachment.getPkApplicant().toString();
+        }
+        if (attachment.getPkHr() == null) {
+            this.pkHr = null;
+        } else {
+            this.pkHr = attachment.getPkHr().toString();
+        }
         this.name = attachment.getName();
         this.size = attachment.getSize().toString();
         this.resumePDF = attachment.getResumePDF();
         LocalDateTime ts = attachment.getTs();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        this.ts =ts.format(formatter); ;
+        this.ts = ts.format(formatter);
+        ;
     }
 }

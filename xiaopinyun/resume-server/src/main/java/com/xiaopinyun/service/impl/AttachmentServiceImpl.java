@@ -35,6 +35,25 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     }
 
     /**
+     * 查询 hr 附件
+     */
+    @Override
+    public Result<List<AttachmentVO>> queryHR(String pkHr) {
+        QueryWrapper<Attachment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pk_hr", pkHr);
+        List<Attachment> attachments = list(queryWrapper);
+        List<AttachmentVO> attachmentVOS = new ArrayList<>();
+        if (!attachments.isEmpty()) {
+            attachments.forEach(attachment -> {
+                AttachmentVO attachmentVO = new AttachmentVO(attachment);
+                attachmentVOS.add(attachmentVO);
+            });
+            return Result.ok(attachmentVOS);
+        }
+        return Result.ok(BizCode.NO_DATA);
+    }
+
+    /**
      * 新增附件
      */
     @Override
@@ -43,13 +62,23 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
             return Result.paramError("请选择上传文件！");
         }
         QueryWrapper<Attachment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("pk_applicant", attachmentVO.getPkApplicant());
+        if (attachmentVO.getPkApplicant() != null) {
+            queryWrapper.eq("pk_applicant", attachmentVO.getPkApplicant());
+        }
+        if (attachmentVO.getPkHr() != null) {
+            queryWrapper.eq("pk_hr", attachmentVO.getPkHr());
+        }
         List<Attachment> attachments = list(queryWrapper);
         if (attachments.size() == 3) {
             return Result.error("最多允许上传三个附件！");
         }
         Attachment attachment = new Attachment();
-        attachment.setPkApplicant(Long.valueOf(attachmentVO.getPkApplicant()));
+        if (attachmentVO.getPkApplicant() != null) {
+            attachment.setPkApplicant(Long.valueOf(attachmentVO.getPkApplicant()));
+        }
+        if (attachmentVO.getPkHr() != null) {
+            attachment.setPkHr(Long.valueOf(attachmentVO.getPkHr()));
+        }
         attachment.setName(attachmentVO.getName());
         attachment.setSize(Double.valueOf(attachmentVO.getSize()));
         attachment.setResumePDF(attachmentVO.getResumePDF());

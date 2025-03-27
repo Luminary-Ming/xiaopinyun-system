@@ -14,6 +14,11 @@ public interface AttachmentService extends IService<Attachment> {
     Result<List<AttachmentVO>> query(String pkApplicant);
 
     /**
+     * 查询 hr 附件
+     */
+    Result<List<AttachmentVO>> queryHR(String pkHr);
+
+    /**
      * 新增附件
      */
     Result<AttachmentVO> insert(AttachmentVO attachmentVO);

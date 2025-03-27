@@ -8,26 +8,29 @@
                 <el-menu-item index="1">
                     <router-link to="/home">首页</router-link>
                 </el-menu-item>
-                <el-menu-item index="2">
+                <el-menu-item index="2" v-if="isStudent()">
                     <router-link to="/job">职位</router-link>
                 </el-menu-item>
                 <el-menu-item index="3">
+                    <router-link to="/job">职位管理</router-link>
+                </el-menu-item>
+                <el-menu-item index="4" v-if="isStudent()">
                     <router-link to="/company">公司</router-link>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="5" v-if="isStudent()">
                     <router-link to="/resume">我的简历</router-link>
                 </el-menu-item>
-                <el-menu-item index="5" v-if="!token">
+                <el-menu-item index="6" v-if="!token">
                     <el-icon><User /></el-icon>
                     <router-link to="/login">登录/注册</router-link>
                 </el-menu-item>
-                <el-menu-item index="6" v-else>
+                <el-menu-item index="7" v-else>
                     <router-link to="/profile">
                         {{ name }}
                         <el-avatar shape="square" :size="35" :src="squareUrl" style="vertical-align: middle" />
                     </router-link>
                 </el-menu-item>
-                <el-sub-menu index="7" :popper-offset="20" v-if="token">
+                <el-sub-menu index="8" :popper-offset="20" v-if="token">
                     <template #title>退出</template>
                     <el-menu-item index="7-1" @click="loginout()">确定退出</el-menu-item>
                 </el-sub-menu>
@@ -44,6 +47,14 @@ import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const userStore = useUserStore();
+
+const isStudent = () => {
+    const role = userStore.role;
+    if (role == 0) {
+        return true;
+    }
+    return false;
+};
 
 let squareUrl = ref(userStore.profileImg); // 头像
 let name = ref(userStore.name); // 名字
