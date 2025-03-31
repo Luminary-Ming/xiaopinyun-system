@@ -20,7 +20,7 @@ public class Recruit {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     // 公司信息主键
-    private Long pkApplicant;
+    private Long pkCompany;
     // HR信息主键
     private Long pkHr;
     // 招聘标题
@@ -43,6 +43,7 @@ public class Recruit {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Integer checkStatus;
     // 是否推荐到首页（管理员功能）  0不推荐、1推荐
+    @TableField(fill = FieldFill.INSERT)
     private Integer recommendStatus;
     // 是否已删除 0正常、1已删除
     @TableLogic

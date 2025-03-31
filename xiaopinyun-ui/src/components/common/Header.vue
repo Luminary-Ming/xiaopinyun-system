@@ -11,12 +11,12 @@
                 <el-menu-item index="2" v-if="isStudent()">
                     <router-link to="/job">职位</router-link>
                 </el-menu-item>
-                <el-menu-item index="3">
+                <!-- <el-menu-item index="3">
                     <router-link to="/job">职位管理</router-link>
-                </el-menu-item>
-                <el-menu-item index="4" v-if="isStudent()">
+                </el-menu-item> -->
+                <!-- <el-menu-item index="4" v-if="isStudent()">
                     <router-link to="/company">公司</router-link>
-                </el-menu-item>
+                </el-menu-item> -->
                 <el-menu-item index="5" v-if="isStudent()">
                     <router-link to="/resume">我的简历</router-link>
                 </el-menu-item>

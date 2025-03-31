@@ -94,7 +94,7 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
         company.setCompanyFullName(companyVO.getCompanyFullName());
         company.setLegalPerson(companyVO.getLegalPerson());
         if (companyVO.getCapital() != null) {
-            company.setCapital(BigDecimal.valueOf(Long.parseLong(companyVO.getCapital())));
+            company.setCapital(new BigDecimal(companyVO.getCapital()));
         }
         company.setFoundDate(companyVO.getFoundDate());
 
@@ -138,7 +138,7 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
         company.setCompanyFullName(companyVO.getCompanyFullName());
         company.setLegalPerson(companyVO.getLegalPerson());
         if (companyVO.getCapital() != null) {
-            company.setCapital(BigDecimal.valueOf(Long.parseLong(companyVO.getCapital())));
+            company.setCapital(new BigDecimal(companyVO.getCapital()));
         }
         company.setFoundDate(companyVO.getFoundDate());
         company.setCheckStatus(Integer.valueOf(companyVO.getCheckStatus()));
@@ -165,9 +165,9 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
      */
     private Result<CompanyVO> checkCompany(CompanyVO companyVO) {
         // 校检工作时间
-        if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", companyVO.getWorkingHours())) {
-            return Result.paramError("工作时间格式错误");
-        }
+//        if (!Pattern.matches("\\b(?:[01]\\d|2[0-3]):[0-5]\\d\\s*-\\s*(?:[01]\\d|2[0-3]):[0-5]\\d\\b", companyVO.getWorkingHours())) {
+//            return Result.paramError("工作时间格式错误");
+//        }
         // 校检休假情况
         if (!Pattern.matches("[0-2]", companyVO.getHoliday())) {
             return Result.paramError("休假情况错误");
@@ -177,13 +177,13 @@ public class CompanyInfoServiceImpl extends ServiceImpl<CompanyInfoMapper, Compa
             return Result.paramError("加班情况错误");
         }
         // 检验注册资本
-        if (!Pattern.matches("^\\d+(\\.\\d+)?$", companyVO.getCapital())) {
-            return Result.paramError("注册资本只能为数值");
-        }
+//        if (!Pattern.matches("^\\d+(\\.\\d+)?$", companyVO.getCapital())) {
+//            return Result.paramError("注册资本只能为数值");
+//        }
         // 检验成立日期
-        if (!Pattern.matches("^\\d{4}-\\d{2}-\\d{2}$", companyVO.getFoundDate())) {
-            return Result.paramError("成立日期格式不正确");
-        }
+//        if (!Pattern.matches("^\\d{4}-\\d{2}-\\d{2}$", companyVO.getFoundDate())) {
+//            return Result.paramError("成立日期格式不正确");
+//        }
         return Result.ok();
     }
 }

@@ -24,7 +24,9 @@
                         </div>
                     </div>
                     <div class="resume-content">
-                        <div><span>所属公司：壹加科技</span></div>
+                        <div>
+                            <span>所属公司：{{ companyView.companyFullName }}</span>
+                        </div>
                         <div>
                             <span>联系方式：{{ hrView.telephone }}</span>
                         </div>
@@ -32,28 +34,26 @@
                             <span>电子邮件：{{ hrView.email }}</span>
                         </div>
                     </div>
-                    <div class="edit-resume">
-                        <router-link to="/job">
-                            <el-button>
-                                发布职位<el-icon class="el-icon--right"><ArrowRight /></el-icon>
-                            </el-button>
-                        </router-link>
+                    <div class="edit-resume" @click="addRecruit()">
+                        <el-button>
+                            发布职位<el-icon class="el-icon--right"><ArrowRight /></el-icon>
+                        </el-button>
                     </div>
                 </div>
                 <div class="job-menu">
                     <div :class="{ active: activeMenu === 'interest' }" @click="handleMenuClick('interest')">
-                        感兴趣&nbsp;<span>{{ contents.length }}</span>
+                        职位管理&nbsp;<span>{{ contents.length }}</span>
                     </div>
                     <div :class="{ active: activeMenu === 'submit' }" @click="handleMenuClick('submit')">
-                        已投递&nbsp;<span>{{ contents.length }}</span>
+                        感兴趣&nbsp;<span>{{ contents.length }}</span>
                     </div>
                     <div :class="{ active: activeMenu === 'interview' }" @click="handleMenuClick('interview')">
                         面试&nbsp;<span>{{ contents.length }}</span>
                     </div>
                 </div>
-                <div v-for="(content, index) in contents" :key="index" class="item-content">
+                <div v-for="(content, index) in contents" :key="index" class="item-content" v-if="true">
                     <div class="content-top">
-                        <div class="img-name-identity">
+                        <div class="img-name-identity" @click="queryBtn(index)">
                             <div class="img-box">
                                 <div class="img"><el-avatar shape="square" :size="30" :src="content.hr_img" style="vertical-align: middle; border-radius: 10px" /></div>
                             </div>
@@ -61,11 +61,11 @@
                             <div class="hr-identity">{{ content.hr_identity }}</div>
                         </div>
                         <div>
-                            <el-button @click="sumbit()">立即沟通</el-button>
-                            <el-button @click="cancel()">取消感兴趣</el-button>
+                            <el-button @click="updateBtn(index)" class="update-btn">编辑职位</el-button>
+                            <el-button @click="delBtn(index)" type="danger">删除职位</el-button>
                         </div>
                     </div>
-                    <div class="content-body">
+                    <div class="content-body" @click="queryBtn(index)">
                         <div class="recruit">
                             <div class="title-address">
                                 <div class="title">{{ content.title }}</div>
@@ -229,34 +229,95 @@
             </div>
         </template>
     </el-dialog>
+    <!-- 招聘信息表单 -->
+    <el-dialog v-model="dialogRecruitFormVisible" title="招聘详情" width="500">
+        <el-form :model="recruitView">
+            <el-form-item label="招聘标题" :label-width="formLabelWidth">
+                <el-input v-model="recruitView.title" autocomplete="off" placeholder="输入招聘标题" />
+            </el-form-item>
+            <el-form-item label="岗位薪资" :label-width="formLabelWidth">
+                <el-input v-model="recruitView.salary" autocomplete="off" placeholder="输入岗位薪资" />
+            </el-form-item>
+            <el-form-item label="工作要求" :label-width="formLabelWidth">
+                <el-input v-model="recruitView.requirement" autocomplete="off" placeholder="输入工作要求" />
+            </el-form-item>
+            <el-form-item label="学历要求" :label-width="formLabelWidth">
+                <el-select v-model="recruitView.education" placeholder="选择学历要求">
+                    <el-option label="大专以上" value="0" />
+                    <el-option label="本科" value="1" />
+                    <el-option label="硕士" value="2" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="员工福利" :label-width="formLabelWidth">
+                <el-input v-model="recruitView.benefit" autocomplete="off" placeholder="输入员工福利" />
+            </el-form-item>
+            <el-form-item label="职位描述" class="textarea">
+                <el-input
+                    v-model="recruitView.jobInformation"
+                    autocomplete="off"
+                    type="textarea"
+                    maxlength="3000"
+                    rows="5"
+                    spellcheck="false"
+                    style="width: 700px"
+                    placeholder="输入职位描述"
+                    show-word-limit
+                />
+            </el-form-item>
+            <el-form-item label="工作地点" :label-width="formLabelWidth">
+                <el-input v-model="recruitView.address" autocomplete="off" placeholder="输入工作地点" />
+            </el-form-item>
+            <el-form-item label="招聘状态" :label-width="formLabelWidth">
+                <el-select v-model="recruitView.publishStatus" placeholder="选择招聘状态">
+                    <el-option label="停止招聘" value="0" />
+                    <el-option label="招聘中" value="1" />
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="dialogRecruitFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="submitRecruit()">OK</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 import { uploadApi } from "@/api/upload";
 import { hrApi } from "@/api/hr";
 import { companyApi } from "@/api/company";
-import { computed } from "vue";
+import { recruitApi } from "@/api/recruit";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
+import { useRecruitStore } from "@/store/recruitStore";
+const router = useRouter();
 const userStore = useUserStore();
+const recruitStore = useRecruitStore();
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
+    // hr信息
+    const resphr = await hrApi.getHR(userStore.pkHr);
+    Object.assign(hrView, resphr.data);
+
+    // 公司信息
+    const respCompany = await companyApi.getCompany(hrView.pkCompany);
+    Object.assign(companyView, respCompany.data);
+    recruitView.pkCompany = companyView.id;
+    recruitView.benefit = companyView.benefit;
+
+    // 招聘信息
+    const respRecruit = await recruitApi.queryByPkHr(hrView.id);
+    Object.assign(recruitViews, respRecruit.data);
+
     // 附件
     const respAttachment = await uploadApi.getHRAttachment(userStore.pkHr);
     if (respAttachment.code == 200) {
         Object.assign(attachmentView, respAttachment.data);
     }
-
-    // 个人信息
-    const resphr = await hrApi.getHR(userStore.pkHr);
-    Object.assign(hrView, resphr.data);
-
-    // 公司信息
-    // const respCompany = await companyApi.getCompany(userStore.pkHr);
-    // Object.assign(companyView, respCompany.data);
 });
 
 /*------------------------------------- 上传附件 -------------------------------------*/
@@ -280,7 +341,6 @@ const handleFileSuccess = async (response, uploadFile) => {
     addAttachmentView.resumePDF = response.data;
     addAttachmentView.name = uploadFile.name;
     addAttachmentView.size = (uploadFile.size / 1024).toFixed(1); // 保留一位小数
-    debugger;
     const resp = await uploadApi.addAttachment(addAttachmentView);
     if (resp.code == 200) {
         addAttachmentView.ts = resp.data.ts;
@@ -365,7 +425,7 @@ let hrView = reactive({
     identity: "招聘身份",
     telephone: "请填写手机号",
     email: "请填写电子邮件",
-    status: "在线状态",
+    status: "0",
 });
 let ImgUrl = ref(hrView.profileImgUrl);
 
@@ -404,14 +464,51 @@ let companyView = reactive({
     foundDate: "", // 成立日期
 });
 
+/*----------------------------------------- 职位管理 ------------------------------------*/
+let recruitViews = reactive([]);
+let recruitView = reactive({
+    id: "",
+    pkCompany: "",
+    pkHr: userStore.pkHr,
+    title: "", // 招聘标题 例Java工程师-2025届(J14894)
+    salary: "", // 薪资 例9k-15k
+    benefit: "", // 员工福利 例五险一金、定期体检、年终奖、带薪年假、节日福利
+    address: "", //  工作地点
+    requirement: "", // 工作要求 经验不限、5天/周、在校/应届
+    education: "", // 学历要求 0大专以上、1本科、2硕士
+    jobInformation: "", // 岗位详情
+    publishStatus: "1", // 是否发布 0不发布（职位关闭）、1发布（招聘中）
+});
+
+let currentIndex = ref(0);
+
+// 添加职位
+const addRecruit = () => {
+    dialogRecruitFormVisible = true;
+    Object.assign(recruitView, {
+        id: "",
+        pkCompany: "",
+        pkHr: userStore.pkHr,
+        title: "",
+        salary: "",
+        benefit: "",
+        address: "",
+        requirement: "",
+        education: "",
+        jobInformation: "",
+        publishStatus: "1",
+    });
+};
 /*----------------------------------------- 表单信息 -------------------------------------------------- -*/
 // 个人信息表单
 const dialogFormVisible = ref(false);
 const formLabelWidth = "100px";
 // 公司信息表单
 const dialogCompanyFormVisible = ref(false);
+// 职位信息表单
+const dialogRecruitFormVisible = ref(false);
 
-if (userStore.flag == "register") {
+if (userStore.flag == "register" && companyView.id == null) {
     dialogFormVisible.value = true;
 }
 
@@ -419,6 +516,7 @@ if (userStore.flag == "register") {
 const submitHR = async () => {
     const resp = await hrApi.updateHR(hrView);
     if (resp.code == 200) {
+        localStorage.setItem("name", hrView.name);
         ElMessage.success(resp.message);
         ElMessage.warning("请填写公司信息！");
     } else {
@@ -430,20 +528,32 @@ const submitHR = async () => {
 
 // 公司信息提交
 const submitCompany = async () => {
-    const resp = await companyApi.addCompany(companyView);
+    let resp = null;
+    let flag = false;
+    if (companyView.id == null) {
+        resp = await companyApi.addCompany(companyView);
+        flag = true;
+    } else {
+        resp = await companyApi.updateCompany(companyView);
+    }
     if (resp.code == 200) {
+        if (flag) {
+            hrView.pkCompany = resp.data.id;
+            await hrApi.updateHR(hrView);
+            recruitView.benefit = companyView.benefit;
+        }
         ElMessage.success(resp.message);
     } else {
         ElMessage.error(resp.message);
     }
     dialogCompanyFormVisible.value = false;
 };
+
 /*------------------------------------- 换头像 ------------------------------------- */
 const handleAvatarSuccess = async (response, uploadFile) => {
     hrView.profileImgUrl = response.data;
     const resp = await hrApi.updateHR(hrView);
     if (resp.code == 200) {
-        debugger;
         localStorage.setItem("profileImg", response.data);
         ElMessage.success(resp.message);
     } else {
@@ -467,41 +577,82 @@ const beforeAvatarUpload = (rawFile) => {
 };
 
 /*----------------------------------------- 选项卡内容 ------------------------------------*/
-let contents = reactive([
-    {
-        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "鲁米", // hr名字
-        hr_identity: "求职者", // hr身份
-        title: "Java工程师-2025届(J14894)", // 招聘标题
-        address: "天津·滨海新区", // 工作地点
-        salary: "6-8k", // 薪资
-        requirement: "经验不限", // 工作要求
-        education: "本科", // 学历要求
-        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "壹加科技", // 公司名
-        industryType: "计算机服务", // 行业分类
-        people: "22-99人", // 公司人数
-    },
-    {
-        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "鲁米", // hr名字
-        hr_identity: "求职者", // hr身份
-        title: "Java工程师-2025届(J14894)", // 招聘标题
-        address: "天津·滨海新区", // 工作地点
-        salary: "6-8k", // 薪资
-        requirement: "经验不限", // 工作要求
-        education: "本科", // 学历要求
-        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "壹加科技", // 公司名
-        industryType: "计算机服务", // 行业分类
-        people: "22-99人", // 公司人数
-    },
-]);
+const contents = computed(() => {
+    return recruitViews.map((recruit) => ({
+        hr_img: userStore.profileImg, // hr头像
+        hr_name: userStore.name, // hr名字
+        hr_identity: hrView.identity, // hr身份
+        title: recruit.title, // 招聘标题
+        address: recruit.address, // 工作地点
+        salary: recruit.salary, // 薪资
+        requirement: recruit.requirement, // 工作要求
+        education: convertEducation(recruit.education), // 学历要求
+        company_img: companyView.profileImgUrl, // 公司头像
+        companyName: companyView.companyName, // 公司名
+        industryType: companyView.industryType, // 行业分类
+        people: companyView.people, // 公司人数
+    }));
+});
+
+// 转换学历要求
+const convertEducation = (education) => {
+    if (education == "0") {
+        return "大专以上";
+    }
+    if (education == "1") {
+        return "本科";
+    }
+    if (education == "2") {
+        return "硕士";
+    }
+};
 
 // 菜单选中后样式
 let activeMenu = ref("interest"); // 默认选中"感兴趣"选项
 let handleMenuClick = function (menu) {
     activeMenu.value = menu;
+};
+
+// 查看职位
+const queryBtn = (index) => {
+    router.push("/job");
+    recruitStore.setRecommendInfo(recommendViews[index]);
+};
+
+// 编辑职位
+const updateBtn = async (index) => {
+    dialogRecruitFormVisible.value = true;
+    currentIndex.value = index;
+    Object.assign(recruitView, recruitViews[index]);
+};
+
+// 删除职位
+const delBtn = async (index) => {
+    const resp = await recruitApi.delete(recruitViews[index].id);
+    if (resp.code == 200) {
+        recruitViews.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 职位提交
+const submitRecruit = async () => {
+    let resp = null;
+    if (recruitView.id == null) {
+        resp = await recruitApi.insert(recruitView);
+        recruitViews.push({ ...recruitView, id: resp.data.id });
+    } else {
+        recruitViews[currentIndex.value] = { ...recruitView };
+        resp = await recruitApi.update(recruitView);
+    }
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+    dialogRecruitFormVisible.value = false;
 };
 </script>
 
@@ -775,12 +926,15 @@ let handleMenuClick = function (menu) {
 .item-content .el-button {
     opacity: 0;
     color: #fff;
-    background-color: #00bebd;
     border-radius: 8px;
 }
 
-.item-content .el-button:hover {
+.item-content .update-btn {
     background-color: #00a6a7;
+}
+
+.item-content .update-btn:hover {
+    background-color: #00bebd;
 }
 
 .item-content .content-body {

@@ -74,9 +74,19 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
         }
         UserDTO userDTO = new UserDTO();
         userDTO.setUserVO(new UserVO(user));
-        Applicant applicant = applicantInfoMapper.selectById(user.getPkApplicant());
-        userDTO.setName(applicant.getName());
-        userDTO.setProfileImg(applicant.getProfileImg());
+        if(role.equals("0")){
+            Applicant applicant = applicantInfoMapper.selectById(user.getPkApplicant());
+            userDTO.setName(applicant.getName());
+            userDTO.setProfileImg(applicant.getProfileImg());
+        }
+        if(role.equals("1")){
+            HR hr = hrInfoMapper.selectById(user.getPkHr());
+            userDTO.setName(hr.getName());
+            userDTO.setProfileImg(hr.getProfileImg());
+        }
+
+        if(role.equals("2")){}
+
         Map<String, Object> map = new HashMap<>();
         map.put("userId", user.getId());
         String token = TokenUtil.getToken(map);

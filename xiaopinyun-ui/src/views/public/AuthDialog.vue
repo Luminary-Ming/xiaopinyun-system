@@ -101,7 +101,6 @@ const userStore = useUserStore();
 // 注册
 const register = async () => {
     const resp = await userApi.register(login);
-    debugger;
     if (resp.code == 200) {
         ElMessage.success("注册成功");
         userStore.setToken(resp.data.token); // 保存token

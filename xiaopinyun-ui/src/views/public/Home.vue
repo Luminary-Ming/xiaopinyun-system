@@ -23,7 +23,7 @@
             <div class="job-box">
                 <div class="title">{{ title }}</div>
                 <div class="job-list">
-                    <div class="job-card" v-for="(item, index) in jobCards" :key="index">
+                    <div class="job-card" v-for="(item, index) in jobCards" :key="index" @click="queryBtn(index)">
                         <div class="job-info-box">
                             <div class="title-salary">
                                 <div class="job-title">{{ item.jobTitle }}</div>
@@ -50,7 +50,63 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
+import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { recruitApi } from "@/api/recruit";
+import { useRouter } from "vue-router";
+import { useRecruitStore } from "@/store/recruitStore";
+const router = useRouter();
+const recruitStore = useRecruitStore();
+/* ------------------------------------- 查询API -------------------------------------- */
+onMounted(async () => {
+    // 职位
+    const respRecruit = await recruitApi.queryRecommend();
+    const recruits = respRecruit.data;
+    Object.assign(recommendViews, recruits);
+});
+
+/* ------------------------------------- 推荐职位 -------------------------------------- */
+let recommendViews = reactive([]);
+
+// 职位卡片
+let jobCards = computed(() => {
+    return recommendViews.map((recommendJob) => ({
+        jobTitle: recommendJob.recruitVO.title, // 标题
+        salary: recommendJob.recruitVO.salary, // 薪资
+        address: convertAddress(recommendJob.recruitVO.address), // 地点
+        requirement: recommendJob.recruitVO.requirement, // 工作要求
+        education: convertEducation(recommendJob.recruitVO.education), // 学历
+        companyImg: recommendJob.companyVO.profileImgUrl, // 公司头像
+        companyName: recommendJob.companyVO.companyName, // 公司名称
+        industryType: recommendJob.companyVO.industryType, // 行业分类
+    }));
+});
+
+// 截取城市
+const convertAddress = (address) => {
+    if (!address) return "";
+    return address.substring(0, 2); // 截取前两个字符
+};
+
+// 转换学历要求
+const convertEducation = (education) => {
+    if (education == "0") {
+        return "大专以上";
+    }
+    if (education == "1") {
+        return "本科";
+    }
+    if (education == "2") {
+        return "硕士";
+    }
+};
+
+// 查看职位
+const queryBtn = (index) => {
+    router.push("/job");
+    recruitStore.setRecommendInfo(recommendViews[index]);
+};
 
 // 选择校招、实习按钮
 let activeMenu = ref("xiaozhao");
@@ -73,70 +129,6 @@ const carouselImages = ref([
     {
         url: "src/assets/images/lunbo-img/lunbo3.jpg",
         title: "图片3",
-    },
-]);
-
-// 职位卡片
-let jobCards = reactive([
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
-    },
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
-    },
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
-    },
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
-    },
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
-    },
-    {
-        jobTitle: "人工智能算法工程师", // 标题
-        salary: "10-15K", // 薪资
-        address: "北京", // 地点
-        requirement: "在校/应届", // 工作要求
-        education: "本科", // 学历
-        companyImg: "src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "滴滴", // 公司名称
-        industryType: "互联网", // 行业分类
     },
 ]);
 </script>

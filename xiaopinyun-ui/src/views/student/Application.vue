@@ -147,7 +147,7 @@ const userStore = useUserStore();
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
     // 附件
-    const respAttachment = await studentApi.getAttachment(userStore.pkApplicant);
+    const respAttachment = await uploadApi.getAttachment(userStore.pkApplicant);
     if (respAttachment.code == 200) {
         Object.assign(attachmentView, respAttachment.data);
     }
