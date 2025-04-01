@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface JobCollectService extends IService<JobCollect> {
     Result<List<JobCollectDTO>> query(String pkApplicant);
-    Result<Void> insert(JobCollectVO jobCollectVO);
+    Result<JobCollectDTO> insert(JobCollectVO jobCollectVO);
     Result<Void> delete(String id);
 }

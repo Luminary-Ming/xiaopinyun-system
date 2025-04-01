@@ -25,5 +25,26 @@
             <artifactId>common-server</artifactId>
             <version>${common-server.version}</version>
         </dependency>
+
+        <!-- 个人信息维护模块 -->
+        <dependency>
+            <groupId>com.xiaopinyun</groupId>
+            <artifactId>info-server</artifactId>
+            <version>${info-server.version}</version>
+        </dependency>
+
+        <!-- 简历模块 -->
+        <dependency>
+            <groupId>com.xiaopinyun</groupId>
+            <artifactId>resume-server</artifactId>
+            <version>${resume-server.version}</version>
+        </dependency>
+
+        <!-- 职位模块 -->
+        <dependency>
+            <groupId>com.xiaopinyun</groupId>
+            <artifactId>recruit-server</artifactId>
+            <version>${recruit-server.version}</version>
+        </dependency>
     </dependencies>
 </project>

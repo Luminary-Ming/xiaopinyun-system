@@ -4,7 +4,7 @@
             <div class="inner">
                 <div class="job-primary">
                     <div class="job-status">{{ convertPublishStatus(currentRecruit.recruitVO.publishStatus) }}</div>
-                    <div class="name">{{currentRecruit.recruitVO.title}}</div>
+                    <div class="name">{{ currentRecruit.recruitVO.title }}</div>
                     <div class="salary">{{ currentRecruit.recruitVO.salary }}</div>
                     <div class="icon">
                         <div class="address">{{ convertAddress(currentRecruit.recruitVO.address) }}</div>
@@ -92,7 +92,11 @@
 import { ref, reactive, onMounted, computed } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { recruitApi } from "@/api/recruit";
+import { jobCollectApi } from "@/api/jobCollect";
+import { resumeSubmitApi } from "@/api/resumeSubmit";
+import { useUserStore } from '@/store/userStore';
 import { useRecruitStore } from '@/store/recruitStore';
+const userStore = useUserStore();
 const recruitStore = useRecruitStore();
 
 const recruitViews = ref([]);
@@ -113,33 +117,67 @@ const currentRecruit = computed(() => {
 
 // 上一个
 const up = () => {
-    if (currentIndex.value > 0) {
-        currentIndex.value--;
-        // 更新当前显示的职位
-        recruitStore.setRecommendInfo({
-            recruitVO: recruitViews.value[currentIndex.value].recruitVO,
-            hrvo: recruitViews.value[currentIndex.value].hrvo,
-            companyVO: recruitViews.value[currentIndex.value].companyVO
-        });
+    // 如果是第一个，则跳到最后一个
+    if (currentIndex.value <= 0) {
+        currentIndex.value = recruitViews.value.length - 1;
     } else {
-        ElMessage.warning('已经是第一条了');
+        currentIndex.value--;
     }
+    // 更新当前显示的职位
+    recruitStore.setRecommendInfo({
+        recruitVO: recruitViews.value[currentIndex.value].recruitVO,
+        hrvo: recruitViews.value[currentIndex.value].hrvo,
+        companyVO: recruitViews.value[currentIndex.value].companyVO
+    });
 };
 
 // 下一个
 const down = () => {
-    if (currentIndex.value < recruitViews.value.length - 1) {
-        currentIndex.value++;
-        // 更新当前显示的职位
-        recruitStore.setRecommendInfo({
-            recruitVO: recruitViews.value[currentIndex.value].recruitVO,
-            hrvo: recruitViews.value[currentIndex.value].hrvo,
-            companyVO: recruitViews.value[currentIndex.value].companyVO
-        });
+    // 如果是最后一个，则跳到第一个
+    if (currentIndex.value >= recruitViews.value.length - 1) {
+        currentIndex.value = 0;
     } else {
-        ElMessage.warning('已经是最后一条了');
+        currentIndex.value++;
     }
+    // 更新当前显示的职位
+    recruitStore.setRecommendInfo({
+        recruitVO: recruitViews.value[currentIndex.value].recruitVO,
+        hrvo: recruitViews.value[currentIndex.value].hrvo,
+        companyVO: recruitViews.value[currentIndex.value].companyVO
+    });
 };
+
+// 收藏
+const collect = async () => {
+    const recommendInfo = recruitStore.getRecommendInfo;
+    let jobCollectVO = {
+        pkApplicant: userStore.pkApplicant,
+        pkRecruit: recommendInfo.recruitVO.id,
+    }
+    const resp = await jobCollectApi.insert(jobCollectVO);
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    } 
+}
+
+// 投递
+const submitResume = async () => { 
+    const recommendInfo = recruitStore.getRecommendInfo;
+    const resp = await resumeSubmitApi.submit({
+        pkRecruit: recommendInfo.recruitVO.id,
+        pkApplicant: userStore.pkApplicant,
+    })
+    if (resp.code == 200) {
+        ElMessage.success("投递成功！");
+    } else {
+        ElMessage.error(resp.message);
+    } 
+}
+
+
+
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
     // 职位
@@ -166,7 +204,7 @@ const convertEducation = (education) => {
 };
 
 // 转换发布状态
-const convertPublishStatus = (publishStatus)=>{
+const convertPublishStatus = (publishStatus) => {
     if (publishStatus == "0") {
         return "停止招聘";
     }
@@ -199,10 +237,12 @@ const coverStatus = (status) => {
     height: 100%;
     background: linear-gradient(to bottom, #e1f2f4, #f6f6f8);
 }
+
 .job-banner {
     background: linear-gradient(90deg, #3b526a 0, #345a6d 100%);
     padding: 18px 0 30px 0;
 }
+
 .job-banner .inner {
     width: 1184px;
     margin: 0 auto;
@@ -223,6 +263,7 @@ const coverStatus = (status) => {
     height: 22px;
     line-height: 22px;
 }
+
 .job-primary .name {
     display: inline-block;
     padding: 0;
@@ -267,11 +308,12 @@ const coverStatus = (status) => {
     background: url(/src/assets/images/icon-img/elf2.png) 0 0 / 16px auto no-repeat;
 }
 
-.job-primary .icon .address::before {
-}
+.job-primary .icon .address::before {}
+
 .job-primary .icon .requirement::before {
     background-position: 0 -32px;
 }
+
 .job-primary .icon .education::before {
     background-position: 0 -48px;
 }
@@ -328,7 +370,7 @@ const coverStatus = (status) => {
     color: #fff;
 }
 
-.job-primary .job-op .up{
+.job-primary .job-op .up {
     margin-left: 550px;
 }
 
@@ -338,6 +380,7 @@ const coverStatus = (status) => {
     border: 1px solid #00ffff;
     color: #fff;
 }
+
 /* ------------------------ 职位描述 -------------------------- */
 .job-box {
     margin-top: 16px;
@@ -425,9 +468,9 @@ const coverStatus = (status) => {
     height: 10px;
     border-radius: 100%;
     background-color: rgb(5, 202, 57);
-    left:-5px;
-    top:5px;
-    
+    left: -5px;
+    top: 5px;
+
 }
 
 .hr .identity {
@@ -497,7 +540,8 @@ const coverStatus = (status) => {
     display: flex;
     flex-wrap: wrap;
 }
-.company-info .item{
+
+.company-info .item {
     width: 50%;
 }
 

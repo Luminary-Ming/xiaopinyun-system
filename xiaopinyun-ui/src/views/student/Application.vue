@@ -48,30 +48,33 @@
                 </div>
                 <div class="job-menu">
                     <div :class="{ active: activeMenu === 'interest' }" @click="handleMenuClick('interest')">
-                        感兴趣&nbsp;<span>{{ contents.length }}</span>
+                        感兴趣&nbsp;<span>{{ jobCollectDTO.length }}</span>
                     </div>
                     <div :class="{ active: activeMenu === 'submit' }" @click="handleMenuClick('submit')">
-                        已投递&nbsp;<span>{{ contents.length }}</span>
+                        已投递&nbsp;<span>{{ resumeSubmitDTO.length }}</span>
                     </div>
-                    <div :class="{ active: activeMenu === 'interview' }" @click="handleMenuClick('interview')">
-                        面试&nbsp;<span>{{ contents.length }}</span>
+                    <div :class="{ active: activeMenu === 'reply' }" @click="handleMenuClick('reply')">
+                        已回复&nbsp;<span>{{ reply.length }}</span>
                     </div>
                 </div>
                 <div v-for="(content, index) in contents" :key="index" class="item-content">
                     <div class="content-top">
-                        <div class="img-name-identity">
+                        <div class="img-name-identity" @click="queryBtn(index)">
                             <div class="img-box">
                                 <div class="img"><el-avatar shape="square" :size="30" :src="content.hr_img" style="vertical-align: middle; border-radius: 10px" /></div>
                             </div>
                             <div class="hr-name">{{ content.hr_name }}</div>
                             <div class="hr-identity">{{ content.hr_identity }}</div>
                         </div>
-                        <div>
-                            <el-button @click="sumbit()">立即投递</el-button>
-                            <el-button @click="cancel()">取消感兴趣</el-button>
+                        <div v-if="activeMenu == 'interest'">
+                            <el-button @click="sumbit(index)">立即投递</el-button>
+                            <el-button @click="cancel(index)">取消感兴趣</el-button>
+                        </div>
+                        <div v-if="activeMenu == 'reply'">
+                            <el-button @click="queryReply(index)">查看回复</el-button>
                         </div>
                     </div>
-                    <div class="content-body">
+                    <div class="content-body" @click="queryBtn(index)">
                         <div class="recruit">
                             <div class="title-address">
                                 <div class="title">{{ content.title }}</div>
@@ -94,6 +97,11 @@
                                     <div class="people">{{ content.people }}</div>
                                 </div>
                             </div>
+                        </div>
+                        <div v-if="activeMenu == 'reply'" class="filter-status">
+                            <el-button type="danger" v-if="content.filterStatus == '1'">简历被退回</el-button>
+                            <el-button type="success" v-if="content.filterStatus == '2'">简历通过</el-button>
+                            <el-button color="#626aef" v-if="content.filterStatus == '3'" class="zi">HR对你很感兴趣</el-button>
                         </div>
                     </div>
                 </div>
@@ -135,15 +143,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import { Document, Menu as IconMenu, Location, Setting } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ref, reactive, onMounted, computed } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 import { studentApi } from "@/api/student";
 import { uploadApi } from "@/api/upload";
-import { computed } from "vue";
+import { jobCollectApi } from "@/api/jobCollect";
+import { resumeSubmitApi } from "@/api/resumeSubmit";
+import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
+import { useRecruitStore } from "@/store/recruitStore";
+const router = useRouter();
 const userStore = useUserStore();
+const recruitStore = useRecruitStore();
+
+const jobCollectDTO = ref([]);
+const resumeSubmitDTO = ref([]);
+const reply = ref([]);
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
     // 附件
@@ -179,6 +195,18 @@ onMounted(async () => {
     if (respWorkExperience.code == 200) {
         Object.assign(workExperienceView, respWorkExperience.data);
     }
+
+    // 职位收藏
+    const respJobCollect = await jobCollectApi.query(userStore.pkApplicant);
+    jobCollectDTO.value = respJobCollect.data;
+
+    // 已投递职位
+    const respSubmit = await resumeSubmitApi.queryByPkApplicant(userStore.pkApplicant);
+    resumeSubmitDTO.value = respSubmit.data;
+
+    // 已回复
+    const respReply = await resumeSubmitApi.queryReply(userStore.pkApplicant);
+    reply.value = respReply.data;
 });
 
 /* ------------------------------------- 个人信息 -------------------------------------- */
@@ -278,41 +306,112 @@ let workExperienceView = reactive([
 ]);
 
 /* ------------------------------------- 选项卡内容 -------------------------------------- */
-let contents = reactive([
-    {
-        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "徐晨", // hr名字
-        hr_identity: "招聘者", // hr身份
-        title: "Java工程师-2025届(J14894)", // 招聘标题
-        address: "天津·滨海新区", // 工作地点
-        salary: "6-8k", // 薪资
-        requirement: "经验不限", // 工作要求
-        education: "本科", // 学历要求
-        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "壹加科技", // 公司名
-        industryType: "计算机服务", // 行业分类
-        people: "22-99人", // 公司人数
-    },
-    {
-        hr_img: "/src/assets/images/profile-img/default.png", // hr头像
-        hr_name: "徐晨", // hr名字
-        hr_identity: "招聘者", // hr身份
-        title: "Java工程师-2025届(J14894)", // 招聘标题
-        address: "天津·滨海新区", // 工作地点
-        salary: "6-8k", // 薪资
-        requirement: "经验不限", // 工作要求
-        education: "本科", // 学历要求
-        company_img: "/src/assets/images/profile-img/default.png", // 公司头像
-        companyName: "壹加科技", // 公司名
-        industryType: "计算机服务", // 行业分类
-        people: "22-99人", // 公司人数
-    },
-]);
-
 // 菜单选中后样式
 let activeMenu = ref("interest"); // 默认选中"感兴趣"选项
 let handleMenuClick = function (menu) {
     activeMenu.value = menu;
+};
+
+let contents = computed(() => {
+    if (activeMenu.value == "interest") {
+        return jobCollectDTO.value.map((item) => ({
+            hr_img: item.hrvo.profileImgUrl, // hr头像
+            hr_name: item.hrvo.name, // hr名字
+            hr_identity: item.hrvo.identity, // hr身份
+            title: item.recruitVO.title, // 招聘标题
+            address: item.recruitVO.address, // 工作地点
+            salary: item.recruitVO.salary, // 薪资
+            requirement: item.recruitVO.requirement, // 工作要求
+            education: convertEducation(item.recruitVO.education), // 学历要求
+            company_img: item.companyVO.profileImgUrl, // 公司头像
+            companyName: item.companyVO.companyName, // 公司名
+            industryType: item.companyVO.industryType, // 行业分类
+            people: item.companyVO.people, // 公司人数
+        }));
+    }
+    if (activeMenu.value == "submit") {
+        return resumeSubmitDTO.value.map((item) => ({
+            hr_img: item.hrvo.profileImgUrl, // hr头像
+            hr_name: item.hrvo.name, // hr名字
+            hr_identity: item.hrvo.identity, // hr身份
+            title: item.recruitVO.title, // 招聘标题
+            address: item.recruitVO.address, // 工作地点
+            salary: item.recruitVO.salary, // 薪资
+            requirement: item.recruitVO.requirement, // 工作要求
+            education: convertEducation(item.recruitVO.education), // 学历要求
+            company_img: item.companyVO.profileImgUrl, // 公司头像
+            companyName: item.companyVO.companyName, // 公司名
+            industryType: item.companyVO.industryType, // 行业分类
+            people: item.companyVO.people, // 公司人数
+        }));
+    }
+    if (activeMenu.value == "reply") {
+        return reply.value.map((item) => ({
+            hr_img: item.hrvo.profileImgUrl, // hr头像
+            hr_name: item.hrvo.name, // hr名字
+            hr_identity: item.hrvo.identity, // hr身份
+            title: item.recruitVO.title, // 招聘标题
+            address: item.recruitVO.address, // 工作地点
+            salary: item.recruitVO.salary, // 薪资
+            requirement: item.recruitVO.requirement, // 工作要求
+            education: convertEducation(item.recruitVO.education), // 学历要求
+            company_img: item.companyVO.profileImgUrl, // 公司头像
+            companyName: item.companyVO.companyName, // 公司名
+            industryType: item.companyVO.industryType, // 行业分类
+            people: item.companyVO.people, // 公司人数
+            filterStatus: item.filterStatus, // 筛选状态
+        }));
+    }
+});
+
+// 转换学历要求
+const convertEducation = (education) => {
+    if (education == "0") {
+        return "大专以上";
+    }
+    if (education == "1") {
+        return "本科";
+    }
+    if (education == "2") {
+        return "硕士";
+    }
+};
+
+// 查看职位
+const queryBtn = (index) => {
+    router.push("/job");
+    recruitStore.setRecommendInfo(jobCollectDTO.value[index]);
+};
+
+// 投递简历
+const sumbit = async (index) => {
+    const resp = await resumeSubmitApi.submit({
+        pkRecruit: jobCollectDTO.value[index].recruitVO.id,
+        pkApplicant: userStore.pkApplicant,
+    });
+    if (resp.code == 200) {
+        ElMessage.success("投递成功！");
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 取消收藏
+const cancel = async (index) => {
+    const resp = await jobCollectApi.delete(jobCollectDTO.value[index].id);
+    if (resp.code == 200) {
+        jobCollectDTO.value.splice(index, 1);
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 查看回复
+const queryReply = async (index) => {
+    ElMessageBox.alert(reply.value[index].reply || "暂无回复内容", "HR 回复", {
+        confirmButtonText: "确定",
+    });
 };
 
 /*------------------------------------- 上传附件 -------------------------------------*/
@@ -414,6 +513,28 @@ const previewFile = async (index) => {
 </script>
 
 <style scoped>
+.filter-status {
+    position: absolute;
+    right: 25px;
+    top: 30px;
+}
+
+/* 针对不同类型按钮分别处理 */
+.filter-status .el-button--danger:hover {
+    background-color: var(--el-color-danger); /* 保持危险按钮的红色 */
+    border-color: var(--el-color-danger);
+}
+
+.filter-status .el-button--success:hover {
+    background-color: var(--el-color-success); /* 保持成功按钮的绿色 */
+    border-color: var(--el-color-success);
+}
+
+.filter-status .zi:hover {
+    background-color: #626aef; /* 保持紫色颜色 */
+    border-color: #626aef;
+}
+
 .profile-box {
     width: 100%;
     height: 100%;
@@ -428,7 +549,7 @@ const previewFile = async (index) => {
     height: 100%;
     display: flex;
     margin-top: 20px;
-    margin-bottom: 200px;
+    margin-bottom: 500px;
 }
 /* --------------------- 个人信息 ---------------------------------- */
 .profile-container .profile-info {
@@ -586,7 +707,7 @@ const previewFile = async (index) => {
     box-shadow: 0 16px 40px 0 hsla(0, 0%, 60%, 0.3);
 }
 
-.profile-info .item-content:hover .el-button {
+.profile-info .item-content:hover .content-top .el-button {
     opacity: 1;
 }
 
@@ -619,18 +740,19 @@ const previewFile = async (index) => {
     margin-left: 12px;
 }
 
-.item-content .el-button {
+.item-content .content-top .el-button {
     opacity: 0;
     color: #fff;
     background-color: #00bebd;
     border-radius: 8px;
 }
 
-.item-content .el-button:hover {
+.item-content .content-top .el-button:hover {
     background-color: #00a6a7;
 }
 
 .item-content .content-body {
+    position: relative;
     box-sizing: border-box;
     width: 100%;
     padding: 16px 24px;

@@ -38,6 +38,7 @@
         <module>upload-server</module>
         <!-- 用户管理模块（登录/注册、首页） -->
         <module>user-server</module>
+        <!-- 网关 -->
         <module>gateway-server</module>
     </modules>
 
@@ -53,6 +54,7 @@
         <info-server.version>1.0-SNAPSHOT</info-server.version>
         <resume-server.version>1.0-SNAPSHOT</resume-server.version>
         <upload-server.version>1.0-SNAPSHOT</upload-server.version>
+        <recruit-server.version>1.0-SNAPSHOT</recruit-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -109,6 +111,13 @@
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>upload-server</artifactId>
                 <version>${upload-server.version}</version>
+            </dependency>
+
+            <!-- 职位模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>recruit-server</artifactId>
+                <version>${recruit-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

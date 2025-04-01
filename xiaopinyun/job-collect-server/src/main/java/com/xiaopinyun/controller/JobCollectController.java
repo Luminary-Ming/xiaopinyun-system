@@ -3,21 +3,36 @@ package com.xiaopinyun.controller;
 import com.xiaopinyun.bean.dto.JobCollectDTO;
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.vo.JobCollectVO;
+import com.xiaopinyun.service.JobCollectService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 
+@RestController
+@RequestMapping("/jobCollect")
 public class JobCollectController {
+    @Autowired
+    private JobCollectService jobCollectService;
 
-    public Result<JobCollectDTO> query(String pkApplicant) {
-        return null;
+    @GetMapping("/{pkApplicant}")
+    public Result<List<JobCollectDTO>> query(@PathVariable String pkApplicant) {
+        return jobCollectService.query(pkApplicant);
     }
 
-
-    public Result<Void> insert(JobCollectVO jobCollectVO) {
-        return null;
+    @PostMapping
+    public Result<JobCollectDTO> insert(@RequestBody JobCollectVO jobCollectVO) {
+        return jobCollectService.insert(jobCollectVO);
     }
 
-
-    public Result<Void> delete(String id) {
-        return null;
+    @DeleteMapping("/{id}")
+    public Result<Void> delete(@PathVariable String id) {
+        return jobCollectService.delete(id);
     }
 }
