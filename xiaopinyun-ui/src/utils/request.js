@@ -1,6 +1,8 @@
 // src/utils/request.js
 import axios from "axios";
 import { useUserStore } from "@/store/userStore";
+import { ElMessage, ElMessageBox } from "element-plus";
+import router from "@/router";
 
 console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
 
@@ -34,7 +36,15 @@ service.interceptors.response.use(
         if (error.response?.status === 401) {
             const userStore = useUserStore();
             userStore.logout();
-            router.push("/login");
+            ElMessageBox.alert("请先登录！", "提示", {
+                confirmButtonText: "去登录",
+                type: "warning",
+                callback: (action) => {
+                    if (action === "confirm") {
+                        router.push("/login");
+                    }
+                },
+            });
         }
         return Promise.reject(error);
     }
