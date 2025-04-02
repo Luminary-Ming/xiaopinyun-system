@@ -33,7 +33,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { adminApi } from "@/api/admin";
 
 const activeTab = ref("students");
 const pendingStudents = ref([]);

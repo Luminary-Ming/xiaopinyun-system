@@ -36,7 +36,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watchEffect } from "vue";
 import * as echarts from "echarts";
-import { adminApi } from "@/api/admin";
 
 // 图表实例
 const userChart = ref(null);
