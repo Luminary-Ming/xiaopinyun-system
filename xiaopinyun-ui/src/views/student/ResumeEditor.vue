@@ -57,7 +57,7 @@
                         </el-upload>
                     </div>
                     <div class="resume-editor-person-info">
-                        <div class="op">
+                        <div class="op" v-if="userStore.role == '0'">
                             <a class="link-edit">
                                 <span @click="onUpdate(0)">
                                     <el-icon><EditPen /></el-icon>
@@ -126,7 +126,7 @@
             <div class="resume-editor-skill" id="section2">
                 <div class="title">专业技能</div>
                 <div class="resume-editor-skill-info" v-if="skillFlag">
-                    <div class="op">
+                    <div class="op" v-if="userStore.role == '0'">
                         <a class="link-edit">
                             <span @click="onUpdate(1)">
                                 <el-icon><EditPen /></el-icon>
@@ -150,7 +150,7 @@
             <div class="resume-editor-expectation" id="section3">
                 <div class="title">
                     求职期望
-                    <span @click="addJobExpectation()">
+                    <span @click="addJobExpectation()" v-if="userStore.role == '0'">
                         <el-icon class="add-icon"><CirclePlus /></el-icon>
                         添加
                     </span>
@@ -165,7 +165,7 @@
                             <el-icon><Location /></el-icon>
                             {{ jobExpectation.district }}
                         </div>
-                        <div class="op">
+                        <div class="op" v-if="userStore.role == '0'">
                             <a class="link-edit">
                                 <span @click="onJobExpectationUpdate(index)">
                                     <el-icon><EditPen /></el-icon>
@@ -223,7 +223,7 @@
             <div class="resume-editor-education" id="section4">
                 <div class="title">教育背景</div>
                 <div class="resume-editor-education-info" v-if="educationFlag">
-                    <div class="op">
+                    <div class="op" v-if="userStore.role == '0'">
                         <a class="link-edit">
                             <span @click="onUpdate(3)">
                                 <el-icon><EditPen /></el-icon>
@@ -307,7 +307,7 @@
             <div class="resume-editor-work" id="section5">
                 <div class="title">
                     工作/实习经历
-                    <span @click="addWorkExperience()">
+                    <span @click="addWorkExperience()" v-if="userStore.role == '0'">
                         <el-icon class="add-icon"><CirclePlus /></el-icon>
                         添加
                     </span>
@@ -327,7 +327,7 @@
                                 <div class="description-text">{{ workExperience.jobContent }}</div>
                             </div>
                         </div>
-                        <div class="op">
+                        <div class="op" v-if="userStore.role == '0'">
                             <a class="link-edit">
                                 <span @click="onWorkExperienceUpdate(index)">
                                     <el-icon><EditPen /></el-icon>
@@ -385,7 +385,7 @@
             <div class="resume-editor-project" id="section6">
                 <div class="title">
                     项目经历
-                    <span @click="addProjectExperience()">
+                    <span @click="addProjectExperience()" v-if="userStore.role == '0'">
                         <el-icon class="add-icon"><CirclePlus /></el-icon>
                         添加
                     </span>
@@ -405,7 +405,7 @@
                                 <div class="description-text">{{ projectExperience.description }}</div>
                             </div>
                         </div>
-                        <div class="op">
+                        <div class="op" v-if="userStore.role == '0'">
                             <a class="link-edit">
                                 <span @click="onProjectExperienceUpdate(index)">
                                     <el-icon><EditPen /></el-icon>
@@ -458,7 +458,7 @@
             <div class="resume-editor-honor" id="section7">
                 <div class="title">获奖荣誉</div>
                 <div class="resume-editor-honor-info" v-if="honorFlag">
-                    <div class="op">
+                    <div class="op" v-if="userStore.role == '0'">
                         <a class="link-edit">
                             <span @click="onUpdate(6)">
                                 <el-icon><EditPen /></el-icon>
@@ -483,7 +483,7 @@
             <div class="resume-editor-evaluate" id="section8">
                 <div class="title">自我评价</div>
                 <div class="resume-editor-evaluate-info" v-if="evaluateFlag">
-                    <div class="op">
+                    <div class="op" v-if="userStore.role == '0'">
                         <a class="link-edit">
                             <span @click="onUpdate(7)">
                                 <el-icon><EditPen /></el-icon>
@@ -513,7 +513,7 @@
                         <h3>
                             附件管理<el-icon><Paperclip /></el-icon>
                         </h3>
-                        <el-upload :show-file-list="false" :action="uploadUrl" :headers="headers" :on-success="handleFileSuccess" :before-upload="beforeFileUpload">
+                        <el-upload v-if="userStore.role == '0'" :show-file-list="false" :action="uploadUrl" :headers="headers" :on-success="handleFileSuccess" :before-upload="beforeFileUpload">
                             <el-icon style="font-size: 20px"><Plus /></el-icon>
                         </el-upload>
                     </div>
@@ -525,7 +525,7 @@
                             <div class="resume-name">{{ attachment.name }}</div>
                             <div class="resume-font">{{ attachment.size }}kb 更新于 {{ attachment.ts }}</div>
                         </div>
-                        <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#626AEF" title="对此附件的操作" placement="right">
+                        <el-popconfirm class="box-item" :icon="InfoFilled" icon-color="#626AEF" title="对此附件的操作" placement="right" v-if="userStore.role == '0'">
                             <template #reference>
                                 <span class="iconfont icon-file-menu"> </span>
                             </template>

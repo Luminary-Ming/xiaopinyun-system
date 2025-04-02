@@ -11,8 +11,8 @@
                         <div class="requirement">{{ currentRecruit.recruitVO.requirement }}</div>
                         <div class="education">{{ convertEducation(currentRecruit.recruitVO.education) }}</div>
                     </div>
-                    <div class="job-op">
-                        <div class="btn btn-interest" @click="collect()">感兴趣</div>
+                    <div class="job-op" v-if="userStore.role == '0'">
+                        <div class="btn btn-interest" @click="collect()" >感兴趣</div>
                         <div class="btn btn-submit" @click="submitResume()">立即投递</div>
                         <div class="btn btn-submit up" @click="up()">上一个</div>
                         <div class="btn btn-submit" @click="down()">下一个</div>

@@ -41,28 +41,36 @@
                     </div>
                 </div>
                 <div class="job-menu">
-                    <div :class="{ active: activeMenu === 'interest' }" @click="handleMenuClick('interest')">
-                        职位管理&nbsp;<span>{{ contents.length }}</span>
+                    <div :class="{ active: activeMenu === 'job' }" @click="handleMenuClick('job')">
+                        职位管理&nbsp;<span>{{ recruitViews?.length || 0 }}</span>
                     </div>
                     <div :class="{ active: activeMenu === 'submit' }" @click="handleMenuClick('submit')">
-                        感兴趣&nbsp;<span>{{ contents.length }}</span>
+                        投递管理&nbsp;<span>{{ submitViews?.length || 0 }}</span>
                     </div>
-                    <div :class="{ active: activeMenu === 'interview' }" @click="handleMenuClick('interview')">
-                        面试&nbsp;<span>{{ contents.length }}</span>
+                    <div :class="{ active: activeMenu === 'interest' }" @click="handleMenuClick('interest')">
+                        感兴趣&nbsp;<span>{{ interestViews?.length || 0 }}</span>
                     </div>
                 </div>
                 <div v-for="(content, index) in contents" :key="index" class="item-content" v-if="true">
                     <div class="content-top">
                         <div class="img-name-identity" @click="queryBtn(index)">
-                            <div class="img-box">
+                            <div class="img-box" v-if="activeMenu == 'job'">
                                 <div class="img"><el-avatar shape="square" :size="30" :src="content.hr_img" style="vertical-align: middle; border-radius: 10px" /></div>
                             </div>
                             <div class="hr-name">{{ content.hr_name }}</div>
                             <div class="hr-identity">{{ content.hr_identity }}</div>
                         </div>
-                        <div>
+                        <div v-if="activeMenu == 'job'">
                             <el-button @click="updateBtn(index)" class="update-btn">编辑职位</el-button>
                             <el-button @click="delBtn(index)" type="danger">删除职位</el-button>
+                        </div>
+                        <div v-if="activeMenu == 'submit'">
+                            <el-button @click="reply(index)" class="update-btn">回复</el-button>
+                            <el-button @click="addInterest(index)" color="#626aef">感兴趣</el-button>
+                        </div>
+                        <div v-if="activeMenu == 'interest'">
+                            <el-button @click="reply(index)" class="update-btn">回复</el-button>
+                            <el-button @click="removeInterest(index)" type="danger">取消感兴趣</el-button>
                         </div>
                     </div>
                     <div class="content-body" @click="queryBtn(index)">
@@ -72,7 +80,8 @@
                                 <div class="address">【{{ content.address }}】</div>
                             </div>
                             <div class="salary-requirement-education">
-                                <div class="salary">{{ content.salary }}</div>
+                                <div class="salary" v-if="activeMenu == 'job'">{{ content.salary }}</div>
+                                <div class="requirement" v-if="activeMenu != 'job'">{{ content.work }}</div>
                                 <div class="requirement">{{ content.requirement }}</div>
                                 <div class="education">{{ content.education }}</div>
                             </div>
@@ -281,22 +290,48 @@
             </div>
         </template>
     </el-dialog>
+    <!-- hr回复 -->
+    <el-dialog v-model="dialogReplyFormVisible" title="回复" width="500">
+        <el-form :model="replyForm">
+            <el-form-item label="筛选状态" :label-width="formLabelWidth">
+                <el-select v-model="replyForm.status" placeholder="请选择筛选状态">
+                    <el-option label="默认" value="0" />
+                    <el-option label="退回" value="1" />
+                    <el-option label="通过" value="2" />
+                    <el-option label="感兴趣" value="3" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="回复" :label-width="formLabelWidth">
+                <el-input v-model="replyForm.reply" autocomplete="off" placeholder="输入回复内容..." />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="dialogReplyFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="confirmReply()">确定</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, reactive, onMounted, computed, watchEffect } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 import { uploadApi } from "@/api/upload";
 import { hrApi } from "@/api/hr";
 import { companyApi } from "@/api/company";
 import { recruitApi } from "@/api/recruit";
+import { resumeSubmitApi } from "@/api/resumeSubmit";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
 import { useRecruitStore } from "@/store/recruitStore";
 const router = useRouter();
 const userStore = useUserStore();
 const recruitStore = useRecruitStore();
+
+const submitViews = ref([]);
+const interestViews = ref([]);
 /* ------------------------------------- 查询API -------------------------------------- */
 onMounted(async () => {
     // hr信息
@@ -318,6 +353,14 @@ onMounted(async () => {
     if (respAttachment.code == 200) {
         Object.assign(attachmentView, respAttachment.data);
     }
+
+    // 查看投递情况
+    const respSubmitInfo = await resumeSubmitApi.querySubmitInfo(userStore.pkHr);
+    submitViews.value = respSubmitInfo.data;
+
+    // 查看感兴趣的简历
+    const respInterest = await resumeSubmitApi.queryInterest(userStore.pkHr);
+    interestViews.value = respInterest.data;
 });
 
 /*------------------------------------- 上传附件 -------------------------------------*/
@@ -507,6 +550,8 @@ const formLabelWidth = "100px";
 const dialogCompanyFormVisible = ref(false);
 // 职位信息表单
 const dialogRecruitFormVisible = ref(false);
+// 回复表单
+const dialogReplyFormVisible = ref(false);
 
 if (userStore.flag == "register" && companyView.id == null) {
     dialogFormVisible.value = true;
@@ -578,20 +623,52 @@ const beforeAvatarUpload = (rawFile) => {
 
 /*----------------------------------------- 选项卡内容 ------------------------------------*/
 const contents = computed(() => {
-    return recruitViews.map((recruit) => ({
-        hr_img: userStore.profileImg, // hr头像
-        hr_name: userStore.name, // hr名字
-        hr_identity: hrView.identity, // hr身份
-        title: recruit.title, // 招聘标题
-        address: recruit.address, // 工作地点
-        salary: recruit.salary, // 薪资
-        requirement: recruit.requirement, // 工作要求
-        education: convertEducation(recruit.education), // 学历要求
-        company_img: companyView.profileImgUrl, // 公司头像
-        companyName: companyView.companyName, // 公司名
-        industryType: companyView.industryType, // 行业分类
-        people: companyView.people, // 公司人数
-    }));
+    if (activeMenu.value == "job") {
+        return recruitViews.map((recruit) => ({
+            hr_img: userStore.profileImg, // hr头像
+            hr_name: userStore.name, // hr名字
+            hr_identity: hrView.identity, // hr身份
+            title: recruit.title, // 招聘标题
+            address: recruit.address, // 工作地点
+            salary: recruit.salary, // 薪资
+            requirement: recruit.requirement, // 工作要求
+            education: convertEducation(recruit.education), // 学历要求
+            company_img: companyView.profileImgUrl, // 公司头像
+            companyName: companyView.companyName, // 公司名
+            industryType: companyView.industryType, // 行业分类
+            people: companyView.people, // 公司人数
+        }));
+    }
+    if (activeMenu.value == "submit") {
+        return submitViews.value.map((item) => ({
+            hr_name: "投递岗位：", // 投递岗位
+            hr_identity: item.recruitVO.title, // 投递岗位
+            title: item.advantageVO.majorSkill, // 个人优势
+            address: item.applicantVO.address, // 居住地
+            work: "应届生", // 有实习经历
+            requirement: item.educationalVO.name, // 学校
+            education: item.educationalVO.major, // 专业
+            company_img: item.applicantVO.profileImgUrl, // 学生头像
+            companyName: item.applicantVO.name, // 姓名
+            industryType: item.educationalVO.qualification, // 学历
+            people: convertStatus(item.applicantVO.status), // 求职状态
+        }));
+    }
+    if (activeMenu.value == "interest") {
+        return interestViews.value.map((item) => ({
+            hr_name: "投递岗位：", // 投递岗位
+            hr_identity: item.recruitVO.title, // 投递岗位
+            title: item.advantageVO.majorSkill, // 个人优势
+            address: item.applicantVO.address, // 居住地
+            work: "应届生", // 有实习经历
+            requirement: item.educationalVO.name, // 学校
+            education: item.educationalVO.major, // 专业
+            company_img: item.applicantVO.profileImgUrl, // 学生头像
+            companyName: item.applicantVO.name, // 姓名
+            industryType: item.educationalVO.qualification, // 学历
+            people: convertStatus(item.applicantVO.status), // 求职状态
+        }));
+    }
 });
 
 // 转换学历要求
@@ -607,16 +684,37 @@ const convertEducation = (education) => {
     }
 };
 
+// 转换求职状态
+const convertStatus = function (status) {
+    switch (status) {
+        case "0":
+            return "离校-随时到岗";
+        case "1":
+            return "在校-月内到岗";
+        case "2":
+            return "在校-看看机会";
+        case "3":
+            return "在校-暂不考虑";
+    }
+};
+
 // 菜单选中后样式
-let activeMenu = ref("interest"); // 默认选中"感兴趣"选项
+let activeMenu = ref("job"); // 默认选中"感兴趣"选项
 let handleMenuClick = function (menu) {
     activeMenu.value = menu;
 };
 
-// 查看职位
+// 查看信息
 const queryBtn = (index) => {
-    router.push("/job");
-    recruitStore.setRecommendInfo(recommendViews[index]);
+    // 职位信息
+    if (activeMenu.value == "job") {
+        router.push("/job");
+        recruitStore.setRecommendInfo(recommendViews[index]);
+    } else {
+        // 学生信息
+        router.push("/resume");
+        localStorage.setItem("pkApplicant", "1904134133366996993");
+    }
 };
 
 // 编辑职位
@@ -653,6 +751,71 @@ const submitRecruit = async () => {
         ElMessage.error(resp.message);
     }
     dialogRecruitFormVisible.value = false;
+};
+
+// 回复表单
+let replyForm = reactive({
+    reply: "",
+    status: "",
+});
+
+let currentReplyFormIndex = ref(null);
+
+// 回复
+const reply = async (index) => {
+    dialogReplyFormVisible.value = true;
+    currentReplyFormIndex.value = index;
+    replyForm.reply = "";
+    if (activeMenu.value == "submit") {
+        replyForm.status = submitViews.value[currentReplyFormIndex.value].resumeSubmitVO.filterStatus;
+    } else {
+        replyForm.status = interestViews.value[currentReplyFormIndex.value].resumeSubmitVO.filterStatus;
+    }
+};
+
+// 确认回复
+const confirmReply = async () => {
+    let resp = null;
+    if (activeMenu.value == "submit") {
+        submitViews.value[currentReplyFormIndex.value].resumeSubmitVO.filterStatus = replyForm.status;
+        submitViews.value[currentReplyFormIndex.value].resumeSubmitVO.reply = replyForm.reply;
+        resp = await resumeSubmitApi.reply(submitViews.value[currentReplyFormIndex.value].resumeSubmitVO);
+    } else {
+        interestViews.value[currentReplyFormIndex.value].resumeSubmitVO.filterStatus = replyForm.status;
+        interestViews.value[currentReplyFormIndex.value].resumeSubmitVO.reply = replyForm.reply;
+        resp = await resumeSubmitApi.reply(interestViews.value[currentReplyFormIndex.value].resumeSubmitVO);
+    }
+
+    if (resp.code == 200) {
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+    dialogReplyFormVisible.value = false;
+};
+
+// 感兴趣
+const addInterest = async (index) => {
+    const resp = await resumeSubmitApi.interest(submitViews.value[index]);
+    if (resp.code == 200) {
+        submitViews.value.splice(index, 1);
+        interestViews.value = [...interestViews.value, resp.data];
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
+};
+
+// 取消感兴趣
+const removeInterest = async (index) => {
+    const resp = await resumeSubmitApi.removeInterest(interestViews.value[index]);
+    if (resp.code == 200) {
+        interestViews.value.splice(index, 1);
+        submitViews.value = [...submitViews.value, resp.data];
+        ElMessage.success(resp.message);
+    } else {
+        ElMessage.error(resp.message);
+    }
 };
 </script>
 
@@ -957,6 +1120,10 @@ const submitRecruit = async () => {
 .content-body .recruit .title {
     font-size: 16px;
     color: #222;
+    white-space: nowrap; /* 文本不换行 */
+    overflow: hidden; /* 溢出隐藏 */
+    text-overflow: ellipsis; /* 显示省略号 */
+    max-width: 300px; /* 设置最大宽度 */
 }
 
 .content-body .recruit .address {

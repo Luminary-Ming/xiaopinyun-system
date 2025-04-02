@@ -23,11 +23,13 @@ public class ResumeSubmitVO {
     // 简历退回回复（HR功能）
     private String reply;
 
-    public ResumeSubmitVO(ResumeSubmit resumeSubmit){
+    public ResumeSubmitVO(ResumeSubmit resumeSubmit) {
         this.id = resumeSubmit.getId().toString();
         this.pkRecruit = resumeSubmit.getPkRecruit().toString();
         this.pkApplicant = resumeSubmit.getPkApplicant().toString();
-        this.pkAttachment = resumeSubmit.getPkAttachment().toString();
+        if (resumeSubmit.getPkAttachment() != null) {
+            this.pkAttachment = resumeSubmit.getPkAttachment().toString();
+        }
         this.filterStatus = resumeSubmit.getFilterStatus().toString();
         this.reply = resumeSubmit.getReply();
     }
