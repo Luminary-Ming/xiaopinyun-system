@@ -34,7 +34,7 @@
                     注册一个<el-icon><ArrowRightBold /></el-icon>
                 </el-button>
             </div>
-            <button id="submit" @click="signIn()">Sign in</button>
+            <button id="submit" @click.prevent="signIn">Sign in</button>
         </form>
     </div>
 
@@ -65,7 +65,6 @@
                         <el-dropdown-menu class="el-dropdown-item">
                             <el-dropdown-item :command="{ text: '学生', value: '0' }">学生</el-dropdown-item>
                             <el-dropdown-item :command="{ text: 'HR', value: '1' }">HR</el-dropdown-item>
-                            <el-dropdown-item :command="{ text: '管理员', value: '2' }">管理员</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -73,7 +72,7 @@
                     返回登录<el-icon><ArrowRightBold /></el-icon>
                 </el-button>
             </div>
-            <button id="submit" @click="register()">Register</button>
+            <button id="submit" @click.prevent="register">Register</button>
         </form>
     </div>
 </template>
@@ -98,14 +97,18 @@ let login = reactive({
 
 const router = useRouter();
 const userStore = useUserStore();
+
 // 注册
-const register = async () => {
+const register = async (e) => {
+    // 阻止表单默认提交
+    e.preventDefault();
+
     const resp = await userApi.register(login);
     if (resp.code == 200) {
-        ElMessage.success("注册成功");
-        userStore.setToken(resp.data.token); // 保存token
+        // 先保存token
+        userStore.setToken(resp.data.token);
 
-        // 传递给跳转页面数据，新注册的用户要补充信息
+        // 保存用户信息
         userStore.setUserInfo({
             pkApplicant: resp.data.userVO.pkApplicant,
             pkHr: resp.data.userVO.pkHr,
@@ -116,33 +119,41 @@ const register = async () => {
             flag: "register",
         });
 
-        // 根据角色跳转到不同页面
-        switch (login.role) {
-            case "0": // 学生
-                router.push("/resume"); // 跳转简历
-                ElMessageBox.alert("请填写简历完整信息", "提示", {
-                    confirmButtonText: "OK",
-                });
-                break;
-            case "1": // HR
-                router.push("/profile");
-                break;
-            case "2": // 管理员
-                router.push("/home");
-                break;
-            default:
-                router.push("/");
+        // 确定跳转路径
+        const targetPath = (() => {
+            switch (login.role) {
+                case "0":
+                    return "/resume";
+                case "1":
+                    return "/profile";
+                default:
+                    return "/";
+            }
+        })();
+
+        // 执行跳转
+        await router.push(targetPath);
+
+        // 如果是学生角色,显示提示框
+        if (login.role === "0") {
+            await ElMessageBox.alert("请填写简历完整信息", "提示", {
+                confirmButtonText: "OK",
+            });
         }
+
+        ElMessage.success("注册成功");
     } else {
         ElMessage.error(resp.message);
     }
 };
 
 // 登录
-const signIn = async () => {
+const signIn = async (e) => {
+    // 阻止表单默认提交行为
+    e.preventDefault();
+
     const resp = await userApi.login(login);
     if (resp.code == 200) {
-        ElMessage.success("登录成功");
         userStore.setToken(resp.data.token); // 保存token
 
         // 保存用户信息
@@ -156,19 +167,21 @@ const signIn = async () => {
             flag: "login",
         });
 
-        switch (login.role) {
-            case "0": // 学生
-                router.push("/");
-                break;
-            case "1": // HR
-                router.push("/profile");
-                break;
-            case "2": // 管理员
-                router.push("/home");
-                break;
-            default:
-                router.push("/");
-        }
+        // 确保用户信息保存后再进行路由跳转
+        const targetPath = (() => {
+            switch (login.role) {
+                case "0":
+                    return "/";
+                case "1":
+                    return "/profile";
+                case "2":
+                    return "/admin/home";
+                default:
+                    return "/";
+            }
+        })();
+        await router.push(targetPath);
+        ElMessage.success("登录成功");
     } else {
         ElMessage.error(resp.message);
     }

@@ -55,6 +55,7 @@
         <resume-server.version>1.0-SNAPSHOT</resume-server.version>
         <upload-server.version>1.0-SNAPSHOT</upload-server.version>
         <recruit-server.version>1.0-SNAPSHOT</recruit-server.version>
+        <admin-server.version>1.0-SNAPSHOT</admin-server.version>
     </properties>
 
     <!-- 管理依赖，子模块引用不需要指定版本号 -->
@@ -118,6 +119,13 @@
                 <groupId>com.xiaopinyun</groupId>
                 <artifactId>recruit-server</artifactId>
                 <version>${recruit-server.version}</version>
+            </dependency>
+
+            <!-- 管理员模块 -->
+            <dependency>
+                <groupId>com.xiaopinyun</groupId>
+                <artifactId>admin-server</artifactId>
+                <version>${admin-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

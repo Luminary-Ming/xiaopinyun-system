@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaopinyun.bean.dto.LoginDTO;
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.dto.UserDTO;
+import com.xiaopinyun.bean.po.Admin;
 import com.xiaopinyun.bean.po.Advantage;
 import com.xiaopinyun.bean.po.Applicant;
 import com.xiaopinyun.bean.po.Educational;
@@ -17,6 +18,7 @@ import com.xiaopinyun.bean.po.User;
 import com.xiaopinyun.bean.po.WorkExperience;
 import com.xiaopinyun.bean.vo.UserVO;
 import com.xiaopinyun.client.ApplicantFeignClient;
+import com.xiaopinyun.mapper.AdminMapper;
 import com.xiaopinyun.mapper.AdvantageMapper;
 import com.xiaopinyun.mapper.ApplicantInfoMapper;
 import com.xiaopinyun.mapper.AuthDialogMapper;
@@ -53,6 +55,8 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
     @Autowired
     private HRInfoMapper hrInfoMapper;
     @Autowired
+    private AdminMapper adminMapper;
+    @Autowired
     private ApplicantFeignClient applicantFeignClient;
 
     @Override
@@ -84,8 +88,12 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
             userDTO.setName(hr.getName());
             userDTO.setProfileImg(hr.getProfileImg());
         }
-
-        if(role.equals("2")){}
+        if(role.equals("2")){
+            QueryWrapper<Admin> adminWrapper = new QueryWrapper<>();
+            Admin admin = adminMapper.selectOne(adminWrapper);
+            userDTO.setName(admin.getName());
+            userDTO.setProfileImg(admin.getProfileImg());
+        }
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", user.getId());
@@ -130,7 +138,6 @@ public class AuthDialogServiceImpl extends ServiceImpl<AuthDialogMapper, User> i
             hrInfoMapper.insert(hr);
             user.setPkHr(hr.getId());
             authDialogMapper.updateById(user);
-        } else {
         }
         UserDTO userDTO = new UserDTO();
         userDTO.setUserVO(new UserVO(user));

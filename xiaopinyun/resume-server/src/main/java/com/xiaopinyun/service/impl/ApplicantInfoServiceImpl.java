@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaopinyun.bean.dto.ApplicantDTO;
+import com.xiaopinyun.bean.dto.ApplicantManageDTO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
+import com.xiaopinyun.bean.dto.ResumeDTO;
+import com.xiaopinyun.bean.po.Advantage;
 import com.xiaopinyun.bean.po.Applicant;
 import com.xiaopinyun.bean.po.Educational;
 import com.xiaopinyun.bean.vo.ApplicantVO;
 import com.xiaopinyun.bean.vo.EducationalVO;
+import com.xiaopinyun.mapper.AdvantageMapper;
 import com.xiaopinyun.mapper.ApplicantInfoMapper;
 import com.xiaopinyun.mapper.EducationalMapper;
 import com.xiaopinyun.service.ApplicantInfoService;
@@ -31,6 +35,8 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
     private ApplicantInfoMapper applicantInfoMapper;
     @Autowired
     private EducationalMapper educationalMapper;
+    @Autowired
+    private AdvantageMapper advantageMapper;
 
     /**
      * 根据 id 查询学生信息
@@ -92,6 +98,46 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
             }
             pageResult.setData(applicantVOList);
             return null;
+        }
+        return Result.ok(BizCode.NO_DATA);
+    }
+
+    /**
+     * 查询所有学生信息
+     */
+    @Override
+    public Result<List<ApplicantManageDTO>> queryAll() {
+        QueryWrapper<Applicant> wrapper = new QueryWrapper<>();
+        wrapper.eq("dr", 0);
+        List<Applicant> applicantList = applicantInfoMapper.selectList(wrapper);
+        if (applicantList != null) {
+            List<ApplicantManageDTO> applicantManageDTOList = new ArrayList<>();
+            for (Applicant applicant : applicantList) {
+                ApplicantManageDTO applicantManageDTO = new ApplicantManageDTO();
+                ResumeDTO resumeDTO = new ResumeDTO();
+                resumeDTO.setId(applicant.getId());
+                resumeDTO.setApplicantVO(new ApplicantVO(applicant));
+
+                QueryWrapper<Advantage> advantageQueryWrapper = new QueryWrapper<>();
+                advantageQueryWrapper.eq("pk_applicant", applicant.getId());
+                Advantage advantage = advantageMapper.selectOne(advantageQueryWrapper);
+                resumeDTO.setMajorSkill(advantage.getMajorSkill());
+                resumeDTO.setHonor(advantage.getHonor());
+                resumeDTO.setSelfEvaluation(advantage.getSelfEvaluation());
+
+                QueryWrapper<Educational> educationalQueryWrapper = new QueryWrapper<>();
+                educationalQueryWrapper.eq("pk_applicant", applicant.getId());
+                Educational educational = educationalMapper.selectOne(educationalQueryWrapper);
+                List<EducationalVO> educationalList = new ArrayList<>();
+                educationalList.add(new EducationalVO(educational));
+                resumeDTO.setEducationalVO(educationalList);
+                applicantManageDTO.setResumeDTO(resumeDTO);
+
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                applicantManageDTO.setTs(applicant.getTs().format(dateTimeFormatter));
+                applicantManageDTOList.add(applicantManageDTO);
+            }
+            return Result.ok(applicantManageDTOList);
         }
         return Result.ok(BizCode.NO_DATA);
     }
@@ -159,6 +205,7 @@ public class ApplicantInfoServiceImpl extends ServiceImpl<ApplicantInfoMapper, A
         applicant.setStatus(Integer.valueOf(applicantVO.getStatus()));
         applicant.setTelephone(applicantVO.getTelephone());
         applicant.setEmail(applicantVO.getEmail());
+        applicant.setCheckStatus(Integer.valueOf(applicantVO.getCheckStatus()));
     }
 
     /**

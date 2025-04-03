@@ -1,6 +1,7 @@
 package com.xiaopinyun.controller;
 
 import com.xiaopinyun.bean.dto.ApplicantDTO;
+import com.xiaopinyun.bean.dto.ApplicantManageDTO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.Applicant;
@@ -47,6 +48,14 @@ public class ApplicantInfoController {
             @RequestParam(name = "sex", required = false) Integer sex,
             @RequestParam(name = "status", required = false) Integer status) {
         return applicantInfoService.query(currentPage, pageSize, name, sex, status);
+    }
+
+    /**
+     * 查询所有学生信息
+     */
+    @GetMapping("/queryAll")
+    public Result<List<ApplicantManageDTO>> queryAll() {
+        return applicantInfoService.queryAll();
     }
 
     /**

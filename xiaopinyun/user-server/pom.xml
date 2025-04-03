@@ -39,5 +39,12 @@
             <artifactId>info-server</artifactId>
             <version>${info-server.version}</version>
         </dependency>
+
+        <!-- 管理员模块 -->
+        <dependency>
+            <groupId>com.xiaopinyun</groupId>
+            <artifactId>admin-server</artifactId>
+            <version>${admin-server.version}</version>
+        </dependency>
     </dependencies>
 </project>

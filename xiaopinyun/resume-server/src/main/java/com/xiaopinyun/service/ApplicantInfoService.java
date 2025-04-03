@@ -2,6 +2,7 @@ package com.xiaopinyun.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaopinyun.bean.dto.ApplicantDTO;
+import com.xiaopinyun.bean.dto.ApplicantManageDTO;
 import com.xiaopinyun.bean.dto.PageResult;
 import com.xiaopinyun.bean.dto.Result;
 import com.xiaopinyun.bean.po.Applicant;
@@ -19,6 +20,11 @@ public interface ApplicantInfoService extends IService<Applicant> {
      * 条件查询、分页查询学生信息
      */
     Result<PageResult<List<ApplicantDTO>>> query(Integer currentPage, Integer pageSize, String name, Integer sex, Integer status);
+
+    /**
+     * 查询所有学生信息
+     */
+    Result<List<ApplicantManageDTO>> queryAll();
 
     /**
      * 新增学生信息

@@ -9,6 +9,12 @@ export const studentApi = {
             method: "get",
         });
     },
+    queryAll() {
+        return request({
+            url: `/resume-server/applicant/queryAll`,
+            method: "get",
+        });
+    },
     addApplicant(applicantView) {
         return request({
             url: `/resume-server/applicant`,
