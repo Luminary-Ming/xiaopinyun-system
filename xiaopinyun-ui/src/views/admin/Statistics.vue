@@ -1,4 +1,3 @@
-<!-- 统计分析 -->
 <template>
     <div class="statistics-container">
         <div class="filter-bar">
@@ -48,11 +47,34 @@ let employmentChartInstance = null;
 // 数据状态
 const dateRange = ref([new Date().setMonth(new Date().getMonth() - 1), new Date()]);
 const userChartType = ref("line");
-const chartData = ref({
-    userGrowth: [],
-    companyReg: [],
-    employmentRate: [],
-});
+
+// 模拟数据
+const mockData = {
+    userGrowth: [
+        { date: "2025-04-01", count: 150 },
+        { date: "2025-04-02", count: 180 },
+        { date: "2025-04-03", count: 220 },
+        { date: "2025-04-04", count: 260 },
+        { date: "2025-04-05", count: 310 },
+        { date: "2025-04-06", count: 350 },
+        { date: "2025-04-07", count: 410 },
+    ],
+    companyReg: [
+        { industry: "互联网", count: 85 },
+        { industry: "金融", count: 65 },
+        { industry: "教育", count: 45 },
+        { industry: "医疗", count: 55 },
+        { industry: "制造业", count: 75 },
+        { industry: "服务业", count: 60 },
+    ],
+    employmentRate: [
+        { status: "已就业", rate: 68 },
+        { status: "求职中", rate: 22 },
+        { status: "未就业", rate: 10 },
+    ],
+};
+
+const chartData = ref(mockData);
 
 // 初始化图表
 const initCharts = () => {
@@ -62,43 +84,63 @@ const initCharts = () => {
     window.addEventListener("resize", handleResize);
 };
 
-// 加载数据
+// 加载数据(模拟异步请求)
 const loadChartData = async () => {
     try {
-        const params = {
-            start: dateRange.value[0].toISOString().split("T")[0],
-            end: dateRange.value[1].toISOString().split("T")[0],
-        };
-        const res = await adminApi.getStatistics(params);
-        chartData.value = res.data;
+        // 模拟API调用延迟
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        chartData.value = mockData;
         renderCharts();
     } catch (error) {
         console.error("数据加载失败:", error);
     }
 };
 
-// 渲染图表
+// 渲染所有图表
 const renderCharts = () => {
     renderUserChart();
     renderCompanyChart();
     renderEmploymentChart();
 };
 
+// 用户增长趋势图
 const renderUserChart = () => {
     const option = {
-        tooltip: { trigger: "axis" },
+        title: {
+            text: "用户增长趋势",
+            left: "center",
+        },
+        tooltip: {
+            trigger: "axis",
+            formatter: "{b}<br/>{a}: {c}人",
+        },
         xAxis: {
             type: "category",
             data: chartData.value.userGrowth.map((i) => i.date),
+            axisLabel: {
+                rotate: 45,
+            },
         },
-        yAxis: { type: "value" },
+        yAxis: {
+            type: "value",
+            name: "用户数量",
+        },
         series: [
             {
-                name: "用户增长",
+                name: "用户数量",
                 type: userChartType.value,
                 data: chartData.value.userGrowth.map((i) => i.count),
                 smooth: true,
-                areaStyle: userChartType.value === "line" ? {} : null,
+                areaStyle:
+                    userChartType.value === "line"
+                        ? {
+                              opacity: 0.3,
+                              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                  { offset: 0, color: "#00B38A" },
+                                  { offset: 1, color: "#fff" },
+                              ]),
+                          }
+                        : null,
                 itemStyle: { color: "#00B38A" },
             },
         ],
@@ -106,24 +148,41 @@ const renderUserChart = () => {
     userChartInstance.setOption(option);
 };
 
+// 企业注册统计图
 const renderCompanyChart = () => {
     const option = {
-        tooltip: { trigger: "axis" },
+        title: {
+            text: "企业行业分布",
+            left: "center",
+        },
+        tooltip: {
+            trigger: "axis",
+            formatter: "{b}<br/>{a}: {c}家",
+        },
         xAxis: {
             type: "category",
             data: chartData.value.companyReg.map((i) => i.industry),
+            axisLabel: {
+                interval: 0,
+                rotate: 45,
+            },
         },
-        yAxis: { type: "value" },
+        yAxis: {
+            type: "value",
+            name: "企业数量",
+        },
         series: [
             {
                 name: "企业数量",
                 type: "bar",
                 data: chartData.value.companyReg.map((i) => i.count),
+                barWidth: "40%",
                 itemStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                         { offset: 0, color: "#00B38A" },
                         { offset: 1, color: "#00B38A66" },
                     ]),
+                    borderRadius: [5, 5, 0, 0],
                 },
             },
         ],
@@ -131,15 +190,28 @@ const renderCompanyChart = () => {
     companyChartInstance.setOption(option);
 };
 
+// 就业率分布图
 const renderEmploymentChart = () => {
     const option = {
-        tooltip: { trigger: "item" },
-        legend: { orient: "vertical", left: "right" },
+        title: {
+            text: "就业情况分布",
+            left: "center",
+        },
+        tooltip: {
+            trigger: "item",
+            formatter: "{b}: {c}%",
+        },
+        legend: {
+            orient: "vertical",
+            left: "right",
+            top: "center",
+        },
         series: [
             {
                 name: "就业率",
                 type: "pie",
                 radius: ["40%", "70%"],
+                avoidLabelOverlap: true,
                 data: chartData.value.employmentRate.map((i) => ({
                     value: i.rate,
                     name: i.status,
@@ -149,8 +221,21 @@ const renderEmploymentChart = () => {
                     borderColor: "#fff",
                     borderWidth: 2,
                 },
+                label: {
+                    show: true,
+                    formatter: "{b}: {c}%",
+                },
                 emphasis: {
-                    label: { show: true, fontSize: 16 },
+                    label: {
+                        show: true,
+                        fontSize: 16,
+                        fontWeight: "bold",
+                    },
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.5)",
+                    },
                 },
             },
         ],
@@ -185,21 +270,41 @@ watchEffect(() => {
 </script>
 
 <style scoped lang="scss">
+.statistics-container {
+    padding: 20px;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+}
+
 .chart-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 20px;
     margin-top: 20px;
 
-    .chart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
+    .chart-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        padding: 20px;
 
-    .chart-container {
-        height: 400px;
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+
+            h3 {
+                margin: 0;
+                color: #333;
+                font-size: 18px;
+            }
+        }
+
+        .chart-container {
+            height: 400px;
+            width: 100%;
+        }
     }
 }
 

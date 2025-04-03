@@ -315,7 +315,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, watchEffect } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { InfoFilled } from "@element-plus/icons-vue";
 import { uploadApi } from "@/api/upload";
@@ -708,12 +708,17 @@ let handleMenuClick = function (menu) {
 const queryBtn = (index) => {
     // 职位信息
     if (activeMenu.value == "job") {
-        router.push("/job");
         recruitStore.setRecommendInfo(recommendViews[index]);
-    } else {
-        // 学生信息
+        router.push("/job");
+    }
+    // 学生信息
+    if (activeMenu.value == "submit") {
+        localStorage.setItem("pkApplicant", submitViews.value[index].applicantVO.id);
         router.push("/resume");
-        localStorage.setItem("pkApplicant", "1904134133366996993");
+    }
+    if (activeMenu.value == "interest") {
+        localStorage.setItem("pkApplicant", interestViews.value[index].applicantVO.id);
+        router.push("/resume");
     }
 };
 
