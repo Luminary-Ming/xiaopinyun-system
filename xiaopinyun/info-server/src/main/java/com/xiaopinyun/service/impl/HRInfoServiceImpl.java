@@ -111,7 +111,9 @@ public class HRInfoServiceImpl extends ServiceImpl<HRInfoMapper, HR> implements 
         hr.setProfileImg(hrVO.getProfileImgUrl());
         hr.setName(hrVO.getName());
         hr.setSex(Integer.valueOf(hrVO.getSex()));
-        hr.setPkCompany(Long.valueOf(hrVO.getPkCompany()));
+        if (hrVO.getPkCompany() != null) {
+            hr.setPkCompany(Long.valueOf(hrVO.getPkCompany()));
+        }
         hr.setIdentity(hrVO.getIdentity());
         hr.setTelephone(hrVO.getTelephone());
         hr.setEmail(hrVO.getEmail());
