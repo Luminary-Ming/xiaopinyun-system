@@ -344,6 +344,10 @@ onMounted(async () => {
     recruitView.pkCompany = companyView.id;
     recruitView.benefit = companyView.benefit;
 
+    if (userStore.flag == "register" && companyView.id == "") {
+        dialogFormVisible.value = true;
+    }
+
     // 招聘信息
     const respRecruit = await recruitApi.queryByPkHr(hrView.id);
     Object.assign(recruitViews, respRecruit.data);
@@ -527,7 +531,7 @@ let currentIndex = ref(0);
 
 // 添加职位
 const addRecruit = () => {
-    dialogRecruitFormVisible = true;
+    dialogRecruitFormVisible.value = true;
     Object.assign(recruitView, {
         id: "",
         pkCompany: "",
@@ -553,10 +557,6 @@ const dialogRecruitFormVisible = ref(false);
 // 回复表单
 const dialogReplyFormVisible = ref(false);
 
-if (userStore.flag == "register" && companyView.id == null) {
-    dialogFormVisible.value = true;
-}
-
 // HR信息提交
 const submitHR = async () => {
     const resp = await hrApi.updateHR(hrView);
@@ -575,7 +575,7 @@ const submitHR = async () => {
 const submitCompany = async () => {
     let resp = null;
     let flag = false;
-    if (companyView.id == null) {
+    if (companyView.id == "") {
         resp = await companyApi.addCompany(companyView);
         flag = true;
     } else {
@@ -708,7 +708,7 @@ let handleMenuClick = function (menu) {
 const queryBtn = (index) => {
     // 职位信息
     if (activeMenu.value == "job") {
-        recruitStore.setRecommendInfo(recommendViews[index]);
+        recruitStore.setRecommendInfo({ recruitVO: recruitViews[index], hrvo: hrView, companyVO: companyView });
         router.push("/job");
     }
     // 学生信息
@@ -743,7 +743,8 @@ const delBtn = async (index) => {
 // 职位提交
 const submitRecruit = async () => {
     let resp = null;
-    if (recruitView.id == null) {
+    if (recruitView.id == "") {
+        recruitView.pkCompany = companyView.id;
         resp = await recruitApi.insert(recruitView);
         recruitViews.push({ ...recruitView, id: resp.data.id });
     } else {
@@ -751,11 +752,12 @@ const submitRecruit = async () => {
         resp = await recruitApi.update(recruitView);
     }
     if (resp.code == 200) {
+        dialogRecruitFormVisible.value = false;
         ElMessage.success(resp.message);
     } else {
+        dialogRecruitFormVisible.value = false;
         ElMessage.error(resp.message);
     }
-    dialogRecruitFormVisible.value = false;
 };
 
 // 回复表单
@@ -1128,13 +1130,17 @@ const removeInterest = async (index) => {
     white-space: nowrap; /* 文本不换行 */
     overflow: hidden; /* 溢出隐藏 */
     text-overflow: ellipsis; /* 显示省略号 */
-    max-width: 300px; /* 设置最大宽度 */
+    max-width: 160px; /* 设置最大宽度 */
 }
 
 .content-body .recruit .address {
     font-size: 16px;
     color: #222;
     margin-left: 8px;
+    white-space: nowrap; /* 文本不换行 */
+    overflow: hidden; /* 溢出隐藏 */
+    text-overflow: ellipsis; /* 显示省略号 */
+    max-width: 285px; /* 设置最大宽度 */
 }
 
 .content-body .salary-requirement-education {

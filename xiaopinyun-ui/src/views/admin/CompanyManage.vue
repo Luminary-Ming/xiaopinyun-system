@@ -249,13 +249,17 @@ const checkStatus = (index) => {
     white-space: nowrap; /* 文本不换行 */
     overflow: hidden; /* 溢出隐藏 */
     text-overflow: ellipsis; /* 显示省略号 */
-    max-width: 300px; /* 设置最大宽度 */
+    max-width: 160px; /* 设置最大宽度 */
 }
 
 .content-body .recruit .address {
     font-size: 16px;
     color: #222;
     margin-left: 8px;
+    white-space: nowrap; /* 文本不换行 */
+    overflow: hidden; /* 溢出隐藏 */
+    text-overflow: ellipsis; /* 显示省略号 */
+    max-width: 285px; /* 设置最大宽度 */
 }
 
 .content-body .salary-requirement-education {
